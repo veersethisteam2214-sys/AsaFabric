@@ -3,9 +3,11 @@
 *service-account*.json
 *.credentials.json
 
-# Raw page photos — never commit (they live in Google Drive)
+# Raw page photos + scans — never commit (they live in Google Drive)
 photos/*
 !photos/.gitkeep
+drive_upload/
+data/pdf_tmp/
 
 # Generated data
 data/raw/*

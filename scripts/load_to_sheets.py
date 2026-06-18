@@ -1,8 +1,8 @@
-"""Push the pipeline CSV to the master Google Sheet, formatted.
+"""Push the assembled CSV to the master Google Sheet, then format it.
 
-Maps the CSV to the presentation columns (models.SHEET_COLUMNS), resolves each
-page's image to a clickable HYPERLINK from the Drive folder, writes the whole
-table in one batched update, then applies formatting (format_sheet).
+Writes exactly the presentation columns (models.SHEET_COLUMNS), in order, with
+USER_ENTERED so HYPERLINK formulas (the `image` column) and numbers parse. The
+CSV is produced by the page-reading step (assembled with image links + flags).
 
   python scripts/load_to_sheets.py --in data/merged.csv
 """
@@ -20,14 +20,6 @@ import google_io
 import models
 
 
-def _image_formula(page: str, links: dict) -> str:
-    for name, link in links.items():
-        if Path(name).stem == page or name.startswith(page):
-            safe = link.replace('"', "%22")
-            return f'=HYPERLINK("{safe}","view")'
-    return ""
-
-
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="inp", default=str(config.MERGED_CSV))
@@ -39,21 +31,10 @@ def main() -> None:
     with Path(args.inp).open() as f:
         rows = list(csv.DictReader(f))
     if not rows:
-        sys.exit(f"No rows in {args.inp}. Run diff.py first.")
-
-    links = {}
-    if config.GOOGLE_DRIVE_FOLDER_ID:
-        try:
-            links = google_io.folder_image_links(config.GOOGLE_DRIVE_FOLDER_ID)
-        except Exception as exc:
-            print(f"(warn) couldn't list Drive folder for image links: {exc}")
+        sys.exit(f"No rows in {args.inp}.")
 
     header = models.SHEET_COLUMNS
-    values = [header]
-    for r in rows:
-        page = r.get("page", r.get("page_ref", ""))
-        img = _image_formula(page, links)
-        values.append([(img if c == "image" else str(r.get(c, ""))) for c in header])
+    values = [header] + [[str(r.get(c, "")) for c in header] for r in rows]
 
     ws = google_io.open_worksheet()
     ws.clear()

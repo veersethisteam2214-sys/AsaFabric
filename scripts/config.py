@@ -40,6 +40,10 @@ GOOGLE_WORKSHEET = os.getenv("GOOGLE_WORKSHEET", "inventory")
 GOOGLE_SA_JSON = os.getenv("GOOGLE_SA_JSON", str(ROOT / "service-account.json"))
 GOOGLE_DRIVE_FOLDER_ID = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "")
 
+# --- Gemini (vision reader; same call the Apps Script 'Scan' button uses) ---
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
 # --- Yardage sanity bounds (QA flags values outside this range) ------------
 YARDAGE_MIN = float(os.getenv("YARDAGE_MIN", "0"))
 YARDAGE_MAX = float(os.getenv("YARDAGE_MAX", "100000"))

@@ -43,10 +43,12 @@ EXTRACTION_PROMPT = (
     "not merge rows. Return only JSON matching the provided schema."
 )
 
-# Columns shown in the master Google Sheet (single-model presentation).
+# Columns shown in the master Google Sheet (packing-list structure).
 SHEET_COLUMNS = [
-    "page", "image", "fabric_name", "yardage", "notes", "confidence",
-    "needs_review", "verified",
+    "page", "source", "image", "date", "buyer", "item", "ref",
+    "design_no", "color_nos", "total_yards", "total_pcs",
+    "page_total_yards", "page_total_pcs",
+    "needs_review", "verified", "notes",
 ]
 
 
