@@ -1,0 +1,11 @@
+# Pipeline (model-agnostic) — needed for diff/dedupe/load
+rapidfuzz>=3.0
+gspread>=6.0
+google-auth>=2.0
+python-dotenv>=1.0
+
+# Vision-model SDKs — install whichever TWO the Phase 0 pilot picks.
+# (Listed together for convenience; you don't need all three.)
+openai>=1.40
+google-genai>=1.0
+anthropic>=0.40
