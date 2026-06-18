@@ -27,8 +27,8 @@ DEDUPED_CSV = Path(os.getenv("DEDUPED_CSV", ROOT / "data" / "deduped.csv"))
 # --- Models (the two-model cross-check) ------------------------------------
 # Format: "provider:model_id". The Phase 0 pilot decides these. Confirm the
 # exact model_id in each provider's docs the day you run (ids drift monthly).
-MODEL_A = os.getenv("MODEL_A", "gemini:gemini-3.5-flash")
-MODEL_B = os.getenv("MODEL_B", "anthropic:claude-sonnet-4-6")
+MODEL_A = os.getenv("MODEL_A", "anthropic:claude-sonnet-4-6")
+MODEL_B = os.getenv("MODEL_B", "")  # empty => single-model mode
 
 # --- Fuzzy-dedup thresholds (rapidfuzz token_set_ratio, 0-100) -------------
 DEDUPE_AUTO_MERGE = int(os.getenv("DEDUPE_AUTO_MERGE", "90"))

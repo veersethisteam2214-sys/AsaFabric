@@ -29,6 +29,7 @@ from rapidfuzz import fuzz
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config
+import models
 
 NAME_MATCH_MIN = 85  # token_set_ratio above this counts as the "same" fabric name
 
@@ -112,15 +113,41 @@ def build_row(stem: str, idx: int, a: dict, b: dict) -> dict:
     }
 
 
+def _single_main(raw: Path, out: Path, provider: str) -> None:
+    """Single-model mode: one row per entry; needs_review from the model's own
+    confidence flag + a yardage sanity check. Emits the presentation columns."""
+    suffix = f".{provider}.json"
+    stems = sorted(p.name[: -len(suffix)] for p in raw.glob(f"*{suffix}"))
+    if not stems:
+        sys.exit(f"No '*{suffix}' files in {raw}. Run extract.py first.")
+    rows, review = [], 0
+    for stem in stems:
+        for e in load_page(raw, stem, provider):
+            row = models.sheet_row(stem, e)
+            rows.append(row)
+            review += row["needs_review"] == "TRUE"
+    rows.sort(key=lambda r: (r["needs_review"] != "TRUE", r["page"]))  # review rows first
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with out.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=models.SHEET_COLUMNS)
+        w.writeheader()
+        w.writerows(rows)
+    print(f"{len(rows)} entries (single model {config.MODEL_A}) -> {out}")
+    print(f"  needs review: {review}/{len(rows)}")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--raw-dir", default=str(config.RAW_DIR))
     ap.add_argument("--out", default=str(config.MERGED_CSV))
     ap.add_argument("--provider-a", default=config.MODEL_A.split(":")[0])
-    ap.add_argument("--provider-b", default=config.MODEL_B.split(":")[0])
+    ap.add_argument("--provider-b", default=(config.MODEL_B.split(":")[0] if config.MODEL_B else ""))
     args = ap.parse_args()
 
     raw = Path(args.raw_dir)
+    if not config.MODEL_B.strip():  # single-model mode
+        return _single_main(raw, Path(args.out), args.provider_a)
+
     pa, pb = args.provider_a, args.provider_b
     suffix = f".{pa}.json"
     stems = sorted(p.name[: -len(suffix)] for p in raw.glob(f"*{suffix}"))

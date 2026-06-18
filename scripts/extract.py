@@ -35,8 +35,8 @@ def main() -> None:
             f"No page images in {config.PHOTOS_DIR}. Add photos first (README Phase 0)."
         )
 
-    models = [config.MODEL_A, config.MODEL_B]
-    print(f"Extracting {len(pages)} pages with {models[0]} + {models[1]}")
+    models = [m for m in (config.MODEL_A, config.MODEL_B) if m]
+    print(f"Extracting {len(pages)} pages with {', '.join(models)}")
     for page in pages:
         for model_spec in models:
             out = config.RAW_DIR / f"{page.stem}.{provider_of(model_spec)}.json"

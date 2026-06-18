@@ -121,3 +121,43 @@ def folder_image_links(folder_id: str) -> dict:
         if not token:
             break
     return out
+
+
+def list_folder_files(folder_id: str, mime_contains: str = "") -> list:
+    """Read-only: list files in a Drive folder (optionally filtered by mimeType)."""
+    svc = _drive()
+    q = f"'{folder_id}' in parents and trashed = false"
+    if mime_contains:
+        q += f" and mimeType contains '{mime_contains}'"
+    out, token = [], None
+    while True:
+        resp = svc.files().list(
+            q=q,
+            fields="nextPageToken, files(id, name, mimeType, webViewLink)",
+            pageSize=1000,
+            pageToken=token,
+            supportsAllDrives=True,
+            includeItemsFromAllDrives=True,
+        ).execute()
+        out.extend(resp.get("files", []))
+        token = resp.get("nextPageToken")
+        if not token:
+            break
+    return out
+
+
+def download_file(file_id: str, dest) -> Path:
+    """Read-only: download a Drive file's bytes to a local path."""
+    import io
+
+    from googleapiclient.http import MediaIoBaseDownload
+
+    dest = Path(dest)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    req = _drive().files().get_media(fileId=file_id, supportsAllDrives=True)
+    with open(dest, "wb") as fh:
+        dl = MediaIoBaseDownload(fh, req)
+        done = False
+        while not done:
+            _, done = dl.next_chunk()
+    return dest

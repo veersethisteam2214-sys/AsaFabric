@@ -1,15 +1,10 @@
-"""Phase 1, step 4: push a CSV (merged or deduped) to a Google Sheet.
+"""Push the pipeline CSV to the master Google Sheet, formatted.
 
-Setup once:
-  1. Create a Google Cloud service account, enable the Sheets API, download its
-     JSON key to ./service-account.json (gitignored).
-  2. Create the target Sheet, put its id in GOOGLE_SHEET_ID (.env).
-  3. SHARE the Sheet with the service-account email (…@….iam.gserviceaccount.com).
+Maps the CSV to the presentation columns (models.SHEET_COLUMNS), resolves each
+page's image to a clickable HYPERLINK from the Drive folder, writes the whole
+table in one batched update, then applies formatting (format_sheet).
 
-Writes the whole table in ONE batched update (never cell-by-cell — the Sheets
-API caps ~300 writes/min).
-
-  python scripts/load_to_sheets.py --in data/deduped.csv
+  python scripts/load_to_sheets.py --in data/merged.csv
 """
 from __future__ import annotations
 
@@ -20,36 +15,51 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config
+import format_sheet
+import google_io
+import models
+
+
+def _image_formula(page: str, links: dict) -> str:
+    for name, link in links.items():
+        if Path(name).stem == page or name.startswith(page):
+            safe = link.replace('"', "%22")
+            return f'=HYPERLINK("{safe}","view")'
+    return ""
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--in", dest="inp", default=str(config.DEDUPED_CSV))
-    ap.add_argument("--worksheet", default=config.GOOGLE_WORKSHEET)
+    ap.add_argument("--in", dest="inp", default=str(config.MERGED_CSV))
     args = ap.parse_args()
 
     if not config.GOOGLE_SHEET_ID:
-        sys.exit("Set GOOGLE_SHEET_ID in .env and share the Sheet with the service-account email.")
-
-    import gspread  # pip install gspread
+        sys.exit("Set GOOGLE_SHEET_ID in .env (run setup_google.py).")
 
     with Path(args.inp).open() as f:
-        rows = list(csv.reader(f))
+        rows = list(csv.DictReader(f))
     if not rows:
-        sys.exit(f"No rows in {args.inp}.")
+        sys.exit(f"No rows in {args.inp}. Run diff.py first.")
 
-    gc = gspread.service_account(filename=config.GOOGLE_SA_JSON)
-    sh = gc.open_by_key(config.GOOGLE_SHEET_ID)
-    try:
-        ws = sh.worksheet(args.worksheet)
-    except gspread.WorksheetNotFound:
-        ws = sh.add_worksheet(title=args.worksheet, rows=max(1000, len(rows) + 50), cols=20)
+    links = {}
+    if config.GOOGLE_DRIVE_FOLDER_ID:
+        try:
+            links = google_io.folder_image_links(config.GOOGLE_DRIVE_FOLDER_ID)
+        except Exception as exc:
+            print(f"(warn) couldn't list Drive folder for image links: {exc}")
 
+    header = models.SHEET_COLUMNS
+    values = [header]
+    for r in rows:
+        page = r.get("page", r.get("page_ref", ""))
+        img = _image_formula(page, links)
+        values.append([(img if c == "image" else str(r.get(c, ""))) for c in header])
+
+    ws = google_io.open_worksheet()
     ws.clear()
-    # gspread v6: update(values, range_name). Confirm signature for your installed
-    # version if this errors (older versions take range_name first).
-    ws.update(values=rows, range_name="A1")
-    print(f"Wrote {len(rows) - 1} data rows to worksheet '{args.worksheet}'.")
+    ws.update(values=values, range_name="A1", value_input_option="USER_ENTERED")
+    format_sheet.format_inventory(ws, n_rows=len(values))
+    print(f"Wrote {len(values) - 1} rows to '{config.GOOGLE_WORKSHEET}' and formatted it.")
 
 
 if __name__ == "__main__":

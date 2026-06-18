@@ -1,66 +1,64 @@
-"""Interactive page-review app: scan a page -> two models read it -> you confirm
--> rows append to the Google Sheet.
+"""Interactive page-review app: scan a page -> Claude reads it -> you confirm
+-> rows append to the master Google Sheet.
 
-This is the "press yes/no after we scan" workflow. Rows where the two models
-AGREE are pre-approved; DISAGREE rows are highlighted with both models' values
-so you only have to decide the handful that actually conflict. Nothing reaches
-the Sheet until you click Approve — so a misread yardage can't slip in silently.
-
-Reuses the same extraction (providers.py) and cross-check (diff.py) as the batch
-pipeline. Run it with:
+Single-model mode (MODEL_A). High-confidence rows are pre-approved; rows the
+model marked low-confidence (or with an odd yardage) are flagged for a look.
+Nothing reaches the Sheet until you click Approve.
 
     source .venv/bin/activate
-    pip install -r requirements.txt          # includes streamlit
+    pip install -r requirements.txt
     streamlit run scripts/review_app.py
-
-Requires the two model API keys and the Google Sheets service account in .env
-(see README). Fabric-name de-duplication still runs as a final pass (dedupe.py)
-once the whole book is in — clustering needs the full set of names.
 """
 from __future__ import annotations
 
 import sys
 import tempfile
-from itertools import zip_longest
 from pathlib import Path
 
 import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config
-import diff
 import google_io
+import models as M
 import providers
 
 
-# --- Google Sheets helpers -------------------------------------------------
+def image_link_for(image_name: str) -> str:
+    if not (image_name and config.GOOGLE_DRIVE_FOLDER_ID):
+        return ""
+    try:
+        links = google_io.folder_image_links(config.GOOGLE_DRIVE_FOLDER_ID)
+    except Exception:
+        return ""
+    for name, link in links.items():
+        if name == image_name or Path(name).stem == Path(image_name).stem:
+            return link
+    return ""
+
+
 def append_rows_to_sheet(rows: list, image_name: str = "") -> int:
-    # The robot can't upload; it links the same-named image already in your Drive
-    # folder (your scanner app puts originals there). Blank if not found yet.
-    link = ""
-    if image_name and config.GOOGLE_DRIVE_FOLDER_ID:
-        try:
-            link = google_io.folder_image_links(config.GOOGLE_DRIVE_FOLDER_ID).get(image_name, "")
-        except Exception:
-            link = ""
-    ws = google_io.open_worksheet(create_header=diff.FIELDS)
+    import format_sheet
+
+    link = image_link_for(image_name)
+    formula = f'=HYPERLINK("{link.replace(chr(34), "%22")}","view")' if link else ""
+    ws = google_io.open_worksheet(create_header=M.SHEET_COLUMNS)
     values = [
-        [(link if c == "image_link" else str(r.get(c, ""))) for c in diff.FIELDS]
+        [(formula if c == "image" else str(r.get(c, ""))) for c in M.SHEET_COLUMNS]
         for r in rows
     ]
     if values:
-        ws.append_rows(values, value_input_option="RAW")  # one batched write per page
+        ws.append_rows(values, value_input_option="USER_ENTERED")
+    try:
+        format_sheet.format_inventory(ws)
+    except Exception:
+        pass
     return len(values)
 
 
-# --- Extraction (cached per uploaded file) ---------------------------------
-def extract_both(image_path: Path, page_ref: str) -> list:
-    ea = [e.__dict__ for e in providers.extract(config.MODEL_A, image_path)]
-    eb = [e.__dict__ for e in providers.extract(config.MODEL_B, image_path)]
-    return [
-        diff.build_row(page_ref, i, a, b)
-        for i, (a, b) in enumerate(zip_longest(ea, eb), start=1)
-    ]
+def extract_rows(image_path: Path, page_ref: str) -> list:
+    entries = [e.__dict__ for e in providers.extract(config.MODEL_A, image_path)]
+    return [M.sheet_row(page_ref, e) for e in entries]
 
 
 # --- UI --------------------------------------------------------------------
@@ -69,10 +67,9 @@ st.title("ASAFabric — scan & confirm")
 
 with st.sidebar:
     st.subheader("Config")
-    st.write(f"**Model A:** `{config.MODEL_A}`")
-    st.write(f"**Model B:** `{config.MODEL_B}`")
+    st.write(f"**Model:** `{config.MODEL_A}`")
     st.write(f"**Sheet:** `{config.GOOGLE_SHEET_ID or 'NOT SET — see .env'}`")
-    st.caption("Green = both models agree (pre-approved). Yellow = they disagree; check it.")
+    st.caption("🟢 high confidence (pre-approved). 🟡 low confidence — check it.")
     if "appended_pages" not in st.session_state:
         st.session_state.appended_pages = []
     if st.session_state.appended_pages:
@@ -89,11 +86,9 @@ if uploaded:
 
     cache_key = f"rows::{uploaded.name}"
     if cache_key not in st.session_state:
-        if not config.GOOGLE_SHEET_ID:
-            st.warning("GOOGLE_SHEET_ID isn't set in .env — you can review, but Approve will fail until it is.")
-        with st.spinner(f"Reading page with {config.MODEL_A} + {config.MODEL_B}…"):
+        with st.spinner(f"Reading page with {config.MODEL_A}…"):
             try:
-                st.session_state[cache_key] = extract_both(tmp, page_ref)
+                st.session_state[cache_key] = extract_rows(tmp, page_ref)
             except Exception as exc:
                 st.error(f"Extraction failed: {exc}")
                 st.stop()
@@ -106,34 +101,21 @@ if uploaded:
     with col_rows:
         st.markdown("**✓ &nbsp; fabric name &nbsp; · &nbsp; yards &nbsp; · &nbsp; status**")
         edited = []
-        for r in rows:
-            agree = r["agreement_flag"] == "AGREE"
-            c = st.columns([0.5, 3.5, 1.5, 3])
+        for i, r in enumerate(rows):
+            flagged = r["needs_review"] == "TRUE"
+            c = st.columns([0.5, 3.5, 1.5, 2])
             ok = c[0].checkbox(
-                "ok", value=agree, key=f"ok{cache_key}{r['row_index']}",
-                label_visibility="collapsed",
+                "ok", value=not flagged, key=f"ok{cache_key}{i}", label_visibility="collapsed"
             )
             name = c[1].text_input(
-                "name", value=r["raw_name"], key=f"nm{cache_key}{r['row_index']}",
-                label_visibility="collapsed",
+                "name", value=r["fabric_name"], key=f"nm{cache_key}{i}", label_visibility="collapsed"
             )
             yard = c[2].text_input(
-                "yd", value=r["yardage"], key=f"yd{cache_key}{r['row_index']}",
-                label_visibility="collapsed",
+                "yd", value=r["yardage"], key=f"yd{cache_key}{i}", label_visibility="collapsed"
             )
-            if agree:
-                status = "🟢 agree"
-            else:
-                status = (
-                    f"🟡 {r['agreement_flag']} — "
-                    f"A:`{r['pass_a_name']}/{r['pass_a_yard']}` "
-                    f"B:`{r['pass_b_name']}/{r['pass_b_yard']}`"
-                )
-            if r["yardage_warn"]:
-                status += f"  ❗{r['yardage_warn']}"
-            c[3].markdown(status)
+            c[3].markdown("🟡 low — check" if flagged else "🟢 high")
             edited.append(
-                {**r, "raw_name": name, "yardage": yard,
+                {**r, "fabric_name": name, "yardage": yard,
                  "verified": "TRUE" if ok else "FALSE", "_approved": ok}
             )
 
@@ -142,7 +124,7 @@ if uploaded:
 
     disabled = page_ref in st.session_state.appended_pages
     if st.button("✅ Approve & append to Sheet", type="primary", disabled=disabled):
-        to_write = [e for e in edited if e["_approved"]]
+        to_write = [{k: v for k, v in e.items() if k != "_approved"} for e in edited if e["_approved"]]
         try:
             n = append_rows_to_sheet(to_write, uploaded.name)
             st.session_state.appended_pages.append(page_ref)
