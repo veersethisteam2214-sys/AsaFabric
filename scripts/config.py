@@ -38,6 +38,7 @@ DEDUPE_REVIEW_FLOOR = int(os.getenv("DEDUPE_REVIEW_FLOOR", "60"))
 GOOGLE_SHEET_ID = os.getenv("GOOGLE_SHEET_ID", "")
 GOOGLE_WORKSHEET = os.getenv("GOOGLE_WORKSHEET", "inventory")
 GOOGLE_SA_JSON = os.getenv("GOOGLE_SA_JSON", str(ROOT / "service-account.json"))
+GOOGLE_DRIVE_FOLDER_ID = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "")
 
 # --- Yardage sanity bounds (QA flags values outside this range) ------------
 YARDAGE_MIN = float(os.getenv("YARDAGE_MIN", "0"))

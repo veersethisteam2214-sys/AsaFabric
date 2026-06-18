@@ -29,27 +29,25 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config
 import diff
+import google_io
 import providers
 
 
 # --- Google Sheets helpers -------------------------------------------------
-def _worksheet():
-    import gspread
-
-    gc = gspread.service_account(filename=config.GOOGLE_SA_JSON)
-    sh = gc.open_by_key(config.GOOGLE_SHEET_ID)
-    try:
-        ws = sh.worksheet(config.GOOGLE_WORKSHEET)
-    except gspread.WorksheetNotFound:
-        ws = sh.add_worksheet(title=config.GOOGLE_WORKSHEET, rows=2000, cols=20)
-    if not ws.acell("A1").value:  # write the header once
-        ws.update(values=[diff.FIELDS], range_name="A1")
-    return ws
-
-
-def append_rows_to_sheet(rows: list) -> int:
-    ws = _worksheet()
-    values = [[str(r.get(c, "")) for c in diff.FIELDS] for r in rows]
+def append_rows_to_sheet(rows: list, image_name: str = "") -> int:
+    # The robot can't upload; it links the same-named image already in your Drive
+    # folder (your scanner app puts originals there). Blank if not found yet.
+    link = ""
+    if image_name and config.GOOGLE_DRIVE_FOLDER_ID:
+        try:
+            link = google_io.folder_image_links(config.GOOGLE_DRIVE_FOLDER_ID).get(image_name, "")
+        except Exception:
+            link = ""
+    ws = google_io.open_worksheet(create_header=diff.FIELDS)
+    values = [
+        [(link if c == "image_link" else str(r.get(c, ""))) for c in diff.FIELDS]
+        for r in rows
+    ]
     if values:
         ws.append_rows(values, value_input_option="RAW")  # one batched write per page
     return len(values)
@@ -146,7 +144,7 @@ if uploaded:
     if st.button("✅ Approve & append to Sheet", type="primary", disabled=disabled):
         to_write = [e for e in edited if e["_approved"]]
         try:
-            n = append_rows_to_sheet(to_write)
+            n = append_rows_to_sheet(to_write, uploaded.name)
             st.session_state.appended_pages.append(page_ref)
             st.success(f"Appended {n} rows for '{page_ref}'. Scan the next page.")
         except Exception as exc:

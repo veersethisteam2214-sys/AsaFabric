@@ -33,7 +33,7 @@ import config
 NAME_MATCH_MIN = 85  # token_set_ratio above this counts as the "same" fabric name
 
 FIELDS = [
-    "page_ref", "row_index", "raw_name", "canonical_name", "yardage",
+    "page_ref", "image_link", "row_index", "raw_name", "canonical_name", "yardage",
     "pass_a_name", "pass_b_name", "pass_a_yard", "pass_b_yard",
     "agreement_flag", "yardage_warn", "verified",
 ]
@@ -97,6 +97,7 @@ def build_row(stem: str, idx: int, a: dict, b: dict) -> dict:
     yardage = ay if flag == "AGREE" else (ay or by)
     return {
         "page_ref": stem,
+        "image_link": "",  # filled from the Drive folder by filename (review_app/load)
         "row_index": idx,
         "raw_name": an or bn,
         "canonical_name": "",  # filled by dedupe.py
