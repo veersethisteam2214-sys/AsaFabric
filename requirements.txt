@@ -4,6 +4,9 @@ gspread>=6.0
 google-auth>=2.0
 python-dotenv>=1.0
 
+# Interactive scan-and-confirm review app (scripts/review_app.py)
+streamlit>=1.40
+
 # Vision-model SDKs — install whichever TWO the Phase 0 pilot picks.
 # (Listed together for convenience; you don't need all three.)
 openai>=1.40

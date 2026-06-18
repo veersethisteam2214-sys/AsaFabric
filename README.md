@@ -58,23 +58,47 @@ Put your two picks in `.env` as `MODEL_A` / `MODEL_B`.
 
 ## Phase 1: the pipeline (after the pilot)
 
+Common setup:
+
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env          # then fill in MODEL_A/MODEL_B + the two API keys you chose
-# put your page photos in ./photos as page_001.jpg, page_002.jpg, ...
+```
 
+### Option A — scan & confirm, one page at a time (recommended)
+
+The interactive review app: drop in a page photo, both models read it, you see
+the **image beside the rows**, agreements are pre-approved and disagreements are
+highlighted with both models' values — you only decide the conflicts, then click
+**Approve** to append that page to the Sheet. Nothing reaches the Sheet
+unconfirmed, so a misread yardage can't slip in silently. Also your tool for
+adding new fabric later.
+
+```bash
+streamlit run scripts/review_app.py
+```
+
+### Option B — batch the whole book, review in the Sheet
+
+Better if you'd rather photograph everything first and review in bulk:
+
+```bash
+# put your page photos in ./photos as page_001.jpg, page_002.jpg, ...
 python scripts/extract.py         # each page -> 2 models -> data/raw/*.json
 python scripts/diff.py            # merge the two passes -> data/merged.csv (disagreements first)
 python scripts/dedupe.py          # normalize fabric names -> data/deduped.csv
 python scripts/load_to_sheets.py  # push to the Google Sheet
 ```
 
-Then the **human verification pass** (in the Sheet itself):
+Then the **human verification pass** in the Sheet:
 1. Review the flagged rows (sorted to the top) against the page image.
 2. Do one fast eyeball **down the entire yardage column** — a wrong digit is
    invisible in a name-only review.
 3. Spot-check 5–10% of the auto-accepted (`AGREE`) rows.
+
+Either way, run `dedupe.py` as a **final** pass once the whole book is in —
+fabric-name clustering needs the full set of names.
 
 ### Try the pipeline now, without photos or keys
 
@@ -104,6 +128,7 @@ asafabric/
     diff.py            # merge two passes -> merged.csv         [runnable now]
     dedupe.py          # rapidfuzz canonical names -> deduped   [runnable now]
     load_to_sheets.py  # gspread batch upload                   [needs Google creds]
+    review_app.py      # interactive scan-and-confirm app       [needs keys+creds]
   sample/              # tiny two-pass fixture for trying diff/dedupe offline
   photos/              # page images (gitignored — never committed)
   data/                # generated CSVs + data/raw/*.json (gitignored)
