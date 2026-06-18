@@ -21,6 +21,9 @@ The inventory itself lives in a **Google Sheet**; the page photos live in
 - Use a **book-scanning app** — **vFlat Scan** or **Genius Scan** — not the raw
   camera. They batch-capture, auto-crop, and flatten page curvature.
 - **One image per page**, named in order: `page_001.jpg`, `page_002.jpg`, …
+- **Scanned the book as one multi-page PDF instead?** That's fine — split it into
+  per-page images first: `python scripts/split_pdf.py book.pdf` →
+  `photos/page_001.png …` (use `--start 51` to continue numbering across PDFs).
 - Flat pages, soft two-sided ~45° light, **no glare**, ~300–400 DPI. Glance at
   each shot for legibility as you go — bad capture quietly tanks every later
   step and is the cheapest thing to get right.
@@ -121,6 +124,7 @@ keep the real run honest.
 ```
 asafabric/
   scripts/
+    split_pdf.py       # multi-page PDF -> per-page images           [runnable now]
     config.py          # all paths, model picks, thresholds (reads .env)
     models.py          # Entry data model + the strict-JSON schema/prompt
     providers.py       # vision-model adapters (OpenAI / Gemini / Anthropic)

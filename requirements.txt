@@ -7,6 +7,9 @@ python-dotenv>=1.0
 # Interactive scan-and-confirm review app (scripts/review_app.py)
 streamlit>=1.40
 
+# Split scanned multi-page PDFs into per-page images (scripts/split_pdf.py)
+pymupdf>=1.24
+
 # Vision-model SDKs — install whichever TWO the Phase 0 pilot picks.
 # (Listed together for convenience; you don't need all three.)
 openai>=1.40
