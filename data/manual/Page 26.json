@@ -1,0 +1,102 @@
+{
+  "page": 26,
+  "date": "2/11/20",
+  "item": "CVC OMR White 44",
+  "fabrics": [
+    {
+      "label": "2400",
+      "grid": [
+        [
+          "=30*59",
+          23,
+          27
+        ]
+      ],
+      "total_amount": 1820,
+      "piece_count": 61,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 59 pcs."
+    },
+    {
+      "label": "2405",
+      "grid": [
+        [
+          "=30*65",
+          34,
+          32,
+          28,
+          27,
+          28,
+          32
+        ]
+      ],
+      "total_amount": 2131,
+      "piece_count": 71,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 65 pcs."
+    },
+    {
+      "label": "2404",
+      "grid": [
+        [
+          "=30*55",
+          26,
+          33,
+          24,
+          27,
+          34,
+          28
+        ],
+        [
+          27,
+          28
+        ]
+      ],
+      "total_amount": 1877,
+      "piece_count": 63,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 55 pcs."
+    },
+    {
+      "label": "2406",
+      "grid": [
+        [
+          "=30*57",
+          24,
+          27,
+          27,
+          34,
+          26,
+          27
+        ],
+        [
+          33,
+          26,
+          30
+        ]
+      ],
+      "total_amount": 1964,
+      "piece_count": 66,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 57 pcs."
+    },
+    {
+      "label": "1084",
+      "grid": [
+        [
+          "=30*42",
+          26,
+          27,
+          27,
+          35,
+          32,
+          34
+        ]
+      ],
+      "total_amount": 1441,
+      "piece_count": 48,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 42 pcs."
+    }
+  ]
+}

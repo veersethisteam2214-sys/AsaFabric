@@ -1,0 +1,62 @@
+{
+  "page": 27,
+  "date": "2/11/20",
+  "item": "CVC OMR White 44",
+  "fabrics": [
+    {
+      "label": "2207",
+      "grid": [
+        [
+          "=30*59",
+          27,
+          33,
+          30,
+          27,
+          28,
+          23
+        ],
+        [
+          27
+        ]
+      ],
+      "total_amount": 1965,
+      "piece_count": 66,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 59 pcs."
+    },
+    {
+      "label": "2401",
+      "grid": [
+        [
+          "=30*62",
+          27,
+          27,
+          27,
+          "",
+          31
+        ]
+      ],
+      "total_amount": 1972,
+      "piece_count": 66,
+      "needs_review": true,
+      "notes": "One crossed value omitted; formula cell represents 30 x 62 pcs."
+    },
+    {
+      "label": "Unlabeled lower block",
+      "grid": [
+        [
+          60,
+          60,
+          60,
+          38,
+          43,
+          57,
+          38,
+          60
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No visible right quantity."
+    }
+  ]
+}

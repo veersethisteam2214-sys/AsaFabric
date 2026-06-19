@@ -1,0 +1,179 @@
+{
+  "page": 3,
+  "date": "15/7/20",
+  "item": "Cotton Dobrt 444",
+  "page_total_yards": 6132,
+  "page_total_pcs": 77,
+  "notes": "Expanded to roll-level values from Page 03. Handwritten page total reads 77 pcs / 6132 yards; visible line totals add to 6130 yards.",
+  "fabrics": [
+    {
+      "label": "4394",
+      "grid": [
+        [
+          40,
+          73,
+          60,
+          40,
+          120,
+          120,
+          48,
+          119,
+          120,
+          129
+        ],
+        [
+          108,
+          124,
+          120,
+          40,
+          120,
+          103,
+          120,
+          62,
+          120,
+          40
+        ],
+        [
+          60,
+          120
+        ]
+      ],
+      "total_amount": 2006,
+      "piece_count": 22
+    },
+    {
+      "label": "4021",
+      "grid": [
+        [
+          44,
+          122,
+          40,
+          38,
+          71,
+          68,
+          122,
+          111,
+          48
+        ]
+      ],
+      "total_amount": 664,
+      "piece_count": 10,
+      "needs_review": true,
+      "notes": "Visible rolls add to 664 yards but only 9 visible values; quantity column says 10 pcs."
+    },
+    {
+      "label": "2003",
+      "grid": [
+        [
+          60,
+          120,
+          43,
+          120,
+          120,
+          119,
+          81,
+          122,
+          90,
+          132
+        ],
+        [
+          121,
+          40
+        ]
+      ],
+      "total_amount": 1168,
+      "piece_count": 12
+    },
+    {
+      "label": "4438",
+      "grid": [
+        [
+          120,
+          61,
+          50,
+          45,
+          47,
+          120,
+          120
+        ]
+      ],
+      "total_amount": 563,
+      "piece_count": 7
+    },
+    {
+      "label": "4125",
+      "grid": [
+        [
+          66,
+          44,
+          60,
+          46,
+          66,
+          46
+        ]
+      ],
+      "total_amount": 328,
+      "piece_count": 6
+    },
+    {
+      "label": "4460",
+      "grid": [
+        [
+          56,
+          40,
+          123,
+          40,
+          65
+        ]
+      ],
+      "total_amount": 324,
+      "piece_count": 5,
+      "needs_review": true,
+      "notes": "Middle value read as 123 despite overwrite/crossing."
+    },
+    {
+      "label": "3006",
+      "grid": [
+        [
+          127,
+          39,
+          65,
+          64,
+          58
+        ]
+      ],
+      "total_amount": 353,
+      "piece_count": 5,
+      "needs_review": true,
+      "notes": "First value read as 127 despite crossing."
+    },
+    {
+      "label": "601",
+      "grid": [
+        [
+          57,
+          56,
+          33,
+          51,
+          81,
+          30
+        ]
+      ],
+      "total_amount": 308,
+      "piece_count": 6
+    },
+    {
+      "label": "8117",
+      "grid": [
+        [
+          125,
+          68,
+          120,
+          103
+        ]
+      ],
+      "total_amount": 416,
+      "piece_count": 4
+    }
+  ]
+}

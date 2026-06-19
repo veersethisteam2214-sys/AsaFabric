@@ -1,0 +1,92 @@
+{
+  "page": 4,
+  "date": "7/7/20",
+  "item": "Cotton Poplin / SSPC",
+  "page_total_yards": 2368,
+  "page_total_pcs": 53,
+  "fabrics": [
+    {
+      "label": "#101",
+      "grid": [
+        [
+          21,
+          77,
+          22,
+          13,
+          34,
+          36,
+          20,
+          11,
+          36,
+          27
+        ],
+        [
+          12,
+          39,
+          28,
+          90,
+          33,
+          14,
+          25,
+          23,
+          25,
+          60
+        ],
+        [
+          36,
+          66,
+          18,
+          37,
+          20,
+          40,
+          18,
+          78,
+          25,
+          15
+        ],
+        [
+          74,
+          11,
+          65,
+          60,
+          48,
+          15
+        ]
+      ],
+      "total_amount": 1272,
+      "piece_count": 36,
+      "needs_review": true,
+      "notes": "One value read as 78 instead of 77 to match handwritten 1272 yard total."
+    },
+    {
+      "label": "#102",
+      "grid": [
+        [
+          66,
+          60,
+          60,
+          60,
+          60,
+          53,
+          63,
+          78,
+          71,
+          72
+        ],
+        [
+          72,
+          60,
+          63,
+          74,
+          56,
+          72,
+          56
+        ]
+      ],
+      "total_amount": 1096,
+      "piece_count": 17,
+      "needs_review": true,
+      "notes": "First value read as 66 to match handwritten 1096 yard total."
+    }
+  ]
+}

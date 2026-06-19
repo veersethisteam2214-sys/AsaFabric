@@ -1,0 +1,99 @@
+{
+  "page": 31,
+  "date": "23/9/16",
+  "notes": "Loose note page, not a standard packing list.",
+  "fabrics": [
+    {
+      "label": "15Y = 26PS",
+      "grid": [
+        [
+          "=15*26"
+        ]
+      ],
+      "total_amount": 390,
+      "piece_count": 26
+    },
+    {
+      "label": "15YD = 10PS",
+      "grid": [
+        [
+          "=15*10"
+        ]
+      ],
+      "total_amount": 150,
+      "piece_count": 10
+    },
+    {
+      "label": "15YDS = 23PS",
+      "grid": [
+        [
+          "=15*23"
+        ]
+      ],
+      "total_amount": 345,
+      "piece_count": 23
+    },
+    {
+      "label": "15YDS = 8PS",
+      "grid": [
+        [
+          "=15*8"
+        ]
+      ],
+      "total_amount": 120,
+      "piece_count": 8
+    },
+    {
+      "label": "15YDS = 33PS",
+      "grid": [
+        [
+          "=15*33"
+        ]
+      ],
+      "total_amount": 495,
+      "piece_count": 33
+    },
+    {
+      "label": "15YDS = 40PS",
+      "grid": [
+        [
+          "=15*40"
+        ]
+      ],
+      "total_amount": 600,
+      "piece_count": 40
+    },
+    {
+      "label": "15YDS = 33PS",
+      "grid": [
+        [
+          "=15*33"
+        ]
+      ],
+      "total_amount": 495,
+      "piece_count": 33
+    },
+    {
+      "label": "15YDS = 5PS",
+      "grid": [
+        [
+          "=15*5"
+        ]
+      ],
+      "total_amount": 75,
+      "piece_count": 5
+    },
+    {
+      "label": "15YDS = 35PS + note",
+      "grid": [
+        [
+          "=15*35",
+          15,
+          15
+        ]
+      ],
+      "needs_review": true,
+      "notes": "Line includes extra '15Y 15Y' note; review."
+    }
+  ]
+}

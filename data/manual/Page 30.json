@@ -1,0 +1,65 @@
+{
+  "page": 30,
+  "date": "12/10/20",
+  "buyer": "300",
+  "item": "Lace 13? Wire",
+  "fabrics": [
+    {
+      "label": "Silver lace",
+      "grid": [
+        [
+          "=15*105"
+        ]
+      ],
+      "total_amount": 1575,
+      "needs_review": true
+    },
+    {
+      "label": "Gold lace",
+      "grid": [
+        [
+          "=15*72"
+        ]
+      ],
+      "total_amount": 1080,
+      "needs_review": true
+    },
+    {
+      "label": "Black gold lace",
+      "grid": [
+        [
+          "=15*69"
+        ]
+      ],
+      "total_amount": 1035,
+      "needs_review": true
+    },
+    {
+      "label": "P100 bottom",
+      "grid": [
+        [
+          120,
+          120,
+          120,
+          120,
+          120,
+          120,
+          120,
+          120,
+          120,
+          120
+        ],
+        [
+          120,
+          120,
+          120,
+          42,
+          74
+        ]
+      ],
+      "total_amount": 1676,
+      "piece_count": 15,
+      "needs_review": true
+    }
+  ]
+}

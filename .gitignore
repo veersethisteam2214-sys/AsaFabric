@@ -8,6 +8,7 @@ photos/*
 !photos/.gitkeep
 drive_upload/
 data/pdf_tmp/
+tmp/
 
 # Generated data
 data/raw/*

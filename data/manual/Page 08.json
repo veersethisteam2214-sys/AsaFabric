@@ -1,0 +1,133 @@
+{
+  "page": 8,
+  "date": "30/9/20",
+  "item": "T/C UK 44",
+  "fabrics": [
+    {
+      "label": "Block 1",
+      "grid": [
+        [
+          11,
+          25,
+          21,
+          13,
+          20
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 2",
+      "grid": [
+        [
+          13,
+          15,
+          23
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 3",
+      "grid": [
+        [
+          36,
+          26,
+          11,
+          76
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 4",
+      "grid": [
+        [
+          11,
+          10,
+          12,
+          36
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 5",
+      "grid": [
+        [
+          34,
+          10,
+          22,
+          9,
+          10
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 6",
+      "grid": [
+        [
+          15,
+          10,
+          10,
+          44,
+          102,
+          85,
+          10,
+          16,
+          133
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 7",
+      "grid": [
+        [
+          21,
+          15,
+          80,
+          10,
+          18,
+          26
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 8",
+      "grid": [
+        [
+          52,
+          65,
+          33
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 9",
+      "grid": [
+        [
+          12,
+          10,
+          22
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Block 10",
+      "grid": [
+        [
+          31,
+          23,
+          15,
+          14
+        ]
+      ],
+      "needs_review": true
+    }
+  ]
+}

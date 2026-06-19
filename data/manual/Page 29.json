@@ -1,0 +1,64 @@
+{
+  "page": 29,
+  "date": "28/10/20",
+  "buyer": "300",
+  "fabrics": [
+    {
+      "label": "Green lace",
+      "grid": [
+        [
+          "=30*5",
+          29,
+          29,
+          29,
+          29,
+          29
+        ],
+        [
+          28,
+          28
+        ]
+      ],
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 5 pcs."
+    },
+    {
+      "label": "Yellow lace",
+      "grid": [
+        [
+          "=29*5",
+          15,
+          15
+        ]
+      ],
+      "needs_review": true,
+      "notes": "Possible crossed value at row start omitted."
+    },
+    {
+      "label": "Orange lace",
+      "grid": [
+        [
+          "=29*7",
+          30,
+          30,
+          28,
+          27,
+          15
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "White lace",
+      "grid": [
+        [
+          "=30*29",
+          27,
+          29,
+          15
+        ]
+      ],
+      "needs_review": true
+    }
+  ]
+}

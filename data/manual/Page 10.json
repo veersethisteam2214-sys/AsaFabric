@@ -1,0 +1,202 @@
+{
+  "page": 10,
+  "date": "3/9/20",
+  "item": "T/C 210 Luna",
+  "notes": "Several right totals partly covered by swatches; rows flagged.",
+  "fabrics": [
+    {
+      "label": "Black",
+      "grid": [
+        [
+          58,
+          60,
+          60,
+          85,
+          52,
+          60
+        ]
+      ],
+      "total_amount": 375,
+      "needs_review": true
+    },
+    {
+      "label": "Purple",
+      "grid": [
+        [
+          78,
+          44
+        ]
+      ],
+      "total_amount": 122,
+      "needs_review": true
+    },
+    {
+      "label": "Maron",
+      "grid": [
+        [
+          42,
+          76
+        ]
+      ],
+      "total_amount": 118,
+      "needs_review": true
+    },
+    {
+      "label": "7.548",
+      "grid": [
+        [
+          125,
+          105,
+          77
+        ]
+      ],
+      "total_amount": 307,
+      "needs_review": true
+    },
+    {
+      "label": "L Green",
+      "grid": [
+        [
+          61,
+          81,
+          33
+        ]
+      ],
+      "total_amount": 175,
+      "needs_review": true
+    },
+    {
+      "label": "Brown",
+      "grid": [
+        [
+          125,
+          53,
+          125
+        ]
+      ],
+      "total_amount": 303,
+      "needs_review": true
+    },
+    {
+      "label": "Russian",
+      "grid": [
+        [
+          125,
+          60,
+          76,
+          104,
+          97,
+          30
+        ]
+      ],
+      "total_amount": 492,
+      "needs_review": true
+    },
+    {
+      "label": "White",
+      "grid": [
+        [
+          80,
+          90,
+          125,
+          125,
+          61,
+          21,
+          42,
+          51,
+          44,
+          125
+        ],
+        [
+          125,
+          117,
+          116,
+          123,
+          125
+        ]
+      ],
+      "total_amount": 1370,
+      "needs_review": true
+    },
+    {
+      "label": "L Blue",
+      "grid": [
+        [
+          131,
+          89
+        ]
+      ],
+      "total_amount": 220,
+      "needs_review": true
+    },
+    {
+      "label": "Grey",
+      "grid": [
+        [
+          123,
+          124,
+          118,
+          113,
+          122,
+          121,
+          123,
+          122,
+          122,
+          91
+        ],
+        [
+          104,
+          123,
+          123,
+          123,
+          123,
+          122,
+          121,
+          123,
+          123
+        ]
+      ],
+      "total_amount": 2264,
+      "needs_review": true
+    },
+    {
+      "label": "Mustard",
+      "grid": [
+        [
+          104,
+          104,
+          121,
+          121,
+          35,
+          86,
+          123,
+          38,
+          35,
+          120
+        ]
+      ],
+      "total_amount": 887,
+      "needs_review": true
+    },
+    {
+      "label": "N.12",
+      "grid": [
+        [
+          125
+        ]
+      ],
+      "total_amount": 125,
+      "needs_review": true
+    },
+    {
+      "label": "Fin",
+      "grid": [
+        [
+          64
+        ]
+      ],
+      "total_amount": 64,
+      "needs_review": true
+    }
+  ]
+}

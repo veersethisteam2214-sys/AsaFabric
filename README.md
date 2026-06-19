@@ -5,6 +5,21 @@ yardage) into a clean spreadsheet — accurately. This repo holds the **scripts*
 The inventory itself lives in a **Google Sheet**; the page photos live in
 **Google Drive** (never in git).
 
+## Current Google Sheets workflow
+
+The active workbook workflow is documented in `google-sheets-tracking/`.
+
+- Live Sheet:
+  `https://docs.google.com/spreadsheets/d/1wdwDo_UWCe8GJZ2G4GNQ93rZF1oZhn5lmclqgDMC8Pg/edit`
+- PDF Drive folder:
+  `https://drive.google.com/drive/u/1/folders/194XsU0gcDRgSkWUzouMCShvW_3lmn7Ff`
+- Current source of truth: `data/manual/Page NN.json`
+- Current builder: `scripts/build_workbook.py`
+- Current active pages: Pages 01-05 feed Master List; Pages 06-32 stay
+  `NEED UPDATING` until verified.
+
+For another agent, start with `google-sheets-tracking/AGENT_INSTRUCTIONS.md`.
+
 > Full plan: see the approved project plan. TL;DR of the approach:
 > **photos → extract each page with TWO vision models → only hand-check the rows
 > where they disagree → land it in a Google Sheet.** The two-model cross-check is
@@ -123,6 +138,11 @@ keep the real run honest.
 
 ```
 asafabric/
+  google-sheets-tracking/
+    README.md          # current Sheet/Drive links + repeatable workflow
+    AGENT_INSTRUCTIONS.md
+    PAGE_JSON_TEMPLATE.md
+    VERIFY_GOOGLE_SHEET.md
   scripts/
     split_pdf.py       # multi-page PDF -> per-page images           [runnable now]
     config.py          # all paths, model picks, thresholds (reads .env)
@@ -135,14 +155,13 @@ asafabric/
     review_app.py      # interactive scan-and-confirm app       [needs keys+creds]
   sample/              # tiny two-pass fixture for trying diff/dedupe offline
   photos/              # page images (gitignored — never committed)
-  data/                # generated CSVs + data/raw/*.json (gitignored)
+  data/                # manual JSON + generated CSVs/raw data
   .env.example         # config template (copy to .env)
   requirements.txt
 ```
 
-The Sheet has these columns: `page_ref | image_link | raw_name | canonical_name |
-yardage | pass_a_name | pass_b_name | pass_a_yard | pass_b_yard | agreement_flag |
-yardage_warn | verified`.
+The older two-model pipeline output is still in the repo for reference. The
+current Google Sheet workbook shape is documented in `google-sheets-tracking/`.
 
 ---
 

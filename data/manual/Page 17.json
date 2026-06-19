@@ -1,0 +1,45 @@
+{
+  "page": 17,
+  "date": "15/9/20",
+  "item": "Chambray CVC",
+  "fabrics": [
+    {
+      "label": "Swatch 1",
+      "grid": [
+        [
+          157
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Swatch 2",
+      "grid": [
+        [
+          150
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Swatch 3",
+      "grid": [
+        [
+          41,
+          40
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "Swatch 4",
+      "grid": [
+        [
+          50,
+          30
+        ]
+      ],
+      "needs_review": true
+    }
+  ]
+}

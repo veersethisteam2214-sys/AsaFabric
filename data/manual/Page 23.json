@@ -1,0 +1,107 @@
+{
+  "page": 23,
+  "date": "15/8/20",
+  "buyer": "Goo",
+  "item": "C100X Pant 44",
+  "fabrics": [
+    {
+      "label": "Block 1",
+      "grid": [
+        [
+          142,
+          126,
+          134,
+          40,
+          123
+        ]
+      ],
+      "total_amount": 565,
+      "piece_count": 5
+    },
+    {
+      "label": "Block 2",
+      "grid": [
+        [
+          144,
+          138,
+          123
+        ]
+      ],
+      "total_amount": 405,
+      "piece_count": 3
+    },
+    {
+      "label": "Block 3",
+      "grid": [
+        [
+          113,
+          124,
+          121
+        ]
+      ],
+      "total_amount": 358,
+      "piece_count": 3
+    },
+    {
+      "label": "Block 4",
+      "grid": [
+        [
+          142,
+          111,
+          123
+        ]
+      ],
+      "total_amount": 376,
+      "piece_count": 3
+    },
+    {
+      "label": "Block 5",
+      "grid": [
+        [
+          95,
+          154,
+          126,
+          126
+        ]
+      ],
+      "total_amount": 501,
+      "piece_count": 4
+    },
+    {
+      "label": "Block 6",
+      "grid": [
+        [
+          59
+        ],
+        [
+          25
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No visible right quantity; likely two small swatch entries."
+    },
+    {
+      "label": "Block 7",
+      "grid": [
+        [
+          85,
+          155
+        ]
+      ],
+      "total_amount": 240,
+      "piece_count": 2
+    },
+    {
+      "label": "Block 8",
+      "grid": [
+        [
+          80,
+          120,
+          37
+        ]
+      ],
+      "total_amount": 237,
+      "piece_count": 3
+    }
+  ]
+}

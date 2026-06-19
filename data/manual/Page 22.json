@@ -1,0 +1,111 @@
+{
+  "page": 22,
+  "date": "15/8/20",
+  "buyer": "Goo",
+  "item": "C100X Pant 44",
+  "fabrics": [
+    {
+      "label": "Block 1",
+      "grid": [
+        [
+          70,
+          146
+        ]
+      ],
+      "total_amount": 216,
+      "piece_count": 2
+    },
+    {
+      "label": "Block 2",
+      "grid": [
+        [
+          79,
+          149
+        ]
+      ],
+      "total_amount": 228,
+      "piece_count": 2
+    },
+    {
+      "label": "Block 3",
+      "grid": [
+        [
+          113,
+          60,
+          124,
+          124,
+          123
+        ],
+        [
+          14
+        ]
+      ],
+      "total_amount": 544,
+      "piece_count": 5,
+      "needs_review": true,
+      "notes": "Standalone 14 below block not included in right total."
+    },
+    {
+      "label": "Block 4",
+      "grid": [
+        [
+          124,
+          120,
+          125
+        ]
+      ],
+      "total_amount": 369,
+      "piece_count": 3,
+      "needs_review": true,
+      "notes": "Crossed values before the row omitted."
+    },
+    {
+      "label": "Block 5",
+      "grid": [
+        [
+          112,
+          124,
+          122
+        ]
+      ],
+      "needs_review": true,
+      "notes": "Visible sum differs slightly from right quantity 355."
+    },
+    {
+      "label": "Block 6",
+      "grid": [
+        [
+          99,
+          149
+        ]
+      ],
+      "total_amount": 248,
+      "piece_count": 2
+    },
+    {
+      "label": "Block 7",
+      "grid": [
+        [
+          117,
+          122,
+          122,
+          123
+        ]
+      ],
+      "total_amount": 484,
+      "piece_count": 4
+    },
+    {
+      "label": "Block 8",
+      "grid": [
+        [
+          111
+        ]
+      ],
+      "total_amount": 111,
+      "piece_count": 1,
+      "needs_review": true,
+      "notes": "Single leftover value at page bottom."
+    }
+  ]
+}

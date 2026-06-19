@@ -1,0 +1,116 @@
+{
+  "page": 1,
+  "date": "15/9/20",
+  "item": "Chambray CVC",
+  "page_total_yards": 2973,
+  "page_total_pcs": 39,
+  "format": {
+    "layout": "roll_ledger",
+    "version": 1,
+    "purpose": "Functional inventory page: one row per roll, sell checkboxes, dynamic sold/available totals."
+  },
+  "notes": "Page 01 functional format. Top total reads 39 pcs / 2973 yards; visible roll rows currently account for fewer pcs/yards because several lower values are faint or crossed out.",
+  "fabrics": [
+    {
+      "label": "Design 1",
+      "total_amount": 1077,
+      "piece_count": 13,
+      "grid": [
+        [
+          82,
+          105,
+          100,
+          90,
+          116,
+          60,
+          63,
+          62,
+          87,
+          80
+        ],
+        [
+          62,
+          83,
+          87
+        ]
+      ]
+    },
+    {
+      "label": "Design 2",
+      "total_amount": 793,
+      "piece_count": 11,
+      "grid": [
+        [
+          69,
+          110,
+          59,
+          59,
+          38,
+          103,
+          36,
+          45,
+          58,
+          100
+        ],
+        [
+          89
+        ]
+      ],
+      "notes": "Written quantity appears to be 793 yards / 11 pcs, but visible roll values sum lower; review.",
+      "needs_review": true
+    },
+    {
+      "label": "Design 3",
+      "total_amount": 148,
+      "piece_count": 3,
+      "grid": [
+        [
+          34,
+          74,
+          40
+        ]
+      ],
+      "notes": "One crossed value omitted.",
+      "needs_review": true
+    },
+    {
+      "label": "Design 4",
+      "total_amount": 254,
+      "piece_count": 3,
+      "grid": [
+        [
+          56,
+          100,
+          98
+        ]
+      ]
+    },
+    {
+      "label": "Design 5",
+      "total_amount": 195,
+      "piece_count": 2,
+      "grid": [
+        [
+          105,
+          90
+        ]
+      ],
+      "notes": "Possible missing/faint value; review.",
+      "needs_review": true
+    },
+    {
+      "label": "Design 6",
+      "total_amount": 231,
+      "piece_count": 3,
+      "grid": [
+        [
+          50,
+          81,
+          100
+        ]
+      ],
+      "notes": "One crossed value omitted.",
+      "needs_review": true
+    }
+  ]
+}

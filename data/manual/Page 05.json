@@ -1,0 +1,452 @@
+{
+  "page": 5,
+  "date": "28/10/20",
+  "buyer": "SSPCT/C",
+  "item": "6011",
+  "page_total_yards": 10945,
+  "page_total_pcs": 224,
+  "notes": "Expanded to roll-level values from Page 05. Handwritten page total reads 224 pcs / 10945 yards; visible line totals add to 11777 yards.",
+  "fabrics": [
+    {
+      "label": "Cotton mix line 1",
+      "grid": [
+        [
+          42,
+          47,
+          91,
+          99,
+          89,
+          68,
+          87,
+          29,
+          19,
+          155
+        ]
+      ],
+      "total_amount": 726,
+      "piece_count": 10
+    },
+    {
+      "label": "Cotton mix line 2",
+      "grid": [
+        [
+          74,
+          28,
+          10,
+          20,
+          120,
+          30,
+          5,
+          35,
+          23,
+          18
+        ]
+      ],
+      "total_amount": 363,
+      "piece_count": 10
+    },
+    {
+      "label": "Cotton mix line 3",
+      "grid": [
+        [
+          22,
+          30,
+          27,
+          12,
+          119,
+          38,
+          11,
+          24,
+          25,
+          30
+        ]
+      ],
+      "total_amount": 338,
+      "piece_count": 10
+    },
+    {
+      "label": "Cotton mix line 4",
+      "grid": [
+        [
+          67,
+          56,
+          146,
+          11,
+          21,
+          25,
+          45,
+          57,
+          18,
+          38
+        ]
+      ],
+      "total_amount": 484,
+      "piece_count": 10,
+      "needs_review": true,
+      "notes": "Third value read as 146 to match handwritten line total."
+    },
+    {
+      "label": "Cotton mix line 5",
+      "grid": [
+        [
+          10,
+          42,
+          5,
+          69,
+          40,
+          19,
+          36,
+          11,
+          20,
+          78
+        ]
+      ],
+      "total_amount": 330,
+      "piece_count": 10
+    },
+    {
+      "label": "Acron line 1",
+      "grid": [
+        [
+          21,
+          120,
+          29,
+          41,
+          17,
+          53,
+          35,
+          55,
+          38,
+          17
+        ]
+      ],
+      "total_amount": 426,
+      "piece_count": 10
+    },
+    {
+      "label": "Acron line 2",
+      "grid": [
+        [
+          25,
+          2,
+          75,
+          3,
+          30,
+          41,
+          22,
+          86,
+          25,
+          35
+        ]
+      ],
+      "total_amount": 344,
+      "piece_count": 10,
+      "needs_review": true,
+      "notes": "Second value read as 2 to match handwritten line total."
+    },
+    {
+      "label": "Acron line 3",
+      "grid": [
+        [
+          11,
+          11,
+          130,
+          150,
+          32,
+          29,
+          20,
+          18,
+          57,
+          47
+        ]
+      ],
+      "total_amount": 505,
+      "piece_count": 10
+    },
+    {
+      "label": "Acron line 4",
+      "grid": [
+        [
+          20,
+          18,
+          20,
+          18,
+          23,
+          10,
+          19,
+          60,
+          9,
+          50
+        ]
+      ],
+      "total_amount": 247,
+      "piece_count": 10
+    },
+    {
+      "label": "Acron line 5",
+      "grid": [
+        [
+          23,
+          42,
+          14,
+          123,
+          12,
+          10,
+          20,
+          94,
+          15,
+          22
+        ]
+      ],
+      "total_amount": 375,
+      "piece_count": 10
+    },
+    {
+      "label": "Lower line 1",
+      "grid": [
+        [
+          50,
+          222,
+          132,
+          120,
+          75,
+          74,
+          60,
+          40,
+          51,
+          12
+        ]
+      ],
+      "total_amount": 836,
+      "piece_count": 10,
+      "needs_review": true,
+      "notes": "Second value read as 222 to match handwritten line total."
+    },
+    {
+      "label": "Lower line 2",
+      "grid": [
+        [
+          30,
+          40,
+          56,
+          37,
+          23,
+          222,
+          40,
+          73,
+          33,
+          18
+        ]
+      ],
+      "total_amount": 572,
+      "piece_count": 10
+    },
+    {
+      "label": "Lower line 3",
+      "grid": [
+        [
+          120,
+          30,
+          20,
+          42,
+          47,
+          65,
+          11,
+          60,
+          20,
+          29
+        ]
+      ],
+      "total_amount": 444,
+      "piece_count": 10
+    },
+    {
+      "label": "Lower line 4",
+      "grid": [
+        [
+          49,
+          200,
+          30,
+          64,
+          60,
+          70,
+          220,
+          70,
+          14,
+          55
+        ]
+      ],
+      "total_amount": 832,
+      "piece_count": 10
+    },
+    {
+      "label": "Lower line 5",
+      "grid": [
+        [
+          64,
+          20,
+          19,
+          99,
+          11,
+          43,
+          29,
+          55,
+          60,
+          7
+        ]
+      ],
+      "total_amount": 407,
+      "piece_count": 10,
+      "needs_review": true,
+      "notes": "Seventh value read as 29 to match handwritten line total."
+    },
+    {
+      "label": "Bottom line 1",
+      "grid": [
+        [
+          20,
+          11,
+          6,
+          66,
+          60,
+          109,
+          60,
+          18,
+          58,
+          77
+        ]
+      ],
+      "total_amount": 485,
+      "piece_count": 10
+    },
+    {
+      "label": "Bottom line 2",
+      "grid": [
+        [
+          58,
+          100,
+          116,
+          40,
+          48,
+          70,
+          60,
+          135,
+          101,
+          25
+        ]
+      ],
+      "total_amount": 753,
+      "piece_count": 10
+    },
+    {
+      "label": "Bottom line 3",
+      "grid": [
+        [
+          11,
+          116,
+          65,
+          47,
+          90,
+          27,
+          38,
+          6,
+          10,
+          57
+        ]
+      ],
+      "total_amount": 467,
+      "piece_count": 10
+    },
+    {
+      "label": "Bottom line 4",
+      "grid": [
+        [
+          50,
+          10,
+          12,
+          120,
+          58,
+          33,
+          15,
+          10,
+          5,
+          91
+        ]
+      ],
+      "total_amount": 404,
+      "piece_count": 10
+    },
+    {
+      "label": "Bottom line 5",
+      "grid": [
+        [
+          37,
+          25,
+          129,
+          4,
+          8,
+          120,
+          58,
+          45,
+          100,
+          45
+        ]
+      ],
+      "total_amount": 571,
+      "piece_count": 10,
+      "needs_review": true,
+      "notes": "First value read as 37 to match handwritten line total."
+    },
+    {
+      "label": "Bottom line 6",
+      "grid": [
+        [
+          82,
+          32,
+          28,
+          32,
+          33,
+          20,
+          100,
+          83,
+          81,
+          67
+        ]
+      ],
+      "total_amount": 558,
+      "piece_count": 10
+    },
+    {
+      "label": "Bottom line 7",
+      "grid": [
+        [
+          200,
+          58,
+          51,
+          126,
+          11,
+          120,
+          124,
+          120,
+          120,
+          20
+        ]
+      ],
+      "total_amount": 950,
+      "piece_count": 10
+    },
+    {
+      "label": "Bottom line 8",
+      "grid": [
+        [
+          16,
+          132,
+          137,
+          75
+        ]
+      ],
+      "total_amount": 360,
+      "piece_count": 4
+    }
+  ]
+}

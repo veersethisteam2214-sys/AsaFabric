@@ -1,0 +1,175 @@
+{
+  "page": 24,
+  "date": "10/7/20",
+  "buyer": "300",
+  "item": "Voile 60 / 44",
+  "fabrics": [
+    {
+      "label": "603 X",
+      "grid": [
+        [
+          "=30*22",
+          149,
+          150,
+          153,
+          122,
+          152,
+          20
+        ],
+        [
+          40,
+          25,
+          48,
+          21,
+          18,
+          55
+        ]
+      ],
+      "total_amount": 1613,
+      "piece_count": 34,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 22 pcs."
+    },
+    {
+      "label": "6031 X",
+      "grid": [
+        [
+          59,
+          60,
+          104,
+          60,
+          60,
+          40,
+          78,
+          52,
+          60,
+          39
+        ],
+        [
+          54,
+          30,
+          43,
+          27,
+          34,
+          60,
+          60,
+          60
+        ]
+      ],
+      "total_amount": 1002,
+      "piece_count": 18
+    },
+    {
+      "label": "442? X",
+      "grid": [
+        [
+          60,
+          95,
+          60,
+          59,
+          60,
+          60,
+          45,
+          50,
+          60,
+          30
+        ],
+        [
+          54,
+          64,
+          42,
+          48,
+          45,
+          30,
+          42,
+          60
+        ]
+      ],
+      "total_amount": 984,
+      "piece_count": 18
+    },
+    {
+      "label": "4411 X",
+      "grid": [
+        [
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60
+        ],
+        [
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60
+        ],
+        [
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          60,
+          20,
+          60
+        ],
+        [
+          60,
+          60,
+          60,
+          15,
+          60,
+          12,
+          60,
+          60,
+          60,
+          60
+        ],
+        [
+          60,
+          "",
+          12,
+          "PS",
+          30,
+          "",
+          40,
+          "PS",
+          "",
+          20
+        ]
+      ],
+      "total_amount": 3280,
+      "piece_count": 57,
+      "needs_review": true,
+      "notes": "Grid includes shorthand and blanks; right total used."
+    },
+    {
+      "label": "4411 X lower",
+      "grid": [
+        [
+          "=30*29",
+          20,
+          15
+        ]
+      ],
+      "total_amount": 905,
+      "piece_count": 31,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 29 pcs."
+    }
+  ]
+}

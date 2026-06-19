@@ -1,0 +1,54 @@
+{
+  "page": 12,
+  "date": "28/10/20",
+  "buyer": "SS T/C",
+  "item": "SSPC 60",
+  "fabrics": [
+    {
+      "label": "#12",
+      "grid": [
+        [
+          25,
+          29,
+          20,
+          49,
+          80
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "#9",
+      "grid": [
+        [
+          84,
+          82,
+          96
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "#7",
+      "grid": [
+        [
+          92,
+          126,
+          100
+        ]
+      ],
+      "needs_review": true
+    },
+    {
+      "label": "#14",
+      "grid": [
+        [
+          21,
+          30,
+          120
+        ]
+      ],
+      "needs_review": true
+    }
+  ]
+}

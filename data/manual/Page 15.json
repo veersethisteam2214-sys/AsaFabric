@@ -1,0 +1,72 @@
+{
+  "page": 15,
+  "date": "6/8/20",
+  "buyer": "Raju Partn",
+  "item": "T/C 581",
+  "notes": "Several decimal/overwritten totals; first-pass flags them.",
+  "fabrics": [
+    {
+      "label": "White lines",
+      "grid": [
+        [
+          293
+        ],
+        [
+          355
+        ],
+        [
+          467
+        ],
+        [
+          346
+        ],
+        [
+          416
+        ]
+      ],
+      "needs_review": true,
+      "notes": "Right-side line totals copied; dense grid not fully expanded."
+    },
+    {
+      "label": "Middle decimal lines",
+      "grid": [
+        [
+          288.7
+        ],
+        [
+          252
+        ],
+        [
+          26.5
+        ],
+        [
+          230.75
+        ],
+        [
+          452.75
+        ]
+      ],
+      "needs_review": true,
+      "notes": "Overwritten decimals; review against image."
+    },
+    {
+      "label": "Lower totals",
+      "grid": [
+        [
+          137.25
+        ],
+        [
+          1628.95
+        ],
+        [
+          1692.44
+        ],
+        [
+          540
+        ]
+      ],
+      "needs_review": true,
+      "notes": "Right-side totals copied; review decimals."
+    }
+  ]
+}

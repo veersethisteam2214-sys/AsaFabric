@@ -1,0 +1,172 @@
+{
+  "page": 7,
+  "date": "30/9/20",
+  "item": "T/C UK 44",
+  "fabrics": [
+    {
+      "label": "Block 1",
+      "grid": [
+        [
+          131,
+          137,
+          110,
+          12,
+          110,
+          14,
+          19,
+          13,
+          28,
+          110
+        ],
+        [
+          116,
+          135,
+          11,
+          12,
+          10,
+          13,
+          10,
+          24,
+          14,
+          25
+        ],
+        [
+          52,
+          33,
+          42,
+          22,
+          60,
+          107,
+          110,
+          9,
+          20,
+          17
+        ],
+        [
+          11,
+          10,
+          47,
+          27,
+          101,
+          10,
+          23,
+          35,
+          40,
+          125
+        ],
+        [
+          14,
+          23,
+          11,
+          12
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No quantity total written."
+    },
+    {
+      "label": "Block 2",
+      "grid": [
+        [
+          126,
+          10,
+          64,
+          63,
+          48,
+          55,
+          65,
+          11,
+          20
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No quantity total written."
+    },
+    {
+      "label": "Block 3",
+      "grid": [
+        [
+          122,
+          16,
+          124,
+          124,
+          21,
+          11,
+          11,
+          120,
+          10,
+          10
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No quantity total written."
+    },
+    {
+      "label": "Block 4",
+      "grid": [
+        [
+          82,
+          16,
+          11,
+          10,
+          15,
+          8,
+          11,
+          12,
+          114,
+          81
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No quantity total written."
+    },
+    {
+      "label": "Block 5",
+      "grid": [
+        [
+          11,
+          24,
+          28,
+          124,
+          15,
+          16,
+          11
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No quantity total written."
+    },
+    {
+      "label": "Block 6",
+      "grid": [
+        [
+          65,
+          117,
+          13,
+          12,
+          10,
+          22,
+          16
+        ],
+        [
+          26,
+          16,
+          17,
+          16,
+          16,
+          24,
+          21,
+          30,
+          20,
+          15
+        ],
+        [
+          17,
+          20
+        ]
+      ],
+      "needs_review": true,
+      "notes": "No quantity total written."
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "page": 32,
+  "date": "17/9/20",
+  "buyer": "Gane Pant",
+  "item": "T/C Fancy 60",
+  "fabrics": [
+    {
+      "label": "Black swatch",
+      "grid": [
+        [
+          163,
+          120,
+          23,
+          166,
+          166,
+          167,
+          140,
+          121,
+          167,
+          180
+        ],
+        [
+          67,
+          60,
+          70,
+          71,
+          57,
+          65,
+          72,
+          61,
+          158,
+          66
+        ],
+        [
+          "",
+          150,
+          72,
+          69,
+          76,
+          138,
+          78,
+          52,
+          79,
+          74
+        ],
+        [
+          64,
+          72,
+          20,
+          78
+        ]
+      ],
+      "total_amount": 3992,
+      "piece_count": 33,
+      "needs_review": true,
+      "notes": "One crossed/hidden value omitted; right total used."
+    }
+  ]
+}

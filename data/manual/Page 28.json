@@ -1,0 +1,59 @@
+{
+  "page": 28,
+  "date": "14/10/20",
+  "buyer": "300",
+  "item": "O/C OMR",
+  "fabrics": [
+    {
+      "label": "2346 top",
+      "grid": [
+        [
+          "=30*30",
+          27,
+          29
+        ]
+      ],
+      "total_amount": 956,
+      "piece_count": 32,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 30 pcs."
+    },
+    {
+      "label": "2346",
+      "grid": [
+        [
+          "=30*35"
+        ]
+      ],
+      "total_amount": 1050,
+      "piece_count": 35,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 35 pcs."
+    },
+    {
+      "label": "2292 top",
+      "grid": [
+        [
+          "=30*15"
+        ]
+      ],
+      "total_amount": 450,
+      "piece_count": 15,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 15 pcs."
+    },
+    {
+      "label": "2292 lower",
+      "grid": [
+        [
+          "=30*35",
+          19
+        ]
+      ],
+      "total_amount": 1069,
+      "piece_count": 36,
+      "needs_review": true,
+      "notes": "Formula cell represents handwritten 30 x 35 pcs plus 19."
+    }
+  ]
+}
