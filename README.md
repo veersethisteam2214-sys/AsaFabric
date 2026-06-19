@@ -1,13 +1,36 @@
-# ASAFabric — Fabric Inventory Digitization
+# Asa Fabric
 
-Turning Veer's handwritten fabric inventory book (1,000+ entries: fabric name +
-yardage) into a clean spreadsheet — accurately. This repo holds the **scripts**.
-The inventory itself lives in a **Google Sheet**; the page photos live in
-**Google Drive** (never in git).
+This repo now holds two connected pieces of the Asa Fabric project:
 
-## Current Google Sheets workflow
+- A static website prototype for the buyer-facing fabric catalog.
+- A Google Sheets tracking workflow for turning scanned inventory PDFs into a
+  clean, shared stock workbook.
 
-The active workbook workflow is documented in `google-sheets-tracking/`.
+The website uses sample catalog values for now. The real inventory source is the
+Google Sheet built from the scanned PDFs.
+
+## Website
+
+Premium front-end concept for Asa Fabric, a textile stock house selling fabrics
+such as TC, wool blend, poly cotton, chambray, twill, shirting, trousering, and
+clearance dead stock.
+
+Current files:
+
+- `index.html` - page structure and content.
+- `styles.css` - responsive visual design and textile treatments.
+- `app.js` - sample catalog data, use-case rendering, search, and filters.
+
+Next website steps:
+
+1. Connect catalog data to the real stock Sheet or an exported CSV/JSON file.
+2. Add real fabric photos for each lot.
+3. Replace placeholder prices with confirmed roll and cut-length pricing.
+4. Decide how enquiries should be handled: WhatsApp, email, form backend, or CRM.
+
+## Google Sheets Tracking
+
+The active Sheet workflow is documented in `google-sheets-tracking/`.
 
 - Live Sheet:
   `https://docs.google.com/spreadsheets/d/1wdwDo_UWCe8GJZ2G4GNQ93rZF1oZhn5lmclqgDMC8Pg/edit`
@@ -18,169 +41,85 @@ The active workbook workflow is documented in `google-sheets-tracking/`.
 - Current active pages: Pages 01-05 feed Master List; Pages 06-32 stay
   `NEED UPDATING` until verified.
 
-For another agent, start with `google-sheets-tracking/AGENT_INSTRUCTIONS.md`.
+For another agent, start with:
 
-> Full plan: see the approved project plan. TL;DR of the approach:
-> **photos → extract each page with TWO vision models → only hand-check the rows
-> where they disagree → land it in a Google Sheet.** The two-model cross-check is
-> the accuracy mechanism — a standalone handwritten yardage (`12` vs `17` vs `72`)
-> has no context for a model to self-correct, so wrong digits slip through
-> silently unless a second model disagrees and flags it.
+1. `google-sheets-tracking/README.md`
+2. `google-sheets-tracking/AGENT_INSTRUCTIONS.md`
+3. `data/manual/README.md`
 
----
+The dynamic chain is:
 
-## Where we are: Phase 0 (do this first — no code, no API keys, no money)
-
-### 1. Photograph the whole book into a folder
-
-- Use a **book-scanning app** — **vFlat Scan** or **Genius Scan** — not the raw
-  camera. They batch-capture, auto-crop, and flatten page curvature.
-- **One image per page**, named in order: `page_001.jpg`, `page_002.jpg`, …
-- **Scanned the book as one multi-page PDF instead?** That's fine — split it into
-  per-page images first: `python scripts/split_pdf.py book.pdf` →
-  `photos/page_001.png …` (use `--start 51` to continue numbering across PDFs).
-- Flat pages, soft two-sided ~45° light, **no glare**, ~300–400 DPI. Glance at
-  each shot for legibility as you go — bad capture quietly tanks every later
-  step and is the cheapest thing to get right.
-- Put originals in a **shared Google Drive folder** (backup + Veer access). To
-  run the pipeline later, copy them into this repo's `photos/` folder (it's
-  gitignored — photos never get committed).
-
-### 2. The free pilot — pick the model that reads Veer's hand best
-
-Pick **3–5 representative pages** (include the messiest one). Paste each into the
-**ChatGPT, Gemini, and Claude web apps** (free — no API keys), with this prompt:
-
-```
-You are transcribing one page of a handwritten fabric inventory book.
-Read every row exactly as written, top to bottom. For each row give the fabric
-name/description and its yardage. Transcribe the yardage EXACTLY as written
-(keep fractions/decimals/symbols); never round, infer, or invent a number. If a
-value is unreadable, write "UNREADABLE". Return a JSON array of
-{fabric_name, yardage, notes}.
+```text
+Google Drive PDFs -> data/manual/Page NN.json -> Page NN tab -> Master List -> Control Panel
 ```
 
-Then score each model against the actual page (a quick tally is enough):
+Master List mirrors Page tabs with formulas. Control Panel counts Master List
+with formulas. PDF presence and links refresh from Google Drive when the builder
+or Apps Script runs.
 
-| Model | Names correct | Yardages correct | Notes |
-|-------|--------------|------------------|-------|
-| ChatGPT (GPT-5.5/5.4) | /N | /N | |
-| Gemini (3.5 Flash) | /N | /N | |
-| Claude (Opus 4.8 / Sonnet 4.6) | /N | /N | |
+## Ownership
 
-**The winner + the runner-up become the two models for the bulk run.** Vendor
-benchmarks won't predict whose hand reads best — this 30-minute test decides it.
-Put your two picks in `.env` as `MODEL_A` / `MODEL_B`.
+- Pages 01-12: Shaan
+- Pages 13-24: Veer
+- Pages 25-32: Krish
 
----
+Only pages listed in `VERIFIED_PAGES` in `scripts/build_workbook.py` feed Master
+List. Add a page number there only after the page has been checked against the
+scan.
 
-## Phase 1: the pipeline (after the pilot)
-
-Common setup:
+## Setup
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env          # then fill in MODEL_A/MODEL_B + the two API keys you chose
+cp .env.example .env
 ```
 
-### Option A — scan & confirm, one page at a time (recommended)
+Fill `.env` with the Google Sheet id, Drive folder id, and local service account
+JSON path. Do not commit `.env` or `service-account.json`.
 
-The interactive review app: drop in a page photo, both models read it, you see
-the **image beside the rows**, agreements are pre-approved and disagreements are
-highlighted with both models' values — you only decide the conflicts, then click
-**Approve** to append that page to the Sheet. Nothing reaches the Sheet
-unconfirmed, so a misread yardage can't slip in silently. Also your tool for
-adding new fabric later.
+Main rebuild command:
 
 ```bash
-streamlit run scripts/review_app.py
+.venv/bin/python scripts/build_workbook.py
 ```
 
-### Option B — batch the whole book, review in the Sheet
+## Repo Layout
 
-Better if you'd rather photograph everything first and review in bulk:
-
-```bash
-# put your page photos in ./photos as page_001.jpg, page_002.jpg, ...
-python scripts/extract.py         # each page -> 2 models -> data/raw/*.json
-python scripts/diff.py            # merge the two passes -> data/merged.csv (disagreements first)
-python scripts/dedupe.py          # normalize fabric names -> data/deduped.csv
-python scripts/load_to_sheets.py  # push to the Google Sheet
-```
-
-Then the **human verification pass** in the Sheet:
-1. Review the flagged rows (sorted to the top) against the page image.
-2. Do one fast eyeball **down the entire yardage column** — a wrong digit is
-   invisible in a name-only review.
-3. Spot-check 5–10% of the auto-accepted (`AGREE`) rows.
-
-Either way, run `dedupe.py` as a **final** pass once the whole book is in —
-fabric-name clustering needs the full set of names.
-
-### Try the pipeline now, without photos or keys
-
-`diff.py` and `dedupe.py` are model-agnostic and run on the included sample:
-
-```bash
-pip install rapidfuzz
-python scripts/diff.py   --raw-dir sample --provider-a openai --provider-b gemini --out data/merged_sample.csv
-python scripts/dedupe.py --in data/merged_sample.csv --out data/deduped_sample.csv
-```
-
-You'll see one yardage disagreement get flagged (`DISAGREE_YARD`) and name
-variants collapse to a single canonical name — exactly the two mechanisms that
-keep the real run honest.
-
----
-
-## Repo layout
-
-```
+```text
 asafabric/
+  index.html
+  styles.css
+  app.js
   google-sheets-tracking/
-    README.md          # current Sheet/Drive links + repeatable workflow
+    README.md
     AGENT_INSTRUCTIONS.md
     PAGE_JSON_TEMPLATE.md
     VERIFY_GOOGLE_SHEET.md
+  apps_script/
+    Code.gs
+  data/
+    manual/
+      Page 01.json ... Page 32.json
+      README.md
+    raw/
   scripts/
-    split_pdf.py       # multi-page PDF -> per-page images           [runnable now]
-    config.py          # all paths, model picks, thresholds (reads .env)
-    models.py          # Entry data model + the strict-JSON schema/prompt
-    providers.py       # vision-model adapters (OpenAI / Gemini / Anthropic)
-    extract.py         # photos -> 2 models -> per-page JSON   [needs keys+photos]
-    diff.py            # merge two passes -> merged.csv         [runnable now]
-    dedupe.py          # rapidfuzz canonical names -> deduped   [runnable now]
-    load_to_sheets.py  # gspread batch upload                   [needs Google creds]
-    review_app.py      # interactive scan-and-confirm app       [needs keys+creds]
-  sample/              # tiny two-pass fixture for trying diff/dedupe offline
-  photos/              # page images (gitignored — never committed)
-  data/                # manual JSON + generated CSVs/raw data
-  .env.example         # config template (copy to .env)
-  requirements.txt
+    build_workbook.py
+    config.py
+    google_io.py
+    check_google.py
+    split_pdf.py
+    ...
+  sample/
+  photos/
 ```
 
-The older two-model pipeline output is still in the repo for reference. The
-current Google Sheet workbook shape is documented in `google-sheets-tracking/`.
+## Rules
 
----
-
-## Open risks / gotchas
-
-- **Model IDs drift monthly.** Confirm the exact `model_id` in each provider's
-  docs the day you run `extract.py`. As of mid-2026: `gpt-5.5`/`gpt-5.4`,
-  `gemini-3.5-flash`, `claude-opus-4-8`/`claude-sonnet-4-6`.
-- **Provider SDK calls** in `providers.py` reflect the documented APIs as of
-  mid-2026 — run **one** real page through before the full batch to confirm the
-  call shape, then scale.
-- **Secrets:** never commit `.env` or the Google `service-account.json`
-  (`.gitignore` already excludes them). Share `.env.example` instead.
-- **Cost is trivial** (~a few dollars for the whole book), so optimize for
-  accuracy, not tokens. Switching to each provider's 50%-off Batch API is a
-  later optimization, not needed for ~50 pages.
-
-## Roadmap (later)
-
-Catalog + customer mass-send: migrate the clean data to Airtable, build the site
-with Softr (no-code) or Next.js on Cloudflare Pages, move images to Cloudflare R2.
-Out of scope until the digitized sheet exists.
+- Do not manually edit Master List inventory cells.
+- Do not replace formulas with pasted values.
+- Do not add Page 06+ to Master List until the page is verified.
+- Do not trust legacy Gemini/API output as final truth.
+- Keep scan-derived data in `data/manual/Page NN.json`.
+- Keep secrets and scanned media out of git.
