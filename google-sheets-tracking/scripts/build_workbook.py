@@ -3,9 +3,9 @@
 Final workbook shape:
   Control Panel, Master List, Page 01 ... Page 32
 
-This builder intentionally ignores the old Gemini/raw extraction files. The
-source of truth is hand-checked JSON in data/manual/Page NN.json. Missing pages
-still get a clean page tab so the Control Panel can show what remains.
+This builder intentionally ignores the old Gemini/raw extraction files. Re-check
+the PDF before trusting or expanding any JSON page data. Missing pages still get
+a clean page tab so the Control Panel can show what remains.
 
     python scripts/build_workbook.py
 """
@@ -25,7 +25,7 @@ import google_io
 
 
 PAGE_NUMBERS = range(1, 33)
-VERIFIED_PAGES = set(range(1, 6))
+MASTER_LIST_PAGES = set(range(1, 6))
 OWNER_RANGES = [
     (1, 12, "Shaan"),
     (13, 24, "Veer"),
@@ -364,7 +364,7 @@ def build_page_values(
     existing_fabrics = existing_fabrics or {}
     existing_sales = existing_sales or {}
     page_date = literal_text(data.get("date", ""))
-    needs_update = page not in VERIFIED_PAGES
+    needs_update = page not in MASTER_LIST_PAGES
     master_rows: list[dict[str, Any]] = []
 
     fabrics = data.get("fabrics") or []
@@ -931,7 +931,7 @@ def main() -> None:
         title = page_name(page)
         pdf_url = pdf_links.get(f"{title}.pdf", "")
         existing_fabrics, existing_sales = read_existing_page_state(spreadsheet, title)
-        working_data = data if page in VERIFIED_PAGES else {
+        working_data = data if page in MASTER_LIST_PAGES else {
             "page": page,
             "date": "",
             "item": "",
@@ -1002,7 +1002,7 @@ def main() -> None:
         meta = page_meta[page]
         data = meta["data"]
         pdf_url = meta["pdf_url"]
-        needs_update = page not in VERIFIED_PAGES
+        needs_update = page not in MASTER_LIST_PAGES
         control_note = "NEED UPDATING - roll-level verification pending." if needs_update else str(data.get("notes", ""))
         control_values.append([
             title,

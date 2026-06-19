@@ -1,6 +1,8 @@
 # Manual page data format
 
-Each `Page NN.json` file is the repeatable source for one PDF page.
+Each `Page NN.json` file is the repeatable transcription file for one PDF page.
+The PDF in Google Drive is the visual source. Re-check the PDF before trusting
+or expanding JSON.
 
 Page ownership:
 - Pages 01-12: Shaan.
@@ -14,8 +16,8 @@ Sheet roles:
   the page tabs with formulas; edit the page tab, not Master List.
 - Control Panel is workflow only: owner, PDF/page links, status, line count, needs-check count, OK count, and page note.
 - Do not add scan totals or inventory totals to Control Panel unless they are needed for workflow.
-- Only pages in `VERIFIED_PAGES` in `scripts/build_workbook.py` feed Master List.
-- Pages outside `VERIFIED_PAGES` stay as assigned `NEED UPDATING` placeholders until their scan data is verified.
+- Only pages in `MASTER_LIST_PAGES` in `scripts/build_workbook.py` feed Master List.
+- Pages outside `MASTER_LIST_PAGES` stay as assigned `NEED UPDATING` placeholders until their PDF is re-checked.
 
 Top-level fields:
 - `date`: shown on the page tab and Master List.

@@ -5,18 +5,21 @@ You are continuing the ASAFabric Google Sheets tracking workbook.
 Read these files before changing anything:
 
 1. `google-sheets-tracking/README.md`
-2. `data/manual/README.md`
-3. `scripts/build_workbook.py`
-4. `apps_script/Code.gs`
+2. `google-sheets-tracking/data/manual/README.md`
+3. `google-sheets-tracking/scripts/build_workbook.py`
+4. `google-sheets-tracking/apps_script/Code.gs`
+
+Work inside the `google-sheets-tracking/` folder for Sheet/Drive tasks.
 
 ## Mission
 
 Continue verifying scanned inventory pages and make the generated Google Sheet
 clean, simple, and repeatable.
 
-The user wants no static inventory data except what is transcribed from the scan
-into `data/manual/Page NN.json`. Page tabs are the Google Sheets source of truth.
-Master List must mirror page tabs with formulas. Control Panel is workflow only.
+The user wants no static inventory data except what is re-checked from the PDF
+and entered into `data/manual/Page NN.json`. Existing JSON may be wrong. Open the
+PDF again before trusting or expanding any page. Master List must mirror page
+tabs with formulas. Control Panel is workflow only.
 
 ## Google assets
 
@@ -47,8 +50,9 @@ If you are working for Veer, start at Page 13 and continue in order.
 ## Do not do these
 
 - Do not edit Master List inventory cells manually.
-- Do not add Page 06+ to Master List until the page is actually verified.
+- Do not add Page 06+ to Master List until the PDF has been re-checked.
 - Do not trust legacy Gemini/API output as final truth.
+- Do not trust current JSON without comparing it back to the PDF.
 - Do not replace formulas with pasted values.
 - Do not add extra static tracking columns to scan pages.
 - Do not change the workbook shape unless the user asks.
@@ -62,7 +66,7 @@ Google Drive PDFs -> data/manual/Page NN.json -> Page NN tab -> Master List -> C
 ```
 
 - Google Drive is checked by API during rebuild for PDF presence/links.
-- `data/manual/Page NN.json` is the manual scan transcription.
+- `data/manual/Page NN.json` is the manual scan transcription, not proof of accuracy.
 - Page tabs are generated from JSON and hold the working roll ledger.
 - Master List uses formulas pointing back to Page tabs.
 - Control Panel uses formulas counting Master List.
@@ -75,8 +79,8 @@ the workbook so Page 13 tab updates first.
 
 For each page:
 
-1. Open the scanned PDF/image.
-2. Compare it to `data/manual/Page NN.json`.
+1. Open the scanned PDF/image from the Google Drive folder.
+2. Compare it to `data/manual/Page NN.json`; do not trust JSON by itself.
 3. Make the JSON match the scan.
 4. Use one fabric entry per scan line/design.
 5. Put roll values in `grid`, left-to-right and top-to-bottom.
@@ -84,18 +88,18 @@ For each page:
    scan or clearly intended by the page.
 7. Use fabric `notes` for a line-specific issue.
 8. Use top-level `notes` for a whole-page issue.
-9. Add the page number to `VERIFIED_PAGES` in `scripts/build_workbook.py`.
-10. Run `.venv/bin/python scripts/build_workbook.py`.
+9. Add the page number to `MASTER_LIST_PAGES` in `scripts/build_workbook.py`.
+10. Run `python scripts/build_workbook.py`.
 
 ## Required checks after rebuilding
 
 Confirm:
 
-- Master List only contains pages in `VERIFIED_PAGES`.
+- Master List only contains pages in `MASTER_LIST_PAGES`.
 - New Master List rows use formulas like `='Page 13'!H1`, not pasted item/date
   values.
 - Control Panel line counts come from Master List formulas.
-- Page tabs outside `VERIFIED_PAGES` show `NEED UPDATING` and have zero Master
+- Page tabs outside `MASTER_LIST_PAGES` show `NEED UPDATING` and have zero Master
   rows.
 - Manual `OK?`, sold checkbox, sold date, customer/invoice, and roll notes
   survive rebuilds.
@@ -105,17 +109,17 @@ Confirm:
 ## Useful commands
 
 ```bash
-rg "VERIFIED_PAGES|MASTER_HEADERS|PAGE_SUMMARY_HEADERS" scripts/build_workbook.py
-PYTHONPYCACHEPREFIX=/private/tmp/asafabric-pycache .venv/bin/python -m py_compile scripts/build_workbook.py
-.venv/bin/python scripts/build_workbook.py
+rg "MASTER_LIST_PAGES|MASTER_HEADERS|PAGE_SUMMARY_HEADERS" scripts/build_workbook.py
+PYTHONPYCACHEPREFIX=/private/tmp/asafabric-pycache python -m py_compile scripts/build_workbook.py
+python scripts/build_workbook.py
 ```
 
 ## Handoff note
 
 When you finish a page batch, report:
 
-- Pages verified.
-- Pages added to `VERIFIED_PAGES`.
+- Pages re-checked against PDF.
+- Pages added to `MASTER_LIST_PAGES`.
 - Any line notes or master notes that still need human review.
 - Master List row count.
 - Formula error check result.

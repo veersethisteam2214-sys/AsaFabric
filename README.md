@@ -36,21 +36,22 @@ The active Sheet workflow is documented in `google-sheets-tracking/`.
   `https://docs.google.com/spreadsheets/d/1wdwDo_UWCe8GJZ2G4GNQ93rZF1oZhn5lmclqgDMC8Pg/edit`
 - PDF Drive folder:
   `https://drive.google.com/drive/u/1/folders/194XsU0gcDRgSkWUzouMCShvW_3lmn7Ff`
-- Current source of truth: `data/manual/Page NN.json`
-- Current builder: `scripts/build_workbook.py`
+- Tracking workspace: `google-sheets-tracking/`
+- Current PDF transcription files: `google-sheets-tracking/data/manual/Page NN.json`
+- Current builder: `google-sheets-tracking/scripts/build_workbook.py`
 - Current active pages: Pages 01-05 feed Master List; Pages 06-32 stay
-  `NEED UPDATING` until verified.
+  `NEED UPDATING` until re-checked against the PDF.
 
 For another agent, start with:
 
 1. `google-sheets-tracking/README.md`
 2. `google-sheets-tracking/AGENT_INSTRUCTIONS.md`
-3. `data/manual/README.md`
+3. `google-sheets-tracking/data/manual/README.md`
 
 The dynamic chain is:
 
 ```text
-Google Drive PDFs -> data/manual/Page NN.json -> Page NN tab -> Master List -> Control Panel
+Google Drive PDFs -> google-sheets-tracking/data/manual/Page NN.json -> Page NN tab -> Master List -> Control Panel
 ```
 
 Master List mirrors Page tabs with formulas. Control Panel counts Master List
@@ -59,21 +60,22 @@ or Apps Script runs.
 
 ## Ownership
 
-- Pages 01-12: Shaan
-- Pages 13-24: Veer
-- Pages 25-32: Krish
+- Pages 01-12: Shaan.
+- Pages 13-24: Veer.
+- Pages 25-32: Krish.
 
-Only pages listed in `VERIFIED_PAGES` in `scripts/build_workbook.py` feed Master
-List. Add a page number there only after the page has been checked against the
-scan.
+Only pages listed in `MASTER_LIST_PAGES` in
+`google-sheets-tracking/scripts/build_workbook.py` feed Master List. Add a page
+number there only after the PDF has been re-checked. The JSON is a working
+transcription, not proof that the scan was read correctly.
 
 ## Setup
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
+pip install -r google-sheets-tracking/requirements.txt
+cp google-sheets-tracking/.env.example google-sheets-tracking/.env
 ```
 
 Fill `.env` with the Google Sheet id, Drive folder id, and local service account
@@ -82,7 +84,7 @@ JSON path. Do not commit `.env` or `service-account.json`.
 Main rebuild command:
 
 ```bash
-.venv/bin/python scripts/build_workbook.py
+.venv/bin/python google-sheets-tracking/scripts/build_workbook.py
 ```
 
 ## Repo Layout
@@ -97,29 +99,31 @@ asafabric/
     AGENT_INSTRUCTIONS.md
     PAGE_JSON_TEMPLATE.md
     VERIFY_GOOGLE_SHEET.md
-  apps_script/
-    Code.gs
-  data/
-    manual/
-      Page 01.json ... Page 32.json
-      README.md
-    raw/
-  scripts/
-    build_workbook.py
-    config.py
-    google_io.py
-    check_google.py
-    split_pdf.py
-    ...
-  sample/
-  photos/
+  google-sheets-tracking/
+    apps_script/
+      Code.gs
+    data/
+      manual/
+        Page 01.json ... Page 32.json
+        README.md
+      raw/
+    scripts/
+      build_workbook.py
+      config.py
+      google_io.py
+      check_google.py
+      split_pdf.py
+      ...
+    sample/
+    photos/
 ```
 
 ## Rules
 
 - Do not manually edit Master List inventory cells.
 - Do not replace formulas with pasted values.
-- Do not add Page 06+ to Master List until the page is verified.
+- Do not add Page 06+ to Master List until the PDF has been re-checked.
 - Do not trust legacy Gemini/API output as final truth.
-- Keep scan-derived data in `data/manual/Page NN.json`.
+- Do not trust current JSON without comparing it back to the PDF.
+- Keep scan-derived data in `google-sheets-tracking/data/manual/Page NN.json`.
 - Keep secrets and scanned media out of git.

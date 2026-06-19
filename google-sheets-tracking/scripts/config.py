@@ -9,14 +9,14 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parent.parent
+
 try:
     from dotenv import load_dotenv
 
-    load_dotenv()
+    load_dotenv(ROOT / ".env")
 except ImportError:  # python-dotenv is optional; real env vars still work without it
     pass
-
-ROOT = Path(__file__).resolve().parent.parent
 
 # --- Paths -----------------------------------------------------------------
 PHOTOS_DIR = Path(os.getenv("PHOTOS_DIR", ROOT / "photos"))

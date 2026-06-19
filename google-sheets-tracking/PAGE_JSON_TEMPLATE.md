@@ -2,6 +2,9 @@
 
 Use this shape for `data/manual/Page NN.json`.
 
+Do not copy this shape blindly from existing JSON. Open the PDF and re-check the
+line before adding it to `MASTER_LIST_PAGES`.
+
 ```json
 {
   "page": 13,
@@ -39,4 +42,3 @@ Rules:
 - Do not invent values to make totals match.
 - If a value is crossed out, omit it unless the user specifically wants crossed
   values tracked.
-

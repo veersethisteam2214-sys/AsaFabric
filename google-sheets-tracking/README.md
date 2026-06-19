@@ -4,12 +4,14 @@ This folder documents the repeatable Google Sheets workflow for the ASAFabric
 scan-to-inventory workbook.
 
 Use this when another person or agent is continuing the sheet work. The current
-source of truth is:
+tracking files are:
 
 - Page data: `data/manual/Page NN.json`
 - Workbook builder: `scripts/build_workbook.py`
 - Apps Script helper: `apps_script/Code.gs`
 - Manual JSON schema: `data/manual/README.md`
+
+Run commands from this `google-sheets-tracking/` folder unless noted otherwise.
 
 ## Google assets
 
@@ -33,9 +35,9 @@ presence plus PDF links into the workbook.
 
 ## Current state
 
-- Pages 01-05 are verified enough to feed the workbook.
-- Pages 06-32 are placeholders until reviewed.
-- `VERIFIED_PAGES` in `scripts/build_workbook.py` controls which pages feed the
+- Pages 01-05 currently feed the workbook as the active working set.
+- Pages 06-32 are placeholders until re-checked against the PDF.
+- `MASTER_LIST_PAGES` in `scripts/build_workbook.py` controls which pages feed the
   Master List.
 - Current owners:
   - Pages 01-12: Shaan
@@ -46,6 +48,8 @@ presence plus PDF links into the workbook.
 
 Do not duplicate scan data by hand across sheets.
 
+- The PDF in Google Drive is the visual source.
+- `data/manual/Page NN.json` is a working transcription and may be wrong.
 - Page tabs are the source of truth inside Google Sheets.
 - Master List mirrors page tab cells with formulas.
 - Control Panel counts status from Master List formulas.
@@ -53,8 +57,9 @@ Do not duplicate scan data by hand across sheets.
 - Do not put inventory totals in Control Panel unless the user asks for a
   workflow reason.
 
-If a value comes from the scan, it belongs in `data/manual/Page NN.json`, then
-on the generated Page tab. Master List should point back to the Page tab.
+If a value comes from the scan, check it against the PDF, put it in
+`data/manual/Page NN.json`, then rebuild. Master List should point back to the
+Page tab.
 
 ## What is dynamic
 
@@ -85,26 +90,27 @@ API-refresh values:
 - Manual `OK?`, sold checkbox, sold date, customer/invoice, and roll notes are
   read before rebuild and written back after rebuild.
 
-The Sheet does not automatically read/parse PDFs. A person or agent updates the
-manual JSON from the scan, then rebuilds the workbook.
+The Sheet does not automatically read/parse PDFs. A person or agent must open
+the PDF, re-check the JSON, then rebuild the workbook.
 
-## How to add a verified page
+## How to add a page to Master List
 
 1. Open the PDF/image for the page.
-2. Edit `data/manual/Page NN.json`.
-3. Keep each scan line as one fabric entry.
-4. Put each roll value into `grid`, left-to-right and top-to-bottom.
-5. Put line-specific uncertainty in the fabric `notes` field.
-6. Put whole-page uncertainty in the top-level `notes` field.
-7. When the page is verified, add the page number to `VERIFIED_PAGES` in
+2. Re-check every JSON line against the PDF. Do not trust existing JSON alone.
+3. Edit `data/manual/Page NN.json`.
+4. Keep each scan line as one fabric entry.
+5. Put each roll value into `grid`, left-to-right and top-to-bottom.
+6. Put line-specific uncertainty in the fabric `notes` field.
+7. Put whole-page uncertainty in the top-level `notes` field.
+8. Add the page number to `MASTER_LIST_PAGES` in
    `scripts/build_workbook.py`.
-8. Rebuild:
+9. Rebuild:
 
 ```bash
-.venv/bin/python scripts/build_workbook.py
+python scripts/build_workbook.py
 ```
 
-9. Verify:
+10. Verify:
    - Page tab is clean and readable.
    - Master List has formulas pointing back to the Page tab.
    - Control Panel status/counts are correct.
@@ -114,10 +120,10 @@ manual JSON from the scan, then rebuilds the workbook.
 
 Veer should start with Page 13, then continue through Page 24.
 
-At first, only add a page to `VERIFIED_PAGES` after it has been checked against
-the scan. It is okay for `data/manual/Page 13.json` through `Page 24.json` to
-exist before they are verified; they do not feed Master List until the constant
-is updated.
+At first, only add a page to `MASTER_LIST_PAGES` after it has been checked
+against the PDF. It is okay for `data/manual/Page 13.json` through
+`Page 24.json` to exist before they are re-checked; they do not feed Master List
+until the constant is updated.
 
 ## Good rules
 

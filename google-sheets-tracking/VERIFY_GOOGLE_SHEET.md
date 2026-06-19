@@ -13,14 +13,21 @@ work back.
 ## Visual checks
 
 - `Control Panel` has workflow columns only.
-- `Master List` has rows only for pages in `VERIFIED_PAGES`.
+- `Master List` has rows only for pages in `MASTER_LIST_PAGES`.
 - Each Page tab has:
   - compact header
   - fabric summary table
   - roll ledger
   - simple notes
   - no random dark rows inside data
-- Page tabs outside `VERIFIED_PAGES` say `NEED UPDATING`.
+- Page tabs outside `MASTER_LIST_PAGES` say `NEED UPDATING`.
+
+## PDF re-check
+
+- Open the source PDF before trusting any JSON.
+- Confirm every fabric/design line against the PDF.
+- Leave notes and `needs_review: true` for unclear values.
+- Do not add a page to `MASTER_LIST_PAGES` until the PDF has been re-checked.
 
 ## Formula checks
 

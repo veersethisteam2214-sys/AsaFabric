@@ -1,7 +1,7 @@
 const ASA_CONFIG = {
   folderId: '194XsU0gcDRgSkWUzouMCShvW_3lmn7Ff',
   firstPage: 1,
-  lastReferencePage: 5,
+  lastMasterListPage: 5,
   lastPage: 32,
   ownerRanges: [
     [1, 12, 'Shaan'],
@@ -90,12 +90,12 @@ function asaRefreshPageStatus() {
     control.getRange(row, c['PDF in Drive']).setValue(Boolean(pdfs[pdfName]));
     if (pdfs[pdfName]) control.getRange(row, c['PDF']).setFormula(`=HYPERLINK("${pdfs[pdfName]}","${pdfName}")`);
     if (pageSheet) control.getRange(row, c['Page Tab']).setFormula(`=HYPERLINK("#gid=${pageSheet.getSheetId()}","${page}")`);
-    const needsUpdating = pageNo > ASA_CONFIG.lastReferencePage ? 'TRUE' : 'FALSE';
+    const needsUpdating = pageNo > ASA_CONFIG.lastMasterListPage ? 'TRUE' : 'FALSE';
     control.getRange(row, c['Status']).setFormula(`=IF(${pdfPresent}${row}=FALSE,"MISSING PDF",IF(${needsUpdating},"NEED UPDATING",IF(${needsCheck}${row}>0,"CHECK",IF(${ok}${row}<${asaColLetter_(c['Lines'])}${row},"OPEN","DONE"))))`);
     control.getRange(row, c['Lines']).setFormula(`=COUNTIF('${ASA_CONFIG.masterSheet}'!${masterPage}:${masterPage},${pageCell})`);
     control.getRange(row, c['Needs Check']).setFormula(`=COUNTIFS('${ASA_CONFIG.masterSheet}'!${masterPage}:${masterPage},${pageCell},'${ASA_CONFIG.masterSheet}'!${masterNeedsCheck}:${masterNeedsCheck},TRUE)`);
     control.getRange(row, c['OK']).setFormula(`=COUNTIFS('${ASA_CONFIG.masterSheet}'!${masterPage}:${masterPage},${pageCell},'${ASA_CONFIG.masterSheet}'!${masterOk}:${masterOk},TRUE)`);
-    if (pageNo > ASA_CONFIG.lastReferencePage && c['Notes']) {
+    if (pageNo > ASA_CONFIG.lastMasterListPage && c['Notes']) {
       control.getRange(row, c['Notes']).setValue('NEED UPDATING - roll-level verification pending.');
     }
   }

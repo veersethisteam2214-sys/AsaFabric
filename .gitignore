@@ -9,11 +9,19 @@ photos/*
 drive_upload/
 data/pdf_tmp/
 tmp/
+google-sheets-tracking/photos/*
+!google-sheets-tracking/photos/.gitkeep
+google-sheets-tracking/drive_upload/
+google-sheets-tracking/data/pdf_tmp/
+google-sheets-tracking/tmp/
 
 # Generated data
 data/raw/*
 !data/raw/.gitkeep
 data/*.csv
+google-sheets-tracking/data/raw/*
+!google-sheets-tracking/data/raw/.gitkeep
+google-sheets-tracking/data/*.csv
 
 # Python
 .venv/
