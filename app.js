@@ -1,7 +1,7 @@
 const useCases = [
   {
     title: "School uniforms",
-    description: "TC shirting, poly cotton trousering, navy suiting, white shirt fabric, and durable daily-wear blends.",
+    description: "TC shirting, poly cotton trousering, navy suiting, white shirt fabric, and daily-wear blends.",
     count: "6 matching lots",
     tone: "academy",
     palette: ["#0f2a44", "#f4f0e7", "#b9c6d0"]
@@ -29,7 +29,7 @@ const useCases = [
   },
   {
     title: "Resale deals",
-    description: "Mixed dead stock, lining, pocketing, and assorted clearance bundles for value buyers and resellers.",
+    description: "Mixed dead stock, lining, pocketing, and clearance bundles for value buyers and resellers.",
     count: "8 matching lots",
     tone: "clearance",
     palette: ["#733d2f", "#203d47", "#d6b472"]
