@@ -5,8 +5,22 @@ computer, especially Veer's office Mac. It summarizes the decisions, setup,
 sheet IDs, rules, and final task list from the Codex chat on the Windows
 desktop.
 
-The next Codex agent should read this folder first, then read the existing
-project docs in `google-sheets-tracking/`.
+The next Codex agent should read this folder first, starting with
+`MAC_QUICK_START.md`, then read the existing project docs in
+`google-sheets-tracking/`.
+
+## Fastest Path On The Mac
+
+1. Pull the latest repo from GitHub.
+2. Put `service-account.json` at
+   `google-sheets-tracking/service-account.json`.
+3. Create `google-sheets-tracking/.env` pointing to the duplicate sheet.
+4. Install requirements in a Python venv.
+5. Run `python scripts/check_google.py`.
+6. Read this README and `NEXT_CODEX_PROMPT.md`.
+7. Wait for Veer's page-status batch before changing inventory data.
+
+See `MAC_QUICK_START.md` for exact commands.
 
 ## Absolute Safety Rule
 
@@ -21,6 +35,10 @@ Work only on the duplicate Google Sheet.
 
 Do not use Apps Script as the primary workflow. Use the Python/service-account
 pipeline and Google Sheets API access.
+
+Do not run `scripts/build_workbook.py` blindly. The duplicate sheet has drifted
+from the old builder model, and the redesign should be deliberate and
+repeatable.
 
 ## Current Service Account
 
@@ -37,6 +55,10 @@ That key file is intentionally ignored by git and must not be committed.
 On the Mac, the same JSON key must be copied manually into:
 
 `google-sheets-tracking/service-account.json`
+
+The current Windows key path is:
+
+`C:\Users\User\OneDrive\Desktop\Asa Fabric VSK\_asafabric_repo\google-sheets-tracking\service-account.json`
 
 If the key is not available on the Mac, create/download a new JSON key for the
 same service account in Google Cloud Console, then place it at that path.
@@ -367,6 +389,17 @@ At the end of each batch, report:
 21. Before sheet writes, read current state; for larger updates, prepare the
     change set first, then apply in batches.
 22. Preserve service-account setup and keep private keys out of git.
+
+## Do Not Do These
+
+- Do not edit the live sheet.
+- Do not commit `.env` or `service-account.json`.
+- Do not delete invalid/IV pages automatically.
+- Do not hide page tabs unless Veer explicitly asks.
+- Do not assume historical `Control Panel` statuses are current truth.
+- Do not replace formula-driven inventory values with pasted static summaries.
+- Do not run a destructive rebuild before reading the duplicate sheet state and
+  planning the migration.
 
 ## Suggested First Prompt On The Mac
 

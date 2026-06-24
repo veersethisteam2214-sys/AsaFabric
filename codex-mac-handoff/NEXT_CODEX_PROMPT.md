@@ -1,7 +1,7 @@
 # Prompt For Codex On The Mac
 
-Read this file and `codex-mac-handoff/README.md` completely before doing any
-work.
+Read this file, `codex-mac-handoff/MAC_QUICK_START.md`, and
+`codex-mac-handoff/README.md` completely before doing any work.
 
 You are continuing Veer's ASA Fabric inventory project from a previous Codex
 chat. The Windows Codex set up and verified service-account access, but the key
@@ -39,6 +39,8 @@ GOOGLE_SA_JSON=service-account.json
 2. Confirm `google-sheets-tracking/service-account.json` exists locally.
 3. Run `python scripts/check_google.py` from `google-sheets-tracking`.
 4. If the key is missing, ask Veer to copy/download it before proceeding.
+5. Do not run `scripts/build_workbook.py` until the duplicate sheet state has
+   been read and the redesign/migration plan is explicit.
 
 ## Current Service Account
 
@@ -90,4 +92,30 @@ For each page:
 4. Update audit/status tabs.
 5. Keep invalid items visible with the delete warning.
 6. Report all manually flagged pages at the end.
+
+Allowed whole-page statuses:
+
+- `Valid`
+- `Need Check`
+- `IV (X)`
+
+Expected status input format:
+
+```text
+Page 01: Valid
+Page 02: Need Check
+Page 03: IV (X)
+```
+
+If the user sends looser wording, normalize it carefully and confirm any
+ambiguous page/status pairs before writing.
+
+## First Response On The Mac
+
+After reading the handoff and verifying setup, respond with:
+
+1. whether `.env` targets the duplicate sheet
+2. whether `service-account.json` exists
+3. whether `scripts/check_google.py` passed
+4. a short confirmation that you are ready for Veer's page-status batch
 
