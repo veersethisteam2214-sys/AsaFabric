@@ -1,35 +1,35 @@
 const useCases = [
   {
-    title: "School uniforms",
-    description: "TC shirting, poly cotton trousering, navy suiting, white shirt fabric, and daily-wear blends.",
-    count: "6 matching lots",
+    title: "Shirtings",
+    description: "Crisp TC shirting, oxford, and chambray — easy-care cloth with reliable shade continuity for uniforms and staff shirts.",
+    count: "9 matching lots",
     tone: "academy",
     palette: ["#0f2a44", "#f4f0e7", "#b9c6d0"]
   },
   {
-    title: "Corporate wear",
-    description: "Oxford shirting, wool blend suiting, office trousering, and polished staff uniform materials.",
-    count: "5 matching lots",
+    title: "Pants & Trousers",
+    description: "Structured poly cotton and twill trousering for school programs, office uniforms, and repeat tailoring orders.",
+    count: "7 matching lots",
     tone: "executive",
     palette: ["#202631", "#b08a4f", "#d8dde2"]
   },
   {
-    title: "Workwear",
-    description: "Poly twills, chambray, apron cloth, utility shirting, and hard-wearing operational fabrics.",
-    count: "4 matching lots",
+    title: "Suitings",
+    description: "Elevated wool-blend suiting with refined hand-feel for tailored trousers, jackets, blazers, and front-office uniforms.",
+    count: "5 matching lots",
     tone: "utility",
     palette: ["#33483d", "#c1a06a", "#2a2b28"]
   },
   {
-    title: "Hospitality",
-    description: "Clean shirting, apron, jacket, and trouser fabric for hotels, restaurants, and service teams.",
-    count: "3 matching lots",
+    title: "Workwear & Utility",
+    description: "Hard-wearing twills, apron cloth, and utility shirting built for factory floors, service crews, and long-wear garments.",
+    count: "6 matching lots",
     tone: "service",
     palette: ["#4b2034", "#f1e8db", "#8e785d"]
   },
   {
-    title: "Resale deals",
-    description: "Mixed dead stock, lining, pocketing, and clearance bundles for value buyers and resellers.",
+    title: "Resale & Clearance",
+    description: "Mixed dead stock, lining, and pocketing bundles priced for value buyers, resellers, and export sourcing.",
     count: "8 matching lots",
     tone: "clearance",
     palette: ["#733d2f", "#203d47", "#d6b472"]
@@ -174,32 +174,56 @@ const fabrics = [
   }
 ];
 
+/* ---------- Helpers ---------- */
+function weaveBackground(colors) {
+  const [first, second, third] = colors;
+  return `linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.18) 1px, transparent 1px), radial-gradient(circle at 26% 20%, rgba(255,255,255,0.28), transparent 28%), linear-gradient(135deg, ${first}, ${second} 48%, ${third})`;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (ch) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[ch]));
+}
+
+/* ---------- Renderers ---------- */
 const useGrid = document.querySelector("#useGrid");
 const catalogGrid = document.querySelector("#catalogGrid");
 const filterButtons = document.querySelectorAll(".filter-chip");
 const searchInput = document.querySelector("#fabricSearch");
 let activeFilter = "all";
 
-function weaveBackground(colors) {
-  const [first, second, third] = colors;
-  return `linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.18) 1px, transparent 1px), radial-gradient(circle at 26% 20%, rgba(255,255,255,0.28), transparent 28%), linear-gradient(135deg, ${first}, ${second} 48%, ${third})`;
-}
-
 function renderUseCases() {
-  useGrid.innerHTML = useCases.map((item) => `
+  if (!useGrid) return;
+  const cards = useCases.map((item) => `
     <article class="use-card ${item.tone}">
       <span class="use-pattern" style="background-image: ${weaveBackground(item.palette)}"></span>
-      <div>
-        <small>${item.count}</small>
-        <h3>${item.title}</h3>
-        <p>${item.description}</p>
-      </div>
+      <small>${escapeHtml(item.count)}</small>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.description)}</p>
     </article>
   `).join("");
+
+  const soon = `
+    <article class="use-card soon">
+      <div>
+        <span class="soon-mark" aria-hidden="true">+</span>
+        <h3>More coming soon</h3>
+        <p>Denims, linings, fashion fabrics and more uses are being added to the house.</p>
+      </div>
+    </article>
+  `;
+
+  useGrid.innerHTML = cards + soon;
 }
 
 function renderCatalog() {
-  const query = searchInput.value.trim().toLowerCase();
+  if (!catalogGrid) return;
+  const query = (searchInput ? searchInput.value : "").trim().toLowerCase();
   const filtered = fabrics.filter((fabric) => {
     const matchesFilter = activeFilter === "all" || fabric.use === activeFilter;
     const searchable = `${fabric.name} ${fabric.material} ${fabric.use} ${fabric.status} ${fabric.width} ${fabric.gsm} ${fabric.detail} ${fabric.applications.join(" ")}`.toLowerCase();
@@ -209,39 +233,39 @@ function renderCatalog() {
   catalogGrid.innerHTML = filtered.map((fabric) => `
     <article class="fabric-card">
       <div class="fabric-visual" style="background-image: ${weaveBackground(fabric.colors)}">
-        <span>${fabric.status}</span>
+        <span>${escapeHtml(fabric.status)}</span>
       </div>
       <div class="fabric-body">
         <div class="fabric-heading">
           <div>
-            <small>${fabric.material}</small>
-            <h3>${fabric.name}</h3>
+            <small>${escapeHtml(fabric.material)}</small>
+            <h3>${escapeHtml(fabric.name)}</h3>
           </div>
-          <strong>${fabric.grade}</strong>
+          <strong>${escapeHtml(fabric.grade)}</strong>
         </div>
-        <p>${fabric.detail}</p>
+        <p>${escapeHtml(fabric.detail)}</p>
         <div class="spec-grid">
-          <div><span>Use</span><strong>${fabric.use}</strong></div>
-          <div><span>Width</span><strong>${fabric.width}</strong></div>
-          <div><span>Weight</span><strong>${fabric.gsm}</strong></div>
-          <div><span>Stock</span><strong>${fabric.stock}</strong></div>
+          <div><span>Use</span><strong>${escapeHtml(fabric.use)}</strong></div>
+          <div><span>Width</span><strong>${escapeHtml(fabric.width)}</strong></div>
+          <div><span>Weight</span><strong>${escapeHtml(fabric.gsm)}</strong></div>
+          <div><span>Stock</span><strong>${escapeHtml(fabric.stock)}</strong></div>
         </div>
         <div class="application-tags">
-          ${fabric.applications.map((item) => `<span>${item}</span>`).join("")}
+          ${fabric.applications.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
         </div>
         <div class="price-row">
           <div>
             <small>Full roll</small>
-            <strong>${fabric.roll}</strong>
+            <strong>${escapeHtml(fabric.roll)}</strong>
           </div>
           <div>
             <small>Cut length</small>
-            <strong>${fabric.cut}</strong>
+            <strong>${escapeHtml(fabric.cut)}</strong>
           </div>
         </div>
       </div>
     </article>
-  `).join("") || `<p class="empty-state">No fabrics match that search yet.</p>`;
+  `).join("") || `<p class="empty-state">No fabrics match that search yet. Try a different material or clear the filter.</p>`;
 }
 
 filterButtons.forEach((button) => {
@@ -253,7 +277,124 @@ filterButtons.forEach((button) => {
   });
 });
 
-searchInput.addEventListener("input", renderCatalog);
+if (searchInput) {
+  searchInput.addEventListener("input", renderCatalog);
+}
 
 renderUseCases();
 renderCatalog();
+
+/* ---------- Scroll reveal (IntersectionObserver) ---------- */
+function initReveal() {
+  const items = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window) || !items.length) {
+    items.forEach((el) => el.classList.add("in"));
+    return;
+  }
+
+  // Stagger items within shared parents for a sequenced feel.
+  const groups = new Map();
+  items.forEach((el) => {
+    const parent = el.parentElement;
+    const idx = groups.get(parent) || 0;
+    if (idx) el.classList.add(`d${Math.min(idx, 3)}`);
+    groups.set(parent, idx + 1);
+  });
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("in");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+  items.forEach((el) => observer.observe(el));
+}
+
+/* ---------- Sticky header on scroll ---------- */
+function initHeader() {
+  const header = document.querySelector("#siteHeader");
+  if (!header) return;
+  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 24);
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+}
+
+/* ---------- Smooth scroll for in-page anchors ---------- */
+function initSmoothScroll() {
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const id = link.getAttribute("href");
+      if (!id || id === "#") return;
+      const target = document.querySelector(id);
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", id);
+    });
+  });
+}
+
+/* ---------- Animated stat count-up ---------- */
+function initStats() {
+  const nums = document.querySelectorAll(".stat strong[data-count]");
+  if (!nums.length) return;
+
+  const animate = (el) => {
+    const target = parseFloat(el.dataset.count);
+    const prefix = el.dataset.prefix || "";
+    const suffix = el.dataset.suffix || "";
+    const duration = 1100;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = `${prefix}${Math.round(target * eased)}${suffix}`;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    nums.forEach(animate);
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        animate(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.6 });
+
+  nums.forEach((el) => observer.observe(el));
+}
+
+/* ---------- Enquiry form ---------- */
+function initForm() {
+  const form = document.querySelector("#leadForm");
+  const note = document.querySelector("#formNote");
+  if (!form) return;
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (note) note.hidden = false;
+    form.reset();
+  });
+}
+
+/* ---------- Footer year ---------- */
+function initYear() {
+  const year = document.querySelector("#year");
+  if (year) year.textContent = new Date().getFullYear();
+}
+
+initReveal();
+initHeader();
+initSmoothScroll();
+initStats();
+initForm();
+initYear();
