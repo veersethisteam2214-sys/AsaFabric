@@ -1,3 +1,48 @@
+const fabricTypes = [
+  {
+    title: "Shirtings",
+    slug: "shirtings",
+    description: "TC, oxford, chambray, and cotton-blend shirting for uniforms, office staff, and tailored shirts.",
+    count: "5 fabric families",
+    palette: ["#0f2a44", "#f4f0e7", "#b9c6d0"]
+  },
+  {
+    title: "Trouserings (Pants)",
+    slug: "trouserings",
+    description: "Poly cotton, twill, and structured bottom-weight cloth for trousers, skirts, and uniform sets.",
+    count: "4 fabric families",
+    palette: ["#3f4242", "#b4a27a", "#e8dfd0"]
+  },
+  {
+    title: "Suitings",
+    slug: "suitings",
+    description: "Wool-blend and premium suiting for blazers, jackets, and polished front-office uniforms.",
+    count: "3 fabric families",
+    palette: ["#2d3036", "#202a38", "#86785f"]
+  },
+  {
+    title: "Workwear & Twills",
+    slug: "workwear",
+    description: "Heavy poly twills, apron cloth, and utility weaves built for factory and service wear.",
+    count: "4 fabric families",
+    palette: ["#33483d", "#c1a06a", "#2a2b28"]
+  },
+  {
+    title: "Linings & Pocketing",
+    slug: "linings",
+    description: "Lightweight support fabric for linings, pockets, sampling, and production add-ons.",
+    count: "3 fabric families",
+    palette: ["#efe4d2", "#1d1c1a", "#b88a44"]
+  },
+  {
+    title: "Clearance Lots",
+    slug: "clearance",
+    description: "Mixed dead stock and bundle deals priced to move for resellers and value buyers.",
+    count: "By lot",
+    palette: ["#733d2f", "#203d47", "#d6b472"]
+  }
+];
+
 const useCases = [
   {
     title: "School uniforms",
@@ -174,6 +219,7 @@ const fabrics = [
   }
 ];
 
+const typeGrid = document.querySelector("#typeGrid");
 const useGrid = document.querySelector("#useGrid");
 const catalogGrid = document.querySelector("#catalogGrid");
 const filterButtons = document.querySelectorAll(".filter-chip");
@@ -185,7 +231,21 @@ function weaveBackground(colors) {
   return `linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.18) 1px, transparent 1px), radial-gradient(circle at 26% 20%, rgba(255,255,255,0.28), transparent 28%), linear-gradient(135deg, ${first}, ${second} 48%, ${third})`;
 }
 
+function renderFabricTypes() {
+  if (!typeGrid) return;
+  typeGrid.innerHTML = fabricTypes.map((item) => `
+    <a class="type-card reveal" href="catalog.html#${item.slug}">
+      <span class="type-swatch" style="background-image: ${weaveBackground(item.palette)}"></span>
+      <small>${item.count}</small>
+      <h3>${item.title}</h3>
+      <p>${item.description}</p>
+      <span class="type-link">Open in catalog <span>&rarr;</span></span>
+    </a>
+  `).join("");
+}
+
 function renderUseCases() {
+  if (!useGrid) return;
   useGrid.innerHTML = useCases.map((item) => `
     <article class="use-card ${item.tone}">
       <span class="use-pattern" style="background-image: ${weaveBackground(item.palette)}"></span>
@@ -199,6 +259,7 @@ function renderUseCases() {
 }
 
 function renderCatalog() {
+  if (!catalogGrid) return;
   const query = searchInput.value.trim().toLowerCase();
   const filtered = fabrics.filter((fabric) => {
     const matchesFilter = activeFilter === "all" || fabric.use === activeFilter;
@@ -253,7 +314,79 @@ filterButtons.forEach((button) => {
   });
 });
 
-searchInput.addEventListener("input", renderCatalog);
+if (searchInput) {
+  searchInput.addEventListener("input", renderCatalog);
+}
 
+/* Mobile nav toggle */
+const navToggle = document.querySelector("#navToggle");
+const navLinks = document.querySelector("#navLinks");
+if (navToggle && navLinks) {
+  navToggle.addEventListener("click", () => {
+    const open = navLinks.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded", String(open));
+  });
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      navToggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+/* Scroll-reveal animations */
+function initReveal() {
+  const items = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = `${Math.min(i * 70, 280)}ms`;
+        entry.target.classList.add("is-visible");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+  items.forEach((el) => observer.observe(el));
+}
+
+/* Animated stat counters */
+function initCounters() {
+  const counters = document.querySelectorAll("[data-count]");
+  if (!counters.length) return;
+  const run = (el) => {
+    const target = Number(el.dataset.count);
+    const suffix = el.dataset.suffix || "";
+    const duration = 1100;
+    const start = performance.now();
+    const step = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  if (!("IntersectionObserver" in window)) {
+    counters.forEach(run);
+    return;
+  }
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        run(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.6 });
+  counters.forEach((el) => observer.observe(el));
+}
+
+renderFabricTypes();
 renderUseCases();
 renderCatalog();
+initReveal();
+initCounters();

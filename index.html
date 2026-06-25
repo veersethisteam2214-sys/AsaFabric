@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Asa Fabric is a premium textile stockroom for ready roll fabric, cut-length sourcing, uniform fabric, and dead stock clearance.">
+  <meta name="description" content="Asa Fabric is a premium textile stockroom for ready roll fabric, cut-length sourcing, uniform fabric, shirtings, trouserings, suitings, and dead stock clearance.">
   <title>Asa Fabric | Premium Textile Stockroom</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body id="top">
   <header class="site-header">
     <a class="brand" href="#top" aria-label="Asa Fabric home">
       <span class="brand-mark">AF</span>
@@ -19,30 +19,35 @@
         <small>Premium textile stockroom</small>
       </span>
     </a>
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="#stockroom">Stockroom</a>
+    <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
+      <a href="#types">Fabric types</a>
+      <a href="#stockroom">Why Asa</a>
       <a href="#applications">Applications</a>
       <a href="#catalog">Catalog</a>
       <a href="#contact">Enquiry</a>
-      <a href="https://github.com/veersethisteam2214-sys/AsaFabric" target="_blank" rel="noreferrer">GitHub</a>
     </nav>
-    <a class="header-action" href="https://github.com/veersethisteam2214-sys/AsaFabric" target="_blank" rel="noreferrer">View GitHub</a>
+    <div class="header-end">
+      <a class="header-action" href="catalog.html">Browse catalog</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
 
-  <main id="top">
+  <main>
     <section class="hero">
+      <div class="hero-aurora" aria-hidden="true"></div>
       <div class="hero-copy">
-        <p class="eyebrow">Ready stock fabric for factories, uniform makers, tailors, and resellers</p>
-        <h1>The private fabric stockroom built to move dormant inventory.</h1>
-        <p class="hero-lede">Asa Fabric turns TC, poly cotton, wool blends, chambray, twills, shirting, trousering, and clearance lots into a clean buyer journey organized by material, use case, price, and availability.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#catalog">Explore catalog</a>
-          <a class="button ghost" href="#applications">Shop by use</a>
-          <a class="button ghost" href="https://github.com/veersethisteam2214-sys/AsaFabric" target="_blank" rel="noreferrer">Open GitHub repo</a>
+        <p class="eyebrow reveal">Ready stock fabric for factories, uniform makers, tailors, and resellers</p>
+        <h1 class="reveal">The private fabric stockroom built to move dormant inventory.</h1>
+        <p class="hero-lede reveal">Asa Fabric turns shirtings, trouserings, suitings, wool blends, chambray, twills, and clearance lots into a clean buyer journey organized by fabric type, use case, price, and availability.</p>
+        <div class="hero-actions reveal">
+          <a class="button primary magnetic" href="catalog.html">Browse the full catalog</a>
+          <a class="button ghost magnetic" href="#types">Shop by fabric type</a>
         </div>
       </div>
 
-      <div class="hero-console" aria-label="Asa Fabric catalog preview">
+      <div class="hero-console reveal" aria-label="Asa Fabric catalog preview">
         <div class="console-bar">
           <span>ASA STOCKROOM</span>
           <strong>Buyer preview</strong>
@@ -56,8 +61,8 @@
           </div>
           <div class="console-panel">
             <div class="signal-row">
-              <span>Material</span>
-              <strong>TC / Wool / PC / Chambray</strong>
+              <span>Fabric type</span>
+              <strong>Shirting / Trousering / Suiting</strong>
             </div>
             <div class="signal-row">
               <span>Use case</span>
@@ -75,32 +80,48 @@
         </div>
       </div>
 
-      <div class="metric-strip" aria-label="Catalog highlights">
-        <div><strong>12+</strong><span>fabric families</span></div>
-        <div><strong>5</strong><span>buyer categories</span></div>
-        <div><strong>2</strong><span>price formats</span></div>
+      <div class="metric-strip reveal" aria-label="Catalog highlights">
+        <div><strong data-count="12" data-suffix="+">0</strong><span>fabric families</span></div>
+        <div><strong data-count="6" data-suffix="">0</strong><span>fabric types</span></div>
+        <div><strong data-count="2" data-suffix="">0</strong><span>price formats</span></div>
         <div><strong>Fast</strong><span>lot confirmation</span></div>
       </div>
     </section>
 
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Shirtings</span><span>&bull;</span><span>Trouserings</span><span>&bull;</span><span>Suitings</span><span>&bull;</span><span>Wool blends</span><span>&bull;</span><span>Chambray</span><span>&bull;</span><span>Poly twills</span><span>&bull;</span><span>TC blends</span><span>&bull;</span><span>Linings</span><span>&bull;</span><span>Clearance lots</span><span>&bull;</span>
+        <span>Shirtings</span><span>&bull;</span><span>Trouserings</span><span>&bull;</span><span>Suitings</span><span>&bull;</span><span>Wool blends</span><span>&bull;</span><span>Chambray</span><span>&bull;</span><span>Poly twills</span><span>&bull;</span><span>TC blends</span><span>&bull;</span><span>Linings</span><span>&bull;</span><span>Clearance lots</span><span>&bull;</span>
+      </div>
+    </div>
+
+    <section class="types-section" id="types">
+      <div class="section-heading center reveal">
+        <p class="eyebrow">Shop by fabric type</p>
+        <h2>Start with the cloth you actually sell.</h2>
+        <p>Every lot is grouped into the fabric families buyers ask for by name. Pick a type to open the matching stock in the catalog &mdash; more use cases will be layered on top over time.</p>
+      </div>
+      <div class="type-grid" id="typeGrid"></div>
+    </section>
+
     <section class="stockroom-section" id="stockroom">
-      <div class="section-heading center">
+      <div class="section-heading center reveal">
         <p class="eyebrow">Structured like a buying system</p>
         <h2>Not a pile of fabric. A searchable sales engine.</h2>
         <p>Buyers do not want to decode warehouse stock. They want the right fabric, the right use case, and a clear path to price confirmation.</p>
       </div>
       <div class="feature-grid">
-        <article>
+        <article class="reveal">
           <span>01</span>
           <h3>Material clarity</h3>
           <p>Each lot can be grouped by fabric family, GSM, width, shade family, roll count, and availability.</p>
         </article>
-        <article>
+        <article class="reveal">
           <span>02</span>
           <h3>Use-case selling</h3>
           <p>School uniforms, office wear, workwear, hospitality, tailoring, lining, and resale become obvious entry points.</p>
         </article>
-        <article>
+        <article class="reveal">
           <span>03</span>
           <h3>Price confidence</h3>
           <p>Roll price, cut-length price, and clearance lot options create buyer-friendly anchors without locking final negotiation.</p>
@@ -109,7 +130,7 @@
     </section>
 
     <section class="application-section" id="applications">
-      <div class="section-heading">
+      <div class="section-heading reveal">
         <p class="eyebrow">Shop by application</p>
         <h2>Fabric categories buyers already understand.</h2>
       </div>
@@ -117,10 +138,10 @@
     </section>
 
     <section class="catalog-shell" id="catalog">
-      <div class="catalog-top">
+      <div class="catalog-top reveal">
         <div>
-          <p class="eyebrow">Private catalog preview</p>
-          <h2>Available fabric lots</h2>
+          <p class="eyebrow">Featured stock preview</p>
+          <h2>A taste of the catalog.</h2>
         </div>
         <label class="search-wrap" for="fabricSearch">
           <span>Search stock</span>
@@ -138,25 +159,33 @@
       </div>
 
       <div class="catalog-grid" id="catalogGrid"></div>
+
+      <div class="catalog-cta reveal">
+        <div>
+          <h3>Want the complete, always-current catalog?</h3>
+          <p>The full searchable catalog &mdash; with live stock, every shade, and lot-level detail &mdash; lives on its own page.</p>
+        </div>
+        <a class="button primary magnetic" href="catalog.html">Open the full catalog &rarr;</a>
+      </div>
     </section>
 
     <section class="deal-section">
-      <div>
+      <div class="reveal">
         <p class="eyebrow">From dead stock to deal flow</p>
         <h2>Three ways buyers can purchase.</h2>
       </div>
       <div class="deal-grid">
-        <article>
+        <article class="reveal">
           <span>Roll</span>
           <h3>Full roll buyers</h3>
           <p>Best for factories, uniform programs, schools, repeat buyers, and anyone chasing stronger per-meter value.</p>
         </article>
-        <article>
+        <article class="reveal">
           <span>Cut</span>
           <h3>Cut-length buyers</h3>
           <p>Useful for tailors, sampling, smaller production, and higher-margin retail-style enquiries.</p>
         </article>
-        <article>
+        <article class="reveal">
           <span>Lot</span>
           <h3>Clearance buyers</h3>
           <p>Bundle slow-moving stock into decisive offers for resellers, export buyers, and project-based sourcing.</p>
@@ -165,12 +194,12 @@
     </section>
 
     <section class="contact-section" id="contact">
-      <div>
+      <div class="reveal">
         <p class="eyebrow">Private buyer enquiry</p>
         <h2>Request today's verified stock list.</h2>
         <p>Send the target fabric, shade, quantity, and buying format. Asa Fabric can confirm matching lots, prices, samples, and ready-to-ship quantity.</p>
       </div>
-      <form class="lead-form">
+      <form class="lead-form reveal">
         <label>
           Buyer name
           <input type="text" placeholder="Your name">
@@ -198,7 +227,7 @@
   <footer class="site-footer">
     <span>Asa Fabric</span>
     <span>Premium textile stockroom for ready roll and cut-length fabric</span>
-    <a href="https://github.com/veersethisteam2214-sys/AsaFabric" target="_blank" rel="noreferrer">GitHub repository</a>
+    <a href="catalog.html">Browse catalog</a>
   </footer>
 
   <script src="app.js"></script>

@@ -20,10 +20,13 @@ The inventory values are sample placeholders based on the business requirements.
 - `index.html` - page structure and content
 - `styles.css` - responsive visual design and textile treatments
 - `app.js` - sample catalog data, use-case rendering, search, and filters
+- `catalog.html` - dedicated full-catalog page scaffold (catalog workstream)
 
 ## Next steps
 
-1. Connect the catalog data to the real stock sheet or an exported CSV/JSON file.
-2. Add real fabric photos for each lot.
-3. Replace placeholder prices with confirmed roll and cut-length pricing.
-4. Decide how enquiries should be handled: WhatsApp, email, form backend, or CRM.
+1. Build out `catalog.html` into the full searchable catalog (owned by the catalog workstream). The landing page deep-links to it via fabric-type slugs like `catalog.html#shirtings`.
+2. Wire the landing-page hero, fabric-type cards, and featured preview to the same data source as the catalog page so they stay in sync.
+3. Connect the catalog data to the real stock sheet or an exported CSV/JSON file.
+4. Add real fabric photos for each lot.
+5. Replace placeholder prices with confirmed roll and cut-length pricing.
+6. Decide how enquiries should be handled: WhatsApp, email, form backend, or CRM.
