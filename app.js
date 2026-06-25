@@ -1,37 +1,46 @@
-const useCases = [
+/* ===== Data ===== */
+
+const fabricCategories = [
   {
-    title: "School uniforms",
-    description: "TC shirting, poly cotton trousering, navy suiting, white shirt fabric, and daily-wear blends.",
-    count: "6 matching lots",
-    tone: "academy",
+    title: "Shirtings",
+    description: "Crisp TC, oxford, and cotton-blend shirting for school, office, and hospitality programs.",
+    tag: "9 lots",
+    keyword: "shirting",
     palette: ["#0f2a44", "#f4f0e7", "#b9c6d0"]
   },
   {
-    title: "Corporate wear",
-    description: "Oxford shirting, wool blend suiting, office trousering, and polished staff uniform materials.",
-    count: "5 matching lots",
-    tone: "executive",
+    title: "Suitings",
+    description: "Wool blend and structured suiting with an elevated handfeel for tailored, front-office wear.",
+    tag: "5 lots",
+    keyword: "suiting",
     palette: ["#202631", "#b08a4f", "#d8dde2"]
   },
   {
-    title: "Workwear",
-    description: "Poly twills, chambray, apron cloth, utility shirting, and hard-wearing operational fabrics.",
-    count: "4 matching lots",
-    tone: "utility",
+    title: "Trousering",
+    description: "Poly cotton and durable bottom-weight cloth for school, office, and uniform trousers.",
+    tag: "6 lots",
+    keyword: "trouser",
+    palette: ["#3f4242", "#b4a27a", "#e8dfd0"]
+  },
+  {
+    title: "Workwear Cloth",
+    description: "Chambray, poly twill, and utility fabric engineered for aprons, factory, and service wear.",
+    tag: "7 lots",
+    keyword: "twill",
     palette: ["#33483d", "#c1a06a", "#2a2b28"]
   },
   {
-    title: "Hospitality",
-    description: "Clean shirting, apron, jacket, and trouser fabric for hotels, restaurants, and service teams.",
-    count: "3 matching lots",
-    tone: "service",
+    title: "Linings & Support",
+    description: "Cost-efficient pocketing, lining, and support cloth for production add-ons and sampling.",
+    tag: "4 lots",
+    keyword: "lining",
     palette: ["#4b2034", "#f1e8db", "#8e785d"]
   },
   {
-    title: "Resale deals",
-    description: "Mixed dead stock, lining, pocketing, and clearance bundles for value buyers and resellers.",
-    count: "8 matching lots",
-    tone: "clearance",
+    title: "Clearance Lots",
+    description: "Mixed dead stock and bundle deals for resellers, export buyers, and value sourcing.",
+    tag: "8 lots",
+    keyword: "clearance",
     palette: ["#733d2f", "#203d47", "#d6b472"]
   }
 ];
@@ -49,7 +58,7 @@ const fabrics = [
     roll: "THB 2,450 / roll",
     cut: "THB 78 / meter",
     detail: "Crisp everyday shirting for school uniforms with easy-care structure and reliable color continuity.",
-    applications: ["Shirts", "Daily uniforms", "Institution orders"],
+    applications: ["Shirting", "Daily uniforms", "Institution orders"],
     colors: ["#f8f5ee", "#9fb7ca", "#0f2a44"]
   },
   {
@@ -64,7 +73,7 @@ const fabrics = [
     roll: "THB 3,900 / roll",
     cut: "THB 118 / meter",
     detail: "Structured trouser and skirt fabric for school programs, office uniforms, and repeat tailoring orders.",
-    applications: ["Trousers", "Skirts", "Uniform sets"],
+    applications: ["Trouser", "Skirts", "Uniform sets"],
     colors: ["#3f4242", "#b4a27a", "#e8dfd0"]
   },
   {
@@ -94,7 +103,7 @@ const fabrics = [
     roll: "THB 6,800 / roll",
     cut: "THB 215 / meter",
     detail: "Elevated suiting handfeel for tailored trousers, jackets, blazers, and front-office uniforms.",
-    applications: ["Blazers", "Trousers", "Office uniforms"],
+    applications: ["Suiting", "Blazers", "Office uniforms"],
     colors: ["#2d3036", "#202a38", "#86785f"]
   },
   {
@@ -124,7 +133,7 @@ const fabrics = [
     roll: "THB 4,250 / roll",
     cut: "THB 132 / meter",
     detail: "Durable twill for aprons, factory trousers, operational uniforms, and long-wear utility garments.",
-    applications: ["Aprons", "Factory wear", "Utility trousers"],
+    applications: ["Aprons", "Twill", "Utility trousers"],
     colors: ["#59684d", "#c6af80", "#303329"]
   },
   {
@@ -139,7 +148,7 @@ const fabrics = [
     roll: "THB 3,350 / roll",
     cut: "THB 105 / meter",
     detail: "Textured shirting with a refined business finish for office staff, hotel teams, and branded uniforms.",
-    applications: ["Office shirts", "Hotel shirts", "Staff programs"],
+    applications: ["Shirting", "Hotel shirts", "Staff programs"],
     colors: ["#faf7ef", "#c3d6df", "#6b8390"]
   },
   {
@@ -168,38 +177,70 @@ const fabrics = [
     grade: "Dead stock",
     roll: "Ask for lot price",
     cut: "Limited cuts",
-    detail: "Assorted dead stock positioned for resellers, export buyers, small shops, and fast-moving value bundles.",
-    applications: ["Resale", "Export", "Small shop bundles"],
+    detail: "Assorted dead stock clearance positioned for resellers, export buyers, small shops, and fast-moving value bundles.",
+    applications: ["Resale", "Clearance", "Small shop bundles"],
     colors: ["#733d2f", "#203d47", "#d6b472"]
   }
 ];
 
-const useGrid = document.querySelector("#useGrid");
+/* ===== Element refs ===== */
+const fabricUseGrid = document.querySelector("#fabricUseGrid");
 const catalogGrid = document.querySelector("#catalogGrid");
 const filterButtons = document.querySelectorAll(".filter-chip");
 const searchInput = document.querySelector("#fabricSearch");
+const siteHeader = document.querySelector("#siteHeader");
+const leadForm = document.querySelector("#leadForm");
+
 let activeFilter = "all";
 
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ===== Helpers ===== */
 function weaveBackground(colors) {
   const [first, second, third] = colors;
   return `linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.18) 1px, transparent 1px), radial-gradient(circle at 26% 20%, rgba(255,255,255,0.28), transparent 28%), linear-gradient(135deg, ${first}, ${second} 48%, ${third})`;
 }
 
-function renderUseCases() {
-  useGrid.innerHTML = useCases.map((item) => `
-    <article class="use-card ${item.tone}">
+/* ===== Fabric-use category grid ===== */
+function renderFabricCategories() {
+  if (!fabricUseGrid) return;
+  fabricUseGrid.innerHTML = fabricCategories.map((item) => `
+    <button class="use-card reveal" type="button" data-keyword="${item.keyword}" aria-label="Browse ${item.title} in the catalogue">
       <span class="use-pattern" style="background-image: ${weaveBackground(item.palette)}"></span>
       <div>
-        <small>${item.count}</small>
+        <small>${item.tag}</small>
         <h3>${item.title}</h3>
         <p>${item.description}</p>
       </div>
-    </article>
+    </button>
   `).join("");
+
+  fabricUseGrid.querySelectorAll(".use-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const keyword = card.dataset.keyword || "";
+      // Reset use-case filter so the keyword search drives results.
+      activeFilter = "all";
+      filterButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.filter === "all");
+      });
+      if (searchInput) {
+        searchInput.value = keyword;
+      }
+      renderCatalog();
+      const catalog = document.querySelector("#catalog");
+      if (catalog) {
+        catalog.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
+      }
+    });
+  });
+
+  observeReveals(fabricUseGrid.querySelectorAll(".reveal"));
 }
 
+/* ===== Catalogue ===== */
 function renderCatalog() {
-  const query = searchInput.value.trim().toLowerCase();
+  if (!catalogGrid) return;
+  const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
   const filtered = fabrics.filter((fabric) => {
     const matchesFilter = activeFilter === "all" || fabric.use === activeFilter;
     const searchable = `${fabric.name} ${fabric.material} ${fabric.use} ${fabric.status} ${fabric.width} ${fabric.gsm} ${fabric.detail} ${fabric.applications.join(" ")}`.toLowerCase();
@@ -207,7 +248,7 @@ function renderCatalog() {
   });
 
   catalogGrid.innerHTML = filtered.map((fabric) => `
-    <article class="fabric-card">
+    <article class="fabric-card reveal">
       <div class="fabric-visual" style="background-image: ${weaveBackground(fabric.colors)}">
         <span>${fabric.status}</span>
       </div>
@@ -242,6 +283,8 @@ function renderCatalog() {
       </div>
     </article>
   `).join("") || `<p class="empty-state">No fabrics match that search yet.</p>`;
+
+  observeReveals(catalogGrid.querySelectorAll(".reveal"));
 }
 
 filterButtons.forEach((button) => {
@@ -253,7 +296,161 @@ filterButtons.forEach((button) => {
   });
 });
 
-searchInput.addEventListener("input", renderCatalog);
+if (searchInput) {
+  searchInput.addEventListener("input", renderCatalog);
+}
 
-renderUseCases();
+/* ===== Scroll reveal ===== */
+let revealObserver = null;
+
+if ("IntersectionObserver" in window && !prefersReducedMotion) {
+  revealObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+}
+
+function observeReveals(nodes) {
+  if (!nodes) return;
+  // Apply a staggered delay within sibling groups for grid cards.
+  nodes.forEach((node, index) => {
+    if (!node.style.transitionDelay) {
+      node.style.transitionDelay = `${Math.min(index % 6, 5) * 70}ms`;
+    }
+    if (revealObserver) {
+      revealObserver.observe(node);
+    } else {
+      node.classList.add("is-visible");
+    }
+  });
+}
+
+/* ===== Count-up metrics ===== */
+function animateCount(el) {
+  const target = Number(el.dataset.target || "0");
+  const suffix = el.dataset.suffix || "";
+  if (prefersReducedMotion || !Number.isFinite(target)) {
+    el.textContent = `${target}${suffix}`;
+    return;
+  }
+  const duration = 1400;
+  const start = performance.now();
+  function tick(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = `${Math.round(target * eased)}${suffix}`;
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+function setupCounters() {
+  const counters = document.querySelectorAll(".count");
+  if (!counters.length) return;
+  if (!("IntersectionObserver" in window) || prefersReducedMotion) {
+    counters.forEach(animateCount);
+    return;
+  }
+  const countObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        animateCount(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach((counter) => countObserver.observe(counter));
+}
+
+/* ===== Sticky header scroll state ===== */
+function setupHeaderScroll() {
+  if (!siteHeader) return;
+  const onScroll = () => {
+    siteHeader.classList.toggle("scrolled", window.scrollY > 24);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+}
+
+/* ===== Contact form (client-side) ===== */
+function setupLeadForm() {
+  if (!leadForm) return;
+
+  const fields = [
+    { id: "leadName", errId: "errName", message: "Please enter your name." },
+    { id: "leadEmail", errId: "errEmail", message: "Please enter a valid email address." },
+    { id: "leadIntent", errId: "errIntent", message: "Please choose a buying intent." },
+    { id: "leadRequirement", errId: "errRequirement", message: "Please describe your requirement." }
+  ];
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function validateField(field) {
+    const input = document.getElementById(field.id);
+    const errEl = document.getElementById(field.errId);
+    const label = input ? input.closest("label") : null;
+    if (!input || !errEl || !label) return true;
+
+    const value = input.value.trim();
+    let valid = value.length > 0;
+    if (valid && field.id === "leadEmail") {
+      valid = emailPattern.test(value);
+    }
+
+    label.classList.toggle("invalid", !valid);
+    errEl.textContent = valid ? "" : field.message;
+    return valid;
+  }
+
+  fields.forEach((field) => {
+    const input = document.getElementById(field.id);
+    if (input) {
+      input.addEventListener("input", () => validateField(field));
+      input.addEventListener("blur", () => validateField(field));
+    }
+  });
+
+  leadForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    let allValid = true;
+    let firstInvalid = null;
+    fields.forEach((field) => {
+      const ok = validateField(field);
+      if (!ok && !firstInvalid) {
+        firstInvalid = document.getElementById(field.id);
+      }
+      allValid = allValid && ok;
+    });
+
+    if (!allValid) {
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
+
+    const success = document.createElement("div");
+    success.className = "form-success";
+    success.setAttribute("role", "status");
+    success.innerHTML = `
+      <span class="success-mark" aria-hidden="true">&#10003;</span>
+      <strong>Thanks — your enquiry is in.</strong>
+      <p>We'll send today's verified stock list, matching lots, and pricing shortly.</p>
+    `;
+    leadForm.replaceWith(success);
+  });
+}
+
+/* ===== Init ===== */
+renderFabricCategories();
 renderCatalog();
+setupCounters();
+setupHeaderScroll();
+setupLeadForm();
+
+// Observe static (non-rendered) reveal elements.
+observeReveals(document.querySelectorAll(".reveal:not(.is-visible)"));
