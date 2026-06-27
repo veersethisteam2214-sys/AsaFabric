@@ -454,9 +454,12 @@ function buildWorldMap() {
   syncCompact();
   window.addEventListener("resize", syncCompact, { passive: true });
 
-  const STAGGER = 0.3;   // seconds between routes
-  const DRAW_DUR = 1.6;  // seconds for a line to draw + dot to travel
-  const PERIOD = WORLD_DESTINATIONS.length * STAGGER + DRAW_DUR + 0.8;
+  const STAGGER = 0.45;  // seconds between routes (clear staggered draw-in)
+  const DRAW_DUR = 1.7;  // seconds for a line to draw + dot to travel
+  // Period kept tight so the trace visibly loops rather than holding static.
+  const PERIOD = WORLD_DESTINATIONS.length * STAGGER + DRAW_DUR + 1.4;
+  // fraction of the period spent drawing (rest = brief hold + reset)
+  const DRAW_FRAC = Math.min(0.6, (DRAW_DUR) / PERIOD);
 
   WORLD_DESTINATIONS.forEach((dest, i) => {
     const end = worldProject(dest.lat, dest.lng);
@@ -474,33 +477,36 @@ function buildWorldMap() {
       const len = path.getTotalLength();
       path.style.strokeDasharray = `${len}`;
       path.style.strokeDashoffset = `${len}`;
+      // key timings: draw in over DRAW_FRAC of the period, hold drawn briefly,
+      // then snap back to undrawn just before the loop repeats.
+      const tDraw = DRAW_FRAC.toFixed(3);
+      const tHold = Math.min(0.97, DRAW_FRAC + 0.45).toFixed(3);
       const draw = svgEl("animate", {
         attributeName: "stroke-dashoffset",
-        begin: `${i * STAGGER}s`, dur: `${PERIOD}s`,
+        begin: `${(i * STAGGER).toFixed(3)}s`, dur: `${PERIOD}s`,
         repeatCount: "indefinite",
-        // draw in over the first ~45% of the period, then hold drawn,
-        // then snap back to undrawn just before the loop repeats
-        keyTimes: "0;0.45;0.97;1", values: `${len};0;0;${len}`,
+        keyTimes: `0;${tDraw};${tHold};1`, values: `${len};0;0;${len}`,
         calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1;0 0 1 1"
       });
       path.appendChild(draw);
 
-      // travelling glowing dot
+      // travelling glowing dot — rides the curve while the line draws
       const dot = svgEl("circle", {
-        r: "2.6", fill: ACCENT, filter: "url(#worldGlow)"
+        r: "2.8", fill: ACCENT, filter: "url(#worldGlow)"
       });
       const motion = svgEl("animateMotion", {
-        path: d, begin: `${i * STAGGER}s`, dur: `${PERIOD}s`,
+        path: d, begin: `${(i * STAGGER).toFixed(3)}s`, dur: `${PERIOD}s`,
         repeatCount: "indefinite",
-        keyPoints: "0;1;1", keyTimes: "0;0.45;1",
+        keyPoints: "0;1;1", keyTimes: `0;${tDraw};1`,
         calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1"
       });
       dot.appendChild(motion);
-      // fade the dot out while it idles at the destination
+      // fade the dot out once it reaches the destination, hidden until next loop
       const dotFade = svgEl("animate", {
-        attributeName: "opacity", begin: `${i * STAGGER}s`,
+        attributeName: "opacity", begin: `${(i * STAGGER).toFixed(3)}s`,
         dur: `${PERIOD}s`, repeatCount: "indefinite",
-        keyTimes: "0;0.42;0.55;1", values: "1;1;0;0"
+        keyTimes: `0;${tDraw};${(Math.min(0.99, DRAW_FRAC + 0.08)).toFixed(3)};1`,
+        values: "1;1;0;0"
       });
       dot.appendChild(dotFade);
       svg.appendChild(dot);
@@ -547,21 +553,84 @@ function buildWorldMap() {
 
   stage.appendChild(svg);
 
-  // --- 3. Pause SMIL animations while the map is off-screen (perf).
-  //     Static under reduced motion, so this only matters when animating. ---
+  // --- 3. Play the route tracing when the section scrolls into view.
+  //     Animations stay paused (and reset) off-screen so the trace clearly
+  //     (re)plays from the start each time the map enters the viewport —
+  //     this is what makes it read as animating rather than a static image.
+  //     Static under reduced motion (no SMIL elements were added). ---
   if (!prefersReducedMotion && "IntersectionObserver" in window &&
       typeof svg.pauseAnimations === "function") {
-    try { svg.pauseAnimations(); } catch (e) { /* no-op */ }
+    try { svg.pauseAnimations(); svg.setCurrentTime(0); } catch (e) { /* no-op */ }
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         try {
-          if (e.isIntersecting) svg.unpauseAnimations();
-          else svg.pauseAnimations();
+          if (e.isIntersecting) {
+            // restart the staggered trace from t=0, then run
+            svg.setCurrentTime(0);
+            svg.unpauseAnimations();
+          } else {
+            svg.pauseAnimations();
+          }
         } catch (err) { /* no-op */ }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.25 });
     io.observe(stage);
   }
+}
+
+/* ============================================================
+   Fabric-type fading typographic carousel
+   Slow cross-fade between curated fabric names (~2.7s each).
+   Reduced motion: render a single static comma-separated line.
+   ============================================================ */
+const FABRIC_TYPES = [
+  "Chambray",
+  "Oxford Cotton",
+  "Cashmere Blend",
+  "Irish Linen",
+  "Egyptian Giza Cotton",
+  "Heavyweight Twill",
+  "Raw Silk",
+  "Cotton Poplin"
+];
+
+function initFabricRotator() {
+  const stage = document.querySelector("#fabricRotator");
+  if (!stage) return;
+
+  // Reduced motion (or single item): static line, no rotation.
+  if (prefersReducedMotion || FABRIC_TYPES.length < 2) {
+    const p = document.createElement("p");
+    p.className = "fabric-rotator-static";
+    p.textContent = FABRIC_TYPES.join(" · ");
+    stage.replaceWith(p);
+    return;
+  }
+
+  const items = FABRIC_TYPES.map((name, i) => {
+    const el = document.createElement("p");
+    el.className = "fabric-rotator-item" + (i === 0 ? " is-active" : "");
+    el.textContent = name;
+    stage.appendChild(el);
+    return el;
+  });
+
+  let index = 0;
+  const INTERVAL = 2700; // ~2.7s per name
+  let timer = null;
+
+  function advance() {
+    items[index].classList.remove("is-active");
+    index = (index + 1) % items.length;
+    items[index].classList.add("is-active");
+  }
+  function start() { if (!timer) timer = window.setInterval(advance, INTERVAL); }
+  function stop() { if (timer) { window.clearInterval(timer); timer = null; } }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop(); else start();
+  });
+  start();
 }
 
 /* ---------- Hero slideshow ---------- */
@@ -574,7 +643,7 @@ function initSlideshow() {
   if (!root || slides.length < 2) return;
 
   const reduced = prefersReducedMotion;
-  const INTERVAL = 6000;
+  const INTERVAL = 4500; // auto-advance every 4.5s (no clicks needed)
   let current = 0;
   let timer = null;
 
@@ -740,6 +809,30 @@ function initParallax() {
   window.addEventListener("resize", onScroll, { passive: true });
 }
 
+/* ---------- Stats blur -> clarity (JS fallback for scroll-driven anim) ----------
+   Where `animation-timeline: view()` is supported the CSS drives the effect
+   continuously with scroll. Elsewhere, toggle .in-clarity once the strip enters
+   view so the CSS transition resolves the numbers to clarity. Reduced motion is
+   gated in CSS (always clear). */
+function initStatsClarity() {
+  const strip = document.querySelector(".stats-strip");
+  if (!strip) return;
+  if (prefersReducedMotion) { strip.classList.add("in-clarity"); return; }
+
+  // If the browser supports scroll-driven view() timelines, let CSS handle it.
+  const supportsViewTimeline =
+    window.CSS && CSS.supports && CSS.supports("animation-timeline: view()");
+  if (supportsViewTimeline) return;
+
+  if (!("IntersectionObserver" in window)) { strip.classList.add("in-clarity"); return; }
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { strip.classList.add("in-clarity"); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.35 });
+  io.observe(strip);
+}
+
 /* ---------- Footer year ---------- */
 function initYear() {
   const year = document.querySelector("#year");
@@ -748,6 +841,7 @@ function initYear() {
 
 buildWorldMap();
 initFanCarousel();
+initFabricRotator();
 initSlideshow();
 initScrollProgress();
 initReveal();
@@ -755,4 +849,5 @@ initNav();
 initSmoothScroll();
 initForm();
 initParallax();
+initStatsClarity();
 initYear();

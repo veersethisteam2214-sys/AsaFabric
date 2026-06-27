@@ -26,23 +26,20 @@
   <!-- ============ Glass-pill nav ============ -->
   <header class="glass-nav" id="glassNav">
     <!-- ============================================================
-         LOGO / WORDMARK — single swappable element.
-         Triangle mark removed per client. Clean "AF" serif monogram
-         (matches assets/logo.png from the client's Stitch export) rendered
-         as recolorable inline SVG so it works on the dark hero and the light
-         scrolled nav. To drop in a final raster/SVG logo later, replace the
-         <svg class="brand-mark"> below with:
-             <img class="brand-mark" src="assets/logo.png" alt="Asa Fabric">
-         and keep the .brand-text wordmark (or remove it if the logo includes type).
+         LOGO / WORDMARK — single swappable logo include.
+         The client's real "ASA / FABRICS" serif wordmark, exported as two
+         transparent variants from assets/logo-source.png:
+             assets/logo-light.png  — near-white ink, for DARK backgrounds
+             assets/logo-dark.png   — dark ink, for LIGHT backgrounds
+         Both <img> are stacked; CSS swaps their opacity on .glass-nav.scrolled
+         (transparent-over-hero => light; solid scrolled nav => dark).
+         To replace the logo later, regenerate the two variants (see
+         /tmp make_logo recipe / README) and keep these two <img> tags.
          ============================================================ -->
     <a class="brand" href="#top" aria-label="Asa Fabric — home">
-      <svg class="brand-mark" viewBox="0 0 60 44" width="42" height="31" aria-hidden="true" focusable="false">
-        <text x="30" y="30" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="34" fill="currentColor">AF</text>
-        <line x1="14" y1="38" x2="46" y2="38" stroke="currentColor" stroke-width="1.2"/>
-      </svg>
-      <span class="brand-text">
-        <span class="brand-name">Asa</span>
-        <span class="brand-sub">Fabric</span>
+      <span class="brand-logo" aria-hidden="true">
+        <img class="brand-logo-img light" src="assets/logo-light.png" alt="">
+        <img class="brand-logo-img dark" src="assets/logo-dark.png" alt="">
       </span>
     </a>
 
@@ -63,6 +60,12 @@
 
   <!-- mobile glass menu -->
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <!-- mobile menu sits on a light glass panel -> dark-ink wordmark -->
+    <a class="brand mobile-brand" href="#top" aria-label="Asa Fabric — home">
+      <span class="brand-logo" aria-hidden="true">
+        <img class="brand-logo-img" src="assets/logo-dark.png" alt="">
+      </span>
+    </a>
     <a href="#uses">Shirtings</a>
     <a href="#uses">Suitings</a>
     <a href="#uses">Trousers</a>
@@ -111,13 +114,16 @@
       </div>
     </section>
 
-    <!-- ============ Marquee ticker ============ -->
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <span>Organic Irish Linen</span><span class="dot">•</span><span>Egyptian Giza Cotton</span><span class="dot">•</span><span>Heavyweight Twill</span><span class="dot">•</span><span>Raw Silk</span><span class="dot">•</span><span>Cashmere Blend</span><span class="dot">•</span><span>Oxford Cotton</span><span class="dot">•</span><span>Chambray</span><span class="dot">•</span>
-        <span>Organic Irish Linen</span><span class="dot">•</span><span>Egyptian Giza Cotton</span><span class="dot">•</span><span>Heavyweight Twill</span><span class="dot">•</span><span>Raw Silk</span><span class="dot">•</span><span>Cashmere Blend</span><span class="dot">•</span><span>Oxford Cotton</span><span class="dot">•</span><span>Chambray</span><span class="dot">•</span>
-      </div>
-    </div>
+    <!-- ============ Fabric-type fading typographic carousel ============
+         Replaces the old marquee ticker with a curated, slow cross-fading
+         rotator of fabric names (large EB Garamond), driven by app.js.
+         Reduced-motion renders a static comma-separated line (no rotation). -->
+    <section class="fabric-rotator" aria-label="Fabric types we carry">
+      <p class="fabric-rotator-overline">Fabrics we carry</p>
+      <div class="fabric-rotator-stage" id="fabricRotator" aria-hidden="true"></div>
+      <!-- static fallback for reduced motion / no-JS -->
+      <noscript><p class="fabric-rotator-static">Chambray · Oxford Cotton · Cashmere Blend · Irish Linen · Egyptian Giza Cotton · Heavyweight Twill · Raw Silk · Cotton Poplin</p></noscript>
+    </section>
 
     <!-- ============ Stats strip ============ -->
     <!-- NOTE: placeholder stats — easily editable, no heritage claims. -->
@@ -270,15 +276,15 @@
       <form class="lead-form reveal" id="leadForm" novalidate>
         <label>
           Full Name
-          <input type="text" name="name" placeholder="Your name" required>
+          <span class="field"><input type="text" name="name" placeholder="Your name" required></span>
         </label>
         <label>
           Email
-          <input type="email" name="email" placeholder="you@email.com" required>
+          <span class="field"><input type="email" name="email" placeholder="you@email.com" required></span>
         </label>
         <label>
           Fabric Interest
-          <select name="interest">
+          <span class="field"><select name="interest">
             <option>Shirtings</option>
             <option>Suitings</option>
             <option>Trousers</option>
@@ -286,11 +292,11 @@
             <option>Cottons</option>
             <option>Bulk / clearance</option>
             <option>Other</option>
-          </select>
+          </select></span>
         </label>
         <label>
           Message
-          <textarea name="message" placeholder="Fabric type, colour, quantity, roll or cut length…"></textarea>
+          <span class="field"><textarea name="message" placeholder="Fabric type, colour, quantity, roll or cut length…"></textarea></span>
         </label>
         <button class="btn btn-solid" type="submit">Send Enquiry <span aria-hidden="true">→</span></button>
         <p class="form-note" id="formNote" hidden>Thanks — your enquiry is noted. The team will follow up shortly.</p>
@@ -303,14 +309,9 @@
     <div class="footer-grid">
       <div class="footer-brand-col">
         <a class="brand footer-brand" href="#top" aria-label="Asa Fabric — home">
-          <!-- Same swappable "AF" wordmark as the nav (triangle removed). -->
-          <svg class="brand-mark" viewBox="0 0 60 44" width="42" height="31" aria-hidden="true" focusable="false">
-            <text x="30" y="30" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="34" fill="currentColor">AF</text>
-            <line x1="14" y1="38" x2="46" y2="38" stroke="currentColor" stroke-width="1.2"/>
-          </svg>
-          <span class="brand-text">
-            <span class="brand-name">Asa</span>
-            <span class="brand-sub">Fabric</span>
+          <!-- Footer sits on a light canvas band, so use the dark-ink wordmark. -->
+          <span class="brand-logo" aria-hidden="true">
+            <img class="brand-logo-img" src="assets/logo-dark.png" alt="">
           </span>
         </a>
         <p class="footer-tagline">Quality fabrics, by the roll or the cut.</p>
