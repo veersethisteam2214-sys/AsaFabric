@@ -110,20 +110,16 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
    "Fabrics by use" editorial grid. */
 const useGrid = document.querySelector("#useGrid");
 
-/* TASK 8 — "Fabrics by use": render BOTH candidate variants from the SAME
-   `useCases` data so the client can compare them with the pill toggle.
-     • Variant A "Editorial Index" — full-width stacked rows; large serif index
-       numeral + name on the left, overline label, and an image that elegantly
-       reveals/expands on hover on the right; hairline dividers between rows.
-     • Variant B "Lookbook Mosaic" — asymmetric image-forward grid (one large
-       feature tile + smaller tiles), image hover zoom, refined overlay captions.
-   Both keep a "More coming soon" tile. Visibility is switched by toggling the
-   .variant-index / .variant-mosaic class on the #uses section (see initUsesToggle).
-   Imagery uses the same woven-cloth weaveBackground() the site already uses. */
+/* "Fabrics by use" — Editorial Index (the chosen, permanent layout).
+   Full-width stacked rows rendered from the `useCases` data: a large serif
+   index numeral + use-name on the left, a tracked overline label, and an
+   image that elegantly reveals/zooms on hover on the right; refined hairline
+   dividers between rows and a subtle light-blue accent on the numeral + arrow.
+   Closes with a "More coming soon" row. Imagery uses the same woven-cloth
+   weaveBackground() the site already uses. Reduced-motion safe. */
 function renderUseCases() {
   if (!useGrid) return;
 
-  // --- Variant A: Editorial Index (stacked rows) ---
   const indexRows = useCases.map((item, i) => `
     <article class="use-row reveal" tabindex="0">
       <span class="use-row-num" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
@@ -132,6 +128,7 @@ function renderUseCases() {
         <h3 class="use-row-title">${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
         <p class="use-row-desc">${escapeHtml(item.description)}</p>
       </div>
+      <span class="use-row-meta" aria-hidden="true">${escapeHtml(item.count)}</span>
       <span class="use-row-media" aria-hidden="true">
         <span class="use-row-img" style="background-image: ${weaveBackground(item.palette)}"></span>
       </span>
@@ -145,65 +142,15 @@ function renderUseCases() {
         <h3 class="use-row-title">More coming soon</h3>
         <p class="use-row-desc">Denims, linings and more uses are being added.</p>
       </div>
+      <span class="use-row-meta" aria-hidden="true"></span>
       <span class="use-row-media" aria-hidden="true"></span>
     </article>
   `;
 
-  // --- Variant B: Lookbook Mosaic (asymmetric grid) ---
-  const mosaicTiles = useCases.map((item, i) => `
-    <article class="use-tile ${item.tone} reveal" tabindex="0">
-      <span class="use-tile-img" style="background-image: ${weaveBackground(item.palette)}"></span>
-      <div class="use-tile-cap">
-        <small>${escapeHtml(item.overline || item.count)}</small>
-        <h3>${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
-        <p>${escapeHtml(item.description)}</p>
-      </div>
-    </article>
-  `).join("");
-  const mosaicSoon = `
-    <article class="use-tile soon reveal">
-      <div class="use-tile-soon">
-        <span class="soon-mark" aria-hidden="true">+</span>
-        <h3>More coming soon</h3>
-        <p>Denims, linings and more uses are being added.</p>
-      </div>
-    </article>
-  `;
-
-  useGrid.innerHTML =
-    `<div class="use-index">${indexRows}${indexSoon}</div>` +
-    `<div class="use-mosaic">${mosaicTiles}${mosaicSoon}</div>`;
+  useGrid.innerHTML = `<div class="use-index">${indexRows}${indexSoon}</div>`;
 }
 
 renderUseCases();
-
-/* TASK 8 — variant compare toggle (temporary). Two pill buttons near the
-   heading switch which variant is shown by toggling the section class. Default
-   is Variant A (Index). No motion required; purely a class swap. */
-function initUsesToggle() {
-  const section = document.querySelector("#uses");
-  const toggle = document.querySelector("#usesToggle");
-  if (!section || !toggle) return;
-  const buttons = Array.from(toggle.querySelectorAll(".uses-toggle-btn"));
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const variant = btn.dataset.variant; // "index" | "mosaic"
-      section.classList.toggle("variant-index", variant === "index");
-      section.classList.toggle("variant-mosaic", variant === "mosaic");
-      // The hidden block's .reveal items may never have intersected (display:none),
-      // so force them visible when their variant is switched on.
-      const block = section.querySelector(variant === "mosaic" ? ".use-mosaic" : ".use-index");
-      if (block) block.querySelectorAll(".reveal").forEach((el) => el.classList.add("in-view"));
-      buttons.forEach((b) => {
-        const on = b === btn;
-        b.classList.toggle("is-active", on);
-        b.setAttribute("aria-pressed", String(on));
-      });
-    });
-  });
-}
-
-initUsesToggle();
 
 /* ============================================================
    Featured Fabrics — fan carousel (ported from React+GSAP)
@@ -964,6 +911,13 @@ function initParallax() {
     ticking = false;
     const vh = window.innerHeight;
     items.forEach((el) => {
+      // collage images defer their parallax until the assemble intro completes,
+      // so the two transforms never fight (assemble owns the transform first).
+      if (el.classList.contains("collage-img") &&
+          el.closest(".stock-collage") &&
+          !el.closest(".stock-collage").classList.contains("assembled")) {
+        return;
+      }
       const speed = parseFloat(el.dataset.parallax) || 0;
       const rect = el.getBoundingClientRect();
       // distance of element center from viewport center
@@ -978,6 +932,46 @@ function initParallax() {
   update();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
+}
+
+/* ---------- Available Fabric Lots — "assemble" intro animation ----------
+   When the stock-teaser collage scrolls into view, its three images animate
+   from a spread-out / scaled / faded start into their existing overlapping
+   collage layout (the final resting positions are UNCHANGED — they are the
+   plain CSS defaults). Implemented purely with CSS transforms toggled by a
+   class so it degrades gracefully without GSAP:
+     • `.pre-assemble` (set immediately) holds each image offset + faded.
+     • `.assembled` (set on first intersect) transitions to the natural state.
+   Reduced motion / no IntersectionObserver: we never add `.pre-assemble`, so
+   the collage shows its final positions immediately with no motion. Parallax
+   on the collage images is deferred (see initParallax) until `.assembled`. */
+function initStockAssemble() {
+  const collage = document.querySelector(".stock-collage");
+  if (!collage) return;
+
+  // Reduced motion or no IO support: leave the collage at its final layout.
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    collage.classList.add("assembled");
+    return;
+  }
+
+  // Seed the spread-out / faded start state before first paint of the section.
+  collage.classList.add("pre-assemble");
+
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        // Next frame so the browser registers the pre-assemble state first,
+        // guaranteeing a transition rather than an instant jump.
+        requestAnimationFrame(() => {
+          collage.classList.remove("pre-assemble");
+          collage.classList.add("assembled");
+        });
+        obs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  io.observe(collage);
 }
 
 /* ---------- Stats strip — scramble / decode reveal on scroll ----------
@@ -1086,5 +1080,6 @@ safe(initNavDock, "initNavDock");
 safe(initSmoothScroll, "initSmoothScroll");
 safe(initForm, "initForm");
 safe(initParallax, "initParallax");
+safe(initStockAssemble, "initStockAssemble");
 safe(initStatsScramble, "initStatsScramble");
 safe(initYear, "initYear");

@@ -90,47 +90,50 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 }
 .eyebrow.light::before { background: var(--accent-blue-soft); }
 
-/* ---------- Buttons — unified "liquid glass" system ----------
-   Every button (.btn-solid, .btn-solid-light, .btn-ghost, .btn-link[.light]
-   and the .nav-cta pill) shares one frosted-glass treatment: backdrop blur +
-   saturation, a translucent tinted fill, a faint top highlight, a 1px
-   translucent border, and layered inner/outer shadow.
-   Per client feedback the glass is now ROUNDED (~12px) and genuinely
-   SEE-THROUGH ("less black"): the dark glass fill is dropped to ~0.36 so the
-   page/photo reads through it, and legibility is held with a crisp translucent
-   border, a soft shadow, a faint top highlight and a subtle text-shadow —
-   never an opaque fill. .nav-cta keeps its pill shape. Hover lifts physically
-   (translateY + slight scale) with a sheen sweep; active presses in. Tints/blur
-   are exposed as variables below so the whole system tunes in one place. */
+/* ---------- Buttons — Apple-style "liquid glass" OUTLINE system ----------
+   Per client feedback ("make it see through fully, just black outlines maybe,
+   still liquid glass look, Apple style") buttons are now NEARLY FULLY
+   TRANSPARENT: a very faint tint only (rgba ~0.06–0.10), a real
+   backdrop-filter blur so they still read as liquid glass, and a clean thin
+   OUTLINE that does the defining work.
+     • LIGHT sections  → dark/black outline + dark text (.btn-solid, .btn-ghost).
+     • DARK hero photo → white/light outline + light text (.btn-solid-light,
+       .btn-link.light) — a black outline would vanish on the photo.
+   Hover adds a subtle fill lift/tint + gentle scale; active presses in. The
+   @supports-not(backdrop-filter) fallback uses slightly more opaque fills.
+   Variables below tune the whole system in one place. */
 :root {
   --btn-ease: cubic-bezier(.2,.8,.2,1);
   --glass-ease: cubic-bezier(.22,.61,.36,1);
-  --glass-blur: blur(16px) saturate(170%);
+  --glass-blur: blur(16px) saturate(160%);
   --btn-radius: 12px;
-  /* dark glass (on cream sections) — see-through, not black */
-  --glass-dark-bg: rgba(22,22,22,0.40);
-  --glass-dark-bg-hover: rgba(22,22,22,0.56);
-  --glass-dark-border: rgba(255,255,255,0.32);
-  /* light glass (must stay legible over the dark hero photo) — translucent */
-  --glass-light-bg: rgba(255,255,255,0.40);
-  --glass-light-bg-hover: rgba(255,255,255,0.56);
-  --glass-light-border: rgba(255,255,255,0.55);
-  /* shared highlight + shadow */
-  --glass-highlight: rgba(255,255,255,0.55);
-  --glass-shadow: 0 10px 28px -14px rgba(20,18,15,0.5);
-  --glass-shadow-hover: 0 18px 38px -16px rgba(20,18,15,0.6);
-  /* soft text-shadow keeps labels crisp on a see-through fill */
-  --glass-text-shadow-dark: 0 1px 3px rgba(0,0,0,0.55);
-  --glass-text-shadow-light: 0 1px 1px rgba(255,255,255,0.6);
+  /* dark-outline glass (on LIGHT/cream sections) — near-transparent fill */
+  --glass-dark-bg: rgba(20,20,20,0.06);
+  --glass-dark-bg-hover: rgba(20,20,20,0.12);
+  --glass-dark-border: rgba(20,20,20,0.78);
+  --glass-dark-border-hover: rgba(20,20,20,0.92);
+  --glass-dark-fg: rgba(20,20,20,0.9);
+  /* light-outline glass (on the DARK hero photo) — near-transparent fill */
+  --glass-light-bg: rgba(255,255,255,0.08);
+  --glass-light-bg-hover: rgba(255,255,255,0.16);
+  --glass-light-border: rgba(255,255,255,0.7);
+  --glass-light-border-hover: rgba(255,255,255,0.92);
+  /* shared highlight + shadow (kept very soft for the glass feel) */
+  --glass-highlight: rgba(255,255,255,0.35);
+  --glass-shadow: 0 8px 22px -16px rgba(20,18,15,0.4);
+  --glass-shadow-hover: 0 14px 30px -18px rgba(20,18,15,0.5);
+  /* faint text-shadows keep labels crisp on a see-through fill */
+  --glass-text-shadow-dark: 0 1px 2px rgba(255,255,255,0.5);
+  --glass-text-shadow-light: 0 1px 3px rgba(0,0,0,0.5);
 }
 .btn {
   position: relative; overflow: hidden; isolation: isolate;
   display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--sans); font-size: 13px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 16px 32px; border: 1px solid var(--glass-dark-border); border-radius: var(--btn-radius);
+  padding: 16px 32px; border: 1.5px solid var(--glass-dark-border); border-radius: var(--btn-radius);
   /* faint top highlight baked into the fill */
-  background-image: linear-gradient(180deg, var(--glass-highlight) 0%, rgba(255,255,255,0) 46%);
+  background-image: linear-gradient(180deg, var(--glass-highlight) 0%, rgba(255,255,255,0) 50%);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
@@ -141,7 +144,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* sheen sweep layer — a soft highlight that wipes across on hover */
 .btn::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
+  background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.22) 50%, transparent 100%);
   transform: translateX(-120%);
   transition: transform 0.5s var(--glass-ease);
 }
@@ -149,31 +152,31 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .btn span { transition: transform 0.2s var(--glass-ease); }
 .btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: var(--glass-shadow-hover), inset 0 1px 0 var(--glass-highlight); }
 .btn:hover::before { transform: translateX(120%); }
-.btn:active { transform: translateY(0) scale(0.99); box-shadow: var(--glass-shadow), inset 0 2px 6px rgba(20,18,15,0.35); }
+.btn:active { transform: translateY(0) scale(0.99); box-shadow: var(--glass-shadow), inset 0 2px 6px rgba(20,18,15,0.18); }
 .btn:hover span { transform: translateX(3px); }
 
-/* solid (dark glass) — PRIMARY: see-through dark glass. The page reads through
-   the fill; white label stays crisp via a soft text-shadow + crisp rim. */
+/* solid (on LIGHT sections) — PRIMARY: near-transparent glass, BLACK outline +
+   dark text. The page reads clean through the fill; the outline defines it. */
 .btn-solid {
-  background-color: var(--glass-dark-bg); color: var(--btn-fg);
+  background-color: var(--glass-dark-bg); color: var(--glass-dark-fg);
   border-color: var(--glass-dark-border); text-shadow: var(--glass-text-shadow-dark);
 }
-.btn-solid:hover { background-color: var(--glass-dark-bg-hover); }
+.btn-solid:hover { background-color: var(--glass-dark-bg-hover); border-color: var(--glass-dark-border-hover); color: var(--ink); }
 
-/* ghost — translucent over cream, ink text + ink hairline; fills to dark glass */
+/* ghost — same dark-outline glass treatment on cream */
 .btn-ghost {
-  background-color: rgba(26,26,26,0.04); color: var(--ink);
-  border-color: rgba(26,26,26,0.5);
+  background-color: var(--glass-dark-bg); color: var(--glass-dark-fg);
+  border-color: var(--glass-dark-border); text-shadow: var(--glass-text-shadow-dark);
 }
-.btn-ghost:hover { background-color: var(--glass-dark-bg-hover); color: #fff; border-color: var(--glass-dark-border); text-shadow: var(--glass-text-shadow-dark); }
+.btn-ghost:hover { background-color: var(--glass-dark-bg-hover); border-color: var(--glass-dark-border-hover); color: var(--ink); }
 
-/* light (on dark hero photo) — PRIMARY over photo: see-through white glass.
-   Stays legible on the dark scrim via the crisp rim, ink text + faint highlight. */
+/* light (on the DARK hero photo) — PRIMARY over photo: near-transparent glass,
+   WHITE outline + light text so it never vanishes on the photo. */
 .btn-solid-light {
-  background-color: var(--glass-light-bg); color: var(--ink);
+  background-color: var(--glass-light-bg); color: #fff;
   border-color: var(--glass-light-border); text-shadow: var(--glass-text-shadow-light);
 }
-.btn-solid-light:hover { background-color: var(--glass-light-bg-hover); }
+.btn-solid-light:hover { background-color: var(--glass-light-bg-hover); border-color: var(--glass-light-border-hover); }
 
 .btn-link {
   position: relative; isolation: isolate;
@@ -203,19 +206,18 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* light secondary over the dark hero photo — tint stays dark-ish for legibility */
 .btn-link.light:hover { background-color: rgba(255,255,255,0.14); }
 
-/* @supports fallback — where backdrop-filter is unsupported, lean on MORE
-   opaque tinted fills so no glass button ever renders see-through/invisible. */
+/* @supports fallback — where backdrop-filter is unsupported, keep the
+   outline-led Apple look but use a SLIGHTLY MORE OPAQUE tint so the label
+   stays legible without the blur (still see-through, never an opaque slab). */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .btn-solid { background-color: rgba(26,26,26,0.92); text-shadow: none; }
-  .btn-solid:hover { background-color: #2c2c2c; }
-  .btn-ghost { background-color: transparent; }
-  .btn-ghost:hover { background-color: var(--ink); text-shadow: none; }
-  .btn-solid-light { background-color: rgba(255,255,255,0.96); text-shadow: none; }
-  .btn-solid-light:hover { background-color: #fff; }
-  .btn-link:hover { background-color: rgba(26,26,26,0.1); }
+  .btn-solid, .btn-ghost { background-color: rgba(20,20,20,0.10); text-shadow: none; }
+  .btn-solid:hover, .btn-ghost:hover { background-color: rgba(20,20,20,0.16); }
+  .btn-solid-light { background-color: rgba(255,255,255,0.16); text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+  .btn-solid-light:hover { background-color: rgba(255,255,255,0.24); }
+  .btn-link:hover { background-color: rgba(14,165,233,0.12); }
   .btn-link.light:hover { background-color: rgba(255,255,255,0.22); }
-  .nav-cta { background-color: rgba(26,26,26,0.92); }
-  .nav-cta:hover { background-color: #2c2c2c; }
+  .nav-cta { background-color: rgba(20,20,20,0.10); }
+  .nav-cta:hover { background-color: rgba(20,20,20,0.16); }
 }
 
 /* ---------- Soft rounding override ----------
@@ -223,7 +225,6 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
    glassier, more premium feel. Buttons now carry their own ~12px radius
    (see the liquid-glass system above); inputs stay sharp. */
 .fan-card,
-.use-tile,
 .stock-collage,
 .collage-img,
 .stock-collage .collage-badge { border-radius: 16px; }
@@ -260,10 +261,12 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); }
 /* ---------- Logo wordmark (swappable image variants) ----------
    Two stacked <img> in the nav (light over hero, dark when scrolled);
-   single <img> in footer / mobile menu. Wordmark height ~24px, crisp. */
-.brand-logo { position: relative; display: inline-flex; align-items: center; height: 24px; }
+   single <img> in footer / mobile menu. Rendered larger (~36px nav, ~52px
+   footer) so the full "ASA / FABRICS" wordmark — including the lower
+   "FABRICS" line — is clearly legible. Aspect ratio preserved (width:auto). */
+.brand-logo { position: relative; display: inline-flex; align-items: center; height: 36px; }
 .brand-logo-img {
-  display: block; height: 24px; width: auto; user-select: none;
+  display: block; height: 36px; width: auto; user-select: none;
   image-rendering: -webkit-optimize-contrast;
 }
 /* nav: stack the two variants and cross-fade on .scrolled */
@@ -300,13 +303,14 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   transition: opacity 0.3s ease, transform 0.28s cubic-bezier(.34,1.56,.64,1);
 }
 .nav-links.dock a:hover { opacity: 1; }
-/* nav "View Catalog" pill — same liquid-glass treatment, PRIMARY dark glass,
-   but keeps its rounded-pill shape (the one glass button that stays round). */
+/* nav "View Catalog" pill — same Apple-glass outline treatment: near-transparent
+   fill, dark outline + dark text (the nav panel is a light cream glass), keeps
+   its rounded-pill shape (the one glass button that stays round). */
 .nav-cta {
   position: relative; overflow: hidden; isolation: isolate;
   font-family: var(--sans); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.15em; text-transform: uppercase; color: var(--btn-fg);
-  padding: 9px 20px; border: 1px solid var(--glass-dark-border); border-radius: 9999px;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--glass-dark-fg);
+  padding: 9px 20px; border: 1.5px solid var(--glass-dark-border); border-radius: 9999px;
   background-color: var(--glass-dark-bg);
   background-image: linear-gradient(180deg, var(--glass-highlight) 0%, rgba(255,255,255,0) 50%);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -356,7 +360,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .mobile-menu a:last-child { border-bottom: none; }
 .mobile-cta { color: var(--ink); }
 .mobile-menu .mobile-brand { padding: 4px 4px 14px; border-bottom: 1px solid var(--hairline); }
-.mobile-menu .mobile-brand .brand-logo-img { height: 26px; }
+.mobile-menu .mobile-brand .brand-logo-img { height: 34px; }
 
 /* ---------- Hero ---------- */
 .hero {
@@ -544,153 +548,97 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .fan-layout:not(.static) { cursor: ew-resize; }
 
 /* ============================================================
-   TASK 8 — Fabrics by use: TWO switchable variants
-   Both render from the same `useCases` data into #useGrid (.use-index +
-   .use-mosaic blocks). The #uses section carries .variant-index OR
-   .variant-mosaic; only the matching block is shown. A pill toggle near the
-   heading swaps the class (temporary compare tool). Default: Index.
+   Fabrics by use — Editorial Index (the chosen, permanent layout)
+   Full-width stacked rows rendered from `useCases` into #useGrid (.use-index).
+   Elevated to feel editorial / high-end: larger serif use-names, refined
+   tracked overlines, a lot-count meta column, generous vertical rhythm,
+   premium hairline dividers, and a tasteful hover (image reveal/zoom + a
+   subtle light-blue accent on the numeral + arrow). Reduced-motion safe.
    ============================================================ */
 .uses-section { max-width: var(--container); margin: 0 auto; padding: var(--section-gap) var(--margin); }
 .uses-section .section-heading { max-width: 720px; margin-bottom: 0; }
-/* heading row with the compare toggle on the right */
-.uses-head {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  flex-wrap: wrap; gap: 24px; margin-bottom: 56px;
-}
-/* compare toggle — small pill segmented control (temporary) */
-.uses-toggle {
-  display: inline-flex; padding: 4px; border-radius: 9999px;
-  background: var(--tonal); border: 1px solid var(--hairline);
-}
-.uses-toggle-btn {
-  font-family: var(--sans); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
-  background: transparent; border: none; border-radius: 9999px;
-  padding: 9px 20px; transition: color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
-}
-.uses-toggle-btn.is-active {
-  color: var(--ink); background: var(--canvas);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 16px -10px rgba(20,18,15,0.5);
-}
-.uses-toggle-btn.is-active { box-shadow: 0 6px 16px -10px rgba(20,18,15,0.5), inset 0 0 0 1px var(--accent-blue); }
-.uses-toggle-btn:hover { color: var(--ink); }
+.uses-head { margin-bottom: 64px; }
 
-/* only one variant block is visible at a time */
-.use-mosaic { display: none; }
-.uses-section.variant-mosaic .use-index { display: none; }
-.uses-section.variant-mosaic .use-mosaic { display: grid; }
-
-/* ---------- Variant A — Editorial Index (stacked rows) ---------- */
-.use-index { display: block; border-top: 1px solid var(--hairline); }
+/* ---------- Editorial Index (stacked rows) ---------- */
+.use-index {
+  display: block;
+  /* premium top hairline: a hint of light-blue fades into the page rule */
+  border-top: 1px solid var(--hairline);
+  position: relative;
+}
+.use-index::before {
+  content: ""; position: absolute; top: -1px; left: 0; width: 88px; height: 2px;
+  background: linear-gradient(90deg, var(--accent-blue), transparent);
+}
 .use-row {
   position: relative; display: grid;
-  grid-template-columns: auto 1fr 280px; align-items: center; gap: 40px;
-  padding: 32px 0; outline: none;
+  grid-template-columns: auto 1fr auto 300px; align-items: center; gap: 48px;
+  padding: 40px 0; outline: none;
+  /* refined hairline divider: a hairline that warms slightly on hover */
   border-bottom: 1px solid var(--hairline);
-  transition: padding-left 0.45s var(--btn-ease, ease);
+  transition: padding-left 0.5s var(--btn-ease, ease), background-color 0.5s ease;
 }
-.use-row:hover, .use-row:focus-visible { padding-left: 12px; }
+.use-row:hover, .use-row:focus-visible { padding-left: 16px; }
+/* light-blue tick that grows from the left edge on hover (editorial accent) */
+.use-row::before {
+  content: ""; position: absolute; left: 0; top: 50%; width: 3px; height: 0;
+  background: var(--accent-blue); transform: translateY(-50%); border-radius: 2px;
+  transition: height 0.5s var(--btn-ease, ease);
+}
+.use-row:hover::before, .use-row:focus-visible::before { height: 56%; }
 .use-row-num {
-  font-family: var(--serif); font-size: clamp(34px, 4vw, 52px); line-height: 1;
-  color: var(--muted-2); opacity: 0.55; font-variant-numeric: tabular-nums;
+  font-family: var(--serif); font-size: clamp(40px, 4.4vw, 60px); line-height: 1;
+  color: var(--muted-2); opacity: 0.5; font-variant-numeric: tabular-nums;
+  font-style: italic; transition: color 0.4s ease, opacity 0.4s ease;
 }
 .use-row:hover .use-row-num, .use-row:focus-visible .use-row-num { color: var(--accent-blue); opacity: 1; }
 .use-row-body { min-width: 0; }
 .use-row-overline {
   display: block; font-family: var(--sans); font-size: 10px; font-weight: 600;
-  letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted-2);
-  margin-bottom: 10px;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--muted-2);
+  margin-bottom: 14px;
 }
 .use-row-title {
-  font-family: var(--serif); font-size: clamp(26px, 3vw, 40px); line-height: 1.06;
-  display: flex; align-items: baseline; gap: 12px; margin: 0 0 8px;
+  font-family: var(--serif); font-size: clamp(30px, 3.4vw, 48px); line-height: 1.04;
+  display: flex; align-items: baseline; gap: 14px; margin: 0 0 12px;
+  letter-spacing: -0.01em;
 }
 .use-row-title .arrow {
-  font-size: 0.55em; color: var(--accent-blue); opacity: 0;
-  transform: translateX(-6px); transition: transform 0.4s var(--btn-ease, ease), opacity 0.4s ease;
+  font-size: 0.5em; color: var(--accent-blue); opacity: 0;
+  transform: translateX(-8px); transition: transform 0.4s var(--btn-ease, ease), opacity 0.4s ease;
 }
 .use-row:hover .use-row-title .arrow, .use-row:focus-visible .use-row-title .arrow { opacity: 1; transform: translateX(0); }
-.use-row-desc { color: var(--muted); font-size: 15px; line-height: 1.6; margin: 0; max-width: 52ch; }
+.use-row-desc { color: var(--muted); font-size: 15.5px; line-height: 1.7; margin: 0; max-width: 52ch; }
+/* lot-count meta column — quiet tracked label, blue-accented on hover */
+.use-row-meta {
+  justify-self: end; align-self: center;
+  font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-2);
+  white-space: nowrap; transition: color 0.4s ease;
+}
+.use-row:hover .use-row-meta, .use-row:focus-visible .use-row-meta { color: var(--accent-blue); }
 /* image reveals/expands on hover on the right */
 .use-row-media {
-  justify-self: end; width: 280px; height: 96px; overflow: hidden; border-radius: 12px;
-  transition: height 0.5s var(--btn-ease, ease), box-shadow 0.5s ease;
-  box-shadow: 0 18px 40px -28px rgba(20,18,15,0.5);
+  justify-self: end; width: 300px; height: 104px; overflow: hidden; border-radius: 14px;
+  transition: height 0.55s var(--btn-ease, ease), box-shadow 0.55s ease;
+  box-shadow: 0 18px 42px -28px rgba(20,18,15,0.5);
 }
 .use-row:hover .use-row-media, .use-row:focus-visible .use-row-media {
-  height: 168px; box-shadow: 0 28px 56px -26px rgba(20,18,15,0.55);
+  height: 184px; box-shadow: 0 30px 60px -26px rgba(20,18,15,0.55);
 }
 .use-row-img {
   display: block; width: 100%; height: 100%;
   background-size: cover; background-position: center; transform: scale(1.04);
-  transition: transform 1s var(--btn-ease, ease), filter 0.6s ease; filter: saturate(0.92);
+  transition: transform 1.1s var(--btn-ease, ease), filter 0.6s ease; filter: saturate(0.9);
 }
-.use-row:hover .use-row-img, .use-row:focus-visible .use-row-img { transform: scale(1.1); filter: saturate(1); }
+.use-row:hover .use-row-img, .use-row:focus-visible .use-row-img { transform: scale(1.12); filter: saturate(1.02); }
 /* index "more coming soon" row */
-.use-row.soon .use-row-num { color: var(--muted); opacity: 0.6; }
+.use-row.soon { border-bottom: none; }
+.use-row.soon .use-row-num { color: var(--muted); opacity: 0.5; }
 .use-row.soon:hover { padding-left: 0; }
+.use-row.soon:hover::before, .use-row.soon:focus-visible::before { height: 0; }
 .use-row.soon .use-row-title { color: var(--muted-2); }
 .use-row.soon .use-row-desc { font-style: italic; }
-
-/* ---------- Variant B — Lookbook Mosaic (asymmetric grid) ---------- */
-.use-mosaic {
-  grid-template-columns: repeat(6, 1fr); grid-auto-rows: 240px; gap: 20px;
-}
-/* asymmetric arrangement: one large feature + varied smaller tiles */
-.use-mosaic > .use-tile:nth-child(1) { grid-column: span 4; grid-row: span 2; } /* feature */
-.use-mosaic > .use-tile:nth-child(2) { grid-column: span 2; grid-row: span 1; }
-.use-mosaic > .use-tile:nth-child(3) { grid-column: span 2; grid-row: span 1; }
-.use-mosaic > .use-tile:nth-child(4) { grid-column: span 3; grid-row: span 1; }
-.use-mosaic > .use-tile:nth-child(5) { grid-column: span 3; grid-row: span 1; }
-.use-mosaic > .use-tile:nth-child(6) { grid-column: span 6; grid-row: span 1; } /* soon — full width */
-
-.use-tile {
-  position: relative; display: flex; flex-direction: column; justify-content: flex-end;
-  overflow: hidden; padding: 30px; color: #fff; outline: none; border-radius: 16px;
-  background: var(--img-fallback);
-  box-shadow: 0 24px 50px -28px rgba(20,18,15,0.5);
-  transition: box-shadow 0.5s var(--btn-ease, ease), transform 0.5s var(--btn-ease, ease);
-}
-.use-tile:hover, .use-tile:focus-visible {
-  transform: translateY(-5px); box-shadow: 0 38px 70px -30px rgba(20,18,15,0.6);
-}
-.use-tile-img {
-  position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center;
-  transform: scale(1.03); filter: saturate(0.92);
-  transition: transform 1.2s var(--btn-ease, ease), filter 0.6s ease;
-}
-.use-tile:hover .use-tile-img, .use-tile:focus-visible .use-tile-img { transform: scale(1.12); filter: saturate(1); }
-.use-tile::after {
-  content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to top, rgba(0,0,0,0.72), rgba(0,0,0,0.06) 60%);
-}
-.use-tile-cap { position: relative; z-index: 2; }
-.use-tile-cap small {
-  display: block; font-family: var(--sans); font-size: 10px; font-weight: 600;
-  letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-blue-soft); margin-bottom: 10px;
-}
-.use-tile-cap h3 {
-  font-family: var(--serif); font-size: clamp(24px, 2.4vw, 32px); line-height: 1.08;
-  margin: 0 0 6px; display: flex; align-items: baseline; gap: 10px;
-}
-.use-tile-cap h3 .arrow { font-size: 0.7em; opacity: 0.85; transition: transform 0.4s var(--btn-ease, ease); }
-.use-tile:hover .use-tile-cap h3 .arrow, .use-tile:focus-visible .use-tile-cap h3 .arrow { transform: translateX(8px); opacity: 1; }
-.use-tile-cap p {
-  font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.88);
-  max-height: 0; opacity: 0; overflow: hidden;
-  transition: max-height 0.55s var(--btn-ease, ease), opacity 0.45s ease, margin 0.45s ease;
-}
-.use-tile:hover .use-tile-cap p, .use-tile:focus-visible .use-tile-cap p { max-height: 160px; opacity: 1; margin-top: 10px; }
-/* mosaic "more coming soon" tile */
-.use-tile.soon {
-  background: var(--tonal); color: var(--ink); align-items: center; justify-content: center; text-align: center;
-  border: 1px solid var(--hairline); box-shadow: none;
-}
-.use-tile.soon:hover { transform: none; box-shadow: none; }
-.use-tile.soon::after { display: none; }
-.use-tile.soon .soon-mark { font-size: 40px; font-family: var(--serif); color: var(--accent-blue); display: block; margin-bottom: 6px; }
-.use-tile.soon h3 { color: var(--ink); }
-.use-tile.soon p { font-style: italic; color: var(--muted); margin-top: 6px; }
 
 /* ---------- Why Asa — clean 4-up, rebuilt for zero overlap ----------
    Equal-width columns with a shared top rule and column dividers drawn as
@@ -792,6 +740,40 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   border: 1px solid rgba(255,255,255,0.55);
   box-shadow: 0 12px 26px -16px rgba(20,18,15,0.5), inset 0 1px 0 rgba(255,255,255,0.6);
 }
+
+/* ---------- "Assemble" intro animation (scroll-in) ----------
+   The three collage images start spread out / scaled / faded (.pre-assemble,
+   seeded by initStockAssemble) and animate INTO their existing overlapping
+   layout when the section scrolls into view (.assembled). The final resting
+   positions are the plain rules above and are UNCHANGED — assemble only adds a
+   transient transform/opacity that resolves to the natural state. The settle
+   transition lives on the assembling images; once assembled, parallax (deferred
+   in initParallax until .assembled) takes over the transform. Reduced motion /
+   no-JS: neither class is added the same way (JS adds .assembled immediately),
+   so the collage simply shows its final positions with no motion. */
+.stock-collage.pre-assemble .collage-img,
+.stock-collage.assembled .collage-img {
+  transition: transform 1.15s cubic-bezier(.16,.84,.34,1), opacity 0.85s ease;
+}
+/* gentle stagger so the three frames settle in sequence (back image first) */
+.stock-collage.assembled .collage-a { transition-delay: 0.04s; }
+.stock-collage.assembled .collage-b { transition-delay: 0.16s; }
+.stock-collage.assembled .collage-c { transition-delay: 0.28s; }
+.stock-collage.pre-assemble .collage-badge,
+.stock-collage.assembled .collage-badge {
+  transition: transform 1.15s cubic-bezier(.16,.84,.34,1), opacity 0.85s ease;
+  transition-delay: 0.36s;
+}
+/* start state — images pulled apart, scaled down, faded out */
+.stock-collage.pre-assemble .collage-a { transform: translate3d(-22%, 14%, 0) scale(0.82); opacity: 0; }
+.stock-collage.pre-assemble .collage-b { transform: translate3d(26%, -18%, 0) scale(0.8) rotate(2deg); opacity: 0; }
+.stock-collage.pre-assemble .collage-c { transform: translate3d(18%, 30%, 0) scale(0.78) rotate(-2deg); opacity: 0; }
+.stock-collage.pre-assemble .collage-badge { transform: translate3d(0, 24%, 0) scale(0.9); opacity: 0; }
+/* end state — settle exactly into the natural collage layout (no transform) */
+.stock-collage.assembled .collage-a,
+.stock-collage.assembled .collage-b,
+.stock-collage.assembled .collage-c { transform: none; opacity: 1; }
+.stock-collage.assembled .collage-badge { transform: none; opacity: 1; }
 
 /* ---------- Catalogue slot (empty — owned by the catalogue team) ----------
    Intentionally renders with no visible content. `scroll-margin-top` keeps the
@@ -921,7 +903,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* ---------- Footer ---------- */
 .site-footer { border-top: 1px solid var(--hairline); padding: 80px var(--margin) 40px; max-width: var(--container); margin: 0 auto; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
-.footer-brand .brand-logo-img { height: 30px; }
+.footer-brand .brand-logo { height: 52px; }
+.footer-brand .brand-logo-img { height: 52px; }
 .footer-tagline { color: var(--muted); font-size: 14px; max-width: 260px; margin: 18px 0 0; }
 .footer-col h4 {
   font-family: var(--sans); font-size: 11px; font-weight: 600;
@@ -964,16 +947,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   /* row rule under the first row (cards 1 and 2) */
   .why-card:nth-child(1), .why-card:nth-child(2) { border-bottom: 1px solid var(--hairline); padding-bottom: 40px; }
   .why-card:nth-child(3), .why-card:nth-child(4) { padding-top: 40px; }
-  /* TASK 8: mosaic collapses to two columns (index rows reflow below) */
-  .use-mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 240px; }
-  .use-mosaic > .use-tile:nth-child(1) { grid-column: span 2; grid-row: span 1; }
-  .use-mosaic > .use-tile:nth-child(n+2) { grid-column: span 1; }
-  .use-mosaic > .use-tile:nth-child(4),
-  .use-mosaic > .use-tile:nth-child(5) { grid-column: span 1; }
-  .use-mosaic > .use-tile:nth-child(6) { grid-column: span 2; }
-  /* index rows: drop the media column on tablet */
-  .use-row { grid-template-columns: auto 1fr; }
-  .use-row-media { display: none; }
+  /* index rows: drop the media + meta columns on tablet */
+  .use-row { grid-template-columns: auto 1fr; gap: 32px; }
+  .use-row-media, .use-row-meta { display: none; }
   .stock-inner { grid-template-columns: 1fr; gap: 48px; }
   .stock-collage { height: 420px; max-width: 560px; }
   .world-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -986,9 +962,6 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   .nav-toggle { display: flex; }
   .glass-nav { gap: 16px; }
   .stats-strip { grid-template-columns: repeat(2, 1fr); row-gap: 40px; padding: 56px var(--margin); }
-  /* TASK 8: mosaic single column on phones */
-  .use-mosaic { grid-template-columns: 1fr; grid-auto-rows: 240px; }
-  .use-mosaic > .use-tile:nth-child(n) { grid-column: span 1; }
   /* mobile: single column, stacked. Reset all side dividers; use a row
      rule between each stacked item. Uniform padding, no overlap. */
   .why-grid { grid-template-columns: 1fr; gap: 0; }
