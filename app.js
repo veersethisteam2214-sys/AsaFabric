@@ -1062,16 +1062,29 @@ function initYear() {
   if (year) year.textContent = new Date().getFullYear();
 }
 
-buildWorldMap();
-initFanCarousel();
-initFabricRotator();
-initSlideshow();
-initScrollProgress();
-initReveal();
-initNav();
-initNavDock();
-initSmoothScroll();
-initForm();
-initParallax();
-initStatsScramble();
-initYear();
+/* ---------- Resilient startup ----------
+   Each init runs inside its own try/catch so a single feature throwing
+   (e.g. a GSAP-path error in the fan carousel) can NEVER halt the inits
+   that follow it and blank the rest of the page. Any failure is logged
+   with the feature name and the others still run. */
+function safe(fn, name) {
+  try {
+    fn();
+  } catch (err) {
+    console.error("[init] " + name + " failed:", err);
+  }
+}
+
+safe(buildWorldMap, "buildWorldMap");
+safe(initFanCarousel, "initFanCarousel");
+safe(initFabricRotator, "initFabricRotator");
+safe(initSlideshow, "initSlideshow");
+safe(initScrollProgress, "initScrollProgress");
+safe(initReveal, "initReveal");
+safe(initNav, "initNav");
+safe(initNavDock, "initNavDock");
+safe(initSmoothScroll, "initSmoothScroll");
+safe(initForm, "initForm");
+safe(initParallax, "initParallax");
+safe(initStatsScramble, "initStatsScramble");
+safe(initYear, "initYear");
