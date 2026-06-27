@@ -142,9 +142,6 @@ renderUseCases();
 function initFanCarousel() {
   const root = document.querySelector("#fanCarousel");
   const layout = document.querySelector("#fanLayout");
-  const dotsWrap = document.querySelector("#fanDots");
-  const prevBtn = document.querySelector("#fanPrev");
-  const nextBtn = document.querySelector("#fanNext");
   if (!root || !layout) return;
 
   const cards = FAN_CARDS;
@@ -186,10 +183,9 @@ function initFanCarousel() {
     return el;
   });
 
-  // ----- Static fallback (no GSAP or reduced motion) -----
+  // ----- Static fallback (no GSAP) -----
   if (!window.gsap) {
     layout.classList.add("static");
-    if (dotsWrap && dotsWrap.parentElement) dotsWrap.parentElement.style.display = "none";
     return;
   }
 
@@ -239,8 +235,6 @@ function initFanCarousel() {
         gsap.set(el, props);
       }
     });
-
-    updateDots();
   }
 
   function entrance() {
@@ -265,7 +259,6 @@ function initFanCarousel() {
           zIndex: 100 - Math.abs(offset) }
       );
     });
-    updateDots();
   }
 
   // hover handlers
@@ -274,47 +267,72 @@ function initFanCarousel() {
     el.addEventListener("mouseleave", () => { hovered = -1; applyLayout(true); });
   });
 
-  // dots
-  let dots = [];
-  function buildDots() {
-    if (!dotsWrap) return;
-    dots = cards.map((_, i) => {
-      const d = document.createElement("button");
-      d.type = "button";
-      d.setAttribute("role", "tab");
-      d.setAttribute("aria-label", `Featured fabric ${i + 1}`);
-      d.addEventListener("click", () => { center = i; applyLayout(true); });
-      dotsWrap.appendChild(d);
-      return d;
-    });
-  }
-  function updateDots() {
-    dots.forEach((d, i) => d.classList.toggle("active", i === center));
-  }
-  buildDots();
-
-  if (prevBtn) prevBtn.addEventListener("click", () => { center = (center - 1 + cards.length) % cards.length; applyLayout(true); });
-  if (nextBtn) nextBtn.addEventListener("click", () => { center = (center + 1) % cards.length; applyLayout(true); });
-
   window.addEventListener("resize", () => applyLayout(false), { passive: true });
 
-  // ----- Auto-advance while hovering the carousel (paused otherwise) -----
-  // Respects reduced motion (hasGsap is false under reduced motion, so this is gated).
-  let autoTimer = null;
-  const AUTO_INTERVAL = 1200;
-  function autoStart() {
-    if (autoTimer || prefersReducedMotion) return;
-    autoTimer = window.setInterval(() => {
-      center = (center + 1) % cards.length;
-      applyLayout(true);
-    }, AUTO_INTERVAL);
+  // ----- Hover-position-driven advance (replaces arrows + dots) -----
+  // While the cursor is over the carousel, the carousel advances: cursor on the
+  // LEFT half steps backward, on the RIGHT half steps forward — the same per-
+  // step motion the arrows produced. Speed eases with edge proximity (nearer the
+  // edge = faster; near center = slow/paused). It keeps advancing while hovered
+  // and STOPS on mouse-leave. Gated off under reduced motion (entrance still
+  // plays once; no auto hover-advance then). A rAF loop accumulates fractional
+  // steps so motion stays smooth, not frantic.
+  let hoverDir = 0;          // -1 back, +1 forward, 0 idle
+  let hoverStrength = 0;     // 0..1 eased by edge proximity
+  let rafId = null;
+  let stepAccum = 0;
+  let lastT = 0;
+  const MAX_STEPS_PER_SEC = 1.6;   // fastest cadence at the far edges
+  const DEAD_ZONE = 0.12;          // central fraction with no advance
+
+  function onMove(e) {
+    if (prefersReducedMotion) return;
+    const rect = layout.getBoundingClientRect();
+    if (rect.width <= 0) { hoverDir = 0; hoverStrength = 0; return; }
+    // position across the carousel, -1 (far left) .. +1 (far right)
+    const rel = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const mag = Math.abs(rel);
+    if (mag < DEAD_ZONE) {
+      hoverDir = 0; hoverStrength = 0;
+    } else {
+      hoverDir = rel < 0 ? -1 : 1;
+      // ease 0..1 from the dead-zone edge to the carousel edge
+      hoverStrength = Math.min(1, (mag - DEAD_ZONE) / (1 - DEAD_ZONE));
+    }
   }
-  function autoStop() {
-    if (autoTimer) { window.clearInterval(autoTimer); autoTimer = null; }
+
+  function loop(t) {
+    if (!lastT) lastT = t;
+    const dt = Math.min(0.05, (t - lastT) / 1000); // clamp big gaps
+    lastT = t;
+    if (hoverDir !== 0 && hoverStrength > 0) {
+      stepAccum += hoverDir * hoverStrength * MAX_STEPS_PER_SEC * dt;
+      while (stepAccum >= 1) {
+        center = (center + 1) % cards.length; applyLayout(true); stepAccum -= 1;
+      }
+      while (stepAccum <= -1) {
+        center = (center - 1 + cards.length) % cards.length; applyLayout(true); stepAccum += 1;
+      }
+    } else {
+      stepAccum = 0;
+    }
+    rafId = requestAnimationFrame(loop);
   }
-  root.addEventListener("mouseenter", autoStart);
-  root.addEventListener("mouseleave", autoStop);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) autoStop(); });
+
+  function startHover() {
+    if (prefersReducedMotion || rafId !== null) return;
+    lastT = 0; stepAccum = 0;
+    rafId = requestAnimationFrame(loop);
+  }
+  function stopHover() {
+    hoverDir = 0; hoverStrength = 0; stepAccum = 0;
+    if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+
+  root.addEventListener("mouseenter", startHover);
+  root.addEventListener("mousemove", onMove);
+  root.addEventListener("mouseleave", stopHover);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) stopHover(); });
 
   // Trigger entrance on scroll into view
   if (hasGsap && "IntersectionObserver" in window) {
@@ -579,9 +597,11 @@ function buildWorldMap() {
 }
 
 /* ============================================================
-   Fabric-type fading typographic carousel
-   Slow cross-fade between curated fabric names (~2.7s each).
-   Reduced motion: render a single static comma-separated line.
+   Fabric-type continuous rolling marquee
+   A seamlessly-looping horizontal auto-scroll of fabric names. The track
+   holds TWO identical sequences and translates by -50% via CSS @keyframes
+   (.fabric-rotator-track), so the loop has no seam jump. Pause on hover is
+   handled in CSS. Reduced motion / no-JS: a static comma-separated line.
    ============================================================ */
 const FABRIC_TYPES = [
   "Chambray",
@@ -598,7 +618,7 @@ function initFabricRotator() {
   const stage = document.querySelector("#fabricRotator");
   if (!stage) return;
 
-  // Reduced motion (or single item): static line, no rotation.
+  // Reduced motion (or single item): static line, no scrolling.
   if (prefersReducedMotion || FABRIC_TYPES.length < 2) {
     const p = document.createElement("p");
     p.className = "fabric-rotator-static";
@@ -607,80 +627,56 @@ function initFabricRotator() {
     return;
   }
 
-  const items = FABRIC_TYPES.map((name, i) => {
-    const el = document.createElement("p");
-    el.className = "fabric-rotator-item" + (i === 0 ? " is-active" : "");
-    el.textContent = name;
-    stage.appendChild(el);
-    return el;
-  });
-
-  let index = 0;
-  const INTERVAL = 2700; // ~2.7s per name
-  let timer = null;
-
-  function advance() {
-    items[index].classList.remove("is-active");
-    index = (index + 1) % items.length;
-    items[index].classList.add("is-active");
+  // Build a track containing the names twice so -50% translate loops seamlessly.
+  const track = document.createElement("div");
+  track.className = "fabric-rotator-track";
+  // Two passes of the full list, end to end.
+  for (let pass = 0; pass < 2; pass++) {
+    FABRIC_TYPES.forEach((name) => {
+      const el = document.createElement("span");
+      el.className = "fabric-rotator-item";
+      el.textContent = name;
+      track.appendChild(el);
+    });
   }
-  function start() { if (!timer) timer = window.setInterval(advance, INTERVAL); }
-  function stop() { if (timer) { window.clearInterval(timer); timer = null; } }
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stop(); else start();
-  });
-  start();
+  stage.appendChild(track);
 }
 
-/* ---------- Hero slideshow ---------- */
+/* ---------- Hero slideshow — automatic crossfade (no manual controls) ----------
+   4 slides, ~5s each, smooth opacity crossfade (CSS handles the fade), looping
+   forever. Pauses while the tab is hidden and while the hero is hovered, then
+   resumes. Reduced motion: no auto-advance — the first slide stays static.
+   The <noscript> first-slide-visible fallback is in markup (slide.is-active). */
 function initSlideshow() {
   const root = document.querySelector("#slideshow");
   const slides = root ? Array.from(root.querySelectorAll(".slide")) : [];
-  const dotsWrap = document.querySelector("#slideDots");
-  const prevBtn = document.querySelector("#slidePrev");
-  const nextBtn = document.querySelector("#slideNext");
   if (!root || slides.length < 2) return;
 
-  const reduced = prefersReducedMotion;
-  const INTERVAL = 4500; // auto-advance every 4.5s (no clicks needed)
+  // Reduced motion: leave the first slide showing, never auto-advance.
+  if (prefersReducedMotion) return;
+
+  const INTERVAL = 5000; // ~5s per slide
   let current = 0;
   let timer = null;
 
-  const dots = slides.map((_, i) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.setAttribute("role", "tab");
-    dot.setAttribute("aria-label", `Slide ${i + 1}`);
-    if (i === 0) dot.classList.add("active");
-    dot.addEventListener("click", () => goTo(i, true));
-    if (dotsWrap) dotsWrap.appendChild(dot);
-    return dot;
-  });
-
-  function goTo(index, manual) {
-    current = (index + slides.length) % slides.length;
+  function next() {
+    current = (current + 1) % slides.length;
     slides.forEach((s, i) => s.classList.toggle("is-active", i === current));
-    dots.forEach((d, i) => d.classList.toggle("active", i === current));
-    if (manual) restart();
   }
 
-  function next() { goTo(current + 1); }
-
   function start() {
-    if (reduced || timer) return;
+    if (timer) return;
     timer = window.setInterval(next, INTERVAL);
   }
   function stop() {
     if (timer) { window.clearInterval(timer); timer = null; }
   }
-  function restart() { stop(); start(); }
 
-  if (nextBtn) nextBtn.addEventListener("click", () => goTo(current + 1, true));
-  if (prevBtn) prevBtn.addEventListener("click", () => goTo(current - 1, true));
-
-  root.addEventListener("mouseenter", stop);
-  root.addEventListener("mouseleave", start);
+  // Pause on hover over the hero, resume after.
+  const hero = root.closest(".hero") || root;
+  hero.addEventListener("mouseenter", stop);
+  hero.addEventListener("mouseleave", start);
+  // Pause while the tab is hidden, resume when visible.
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stop(); else start();
   });
@@ -809,25 +805,77 @@ function initParallax() {
   window.addEventListener("resize", onScroll, { passive: true });
 }
 
-/* ---------- Stats blur -> clarity (JS fallback for scroll-driven anim) ----------
-   Where `animation-timeline: view()` is supported the CSS drives the effect
-   continuously with scroll. Elsewhere, toggle .in-clarity once the strip enters
-   view so the CSS transition resolves the numbers to clarity. Reduced motion is
-   gated in CSS (always clear). */
-function initStatsClarity() {
+/* ---------- Stats strip — scramble / decode reveal on scroll ----------
+   When the strip scrolls into view (IntersectionObserver, fired ONCE), each
+   value (`.stat > strong`) and label (`.stat > span`) starts with its
+   characters scrambled to random glyphs, then resolves char-by-char to the
+   exact final text. Numbers and symbols (–, +, /, letters) land exactly.
+   Reduced motion / no-IO: final text is left untouched (shown immediately),
+   preserving the <noscript> / no-JS values present in markup. */
+function initStatsScramble() {
   const strip = document.querySelector(".stats-strip");
   if (!strip) return;
-  if (prefersReducedMotion) { strip.classList.add("in-clarity"); return; }
 
-  // If the browser supports scroll-driven view() timelines, let CSS handle it.
-  const supportsViewTimeline =
-    window.CSS && CSS.supports && CSS.supports("animation-timeline: view()");
-  if (supportsViewTimeline) return;
+  const targets = Array.from(strip.querySelectorAll(".stat > strong, .stat > span"));
+  if (!targets.length) return;
 
-  if (!("IntersectionObserver" in window)) { strip.classList.add("in-clarity"); return; }
+  // Reduced motion or no IntersectionObserver: leave the final text as-is.
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
+
+  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789–+/#%@&*<>";
+
+  // Per-character animated scramble for one element. Spaces and the en-dash
+  // stay fixed; every other character scrambles until its resolve time passes.
+  function scramble(el) {
+    const finalText = el.dataset.finalText;
+    const chars = Array.from(finalText);
+    // Build per-character spans so each resolves independently.
+    el.textContent = "";
+    const spans = chars.map((ch) => {
+      const span = document.createElement("span");
+      span.className = "scramble-char";
+      span.textContent = ch === " " ? " " : ch;
+      el.appendChild(span);
+      return span;
+    });
+
+    const FRAME_MS = 45;          // glyph flicker cadence
+    const PER_CHAR_MS = 90;       // stagger between characters resolving
+    const start = performance.now();
+
+    function tick(now) {
+      let allDone = true;
+      const elapsed = now - start;
+      chars.forEach((ch, i) => {
+        const span = spans[i];
+        if (span.dataset.done) return;
+        const resolveAt = i * PER_CHAR_MS + 260;
+        if (ch === " " || elapsed >= resolveAt) {
+          span.textContent = ch === " " ? " " : ch;
+          span.classList.add("resolved");
+          span.dataset.done = "1";
+        } else {
+          allDone = false;
+          span.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+        }
+      });
+      if (!allDone) {
+        // throttle the flicker frame rate
+        setTimeout(() => requestAnimationFrame(tick), FRAME_MS);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Stash the final text so it's recoverable, then run once on scroll-in.
+  targets.forEach((el) => { el.dataset.finalText = el.textContent; });
+
   const io = new IntersectionObserver((entries, obs) => {
     entries.forEach((e) => {
-      if (e.isIntersecting) { strip.classList.add("in-clarity"); obs.unobserve(e.target); }
+      if (e.isIntersecting) {
+        targets.forEach((el) => scramble(el));
+        obs.disconnect();
+      }
     });
   }, { threshold: 0.35 });
   io.observe(strip);
@@ -849,5 +897,5 @@ initNav();
 initSmoothScroll();
 initForm();
 initParallax();
-initStatsClarity();
+initStatsScramble();
 initYear();

@@ -102,22 +102,13 @@
           <span class="scroll-hint">Scroll to explore</span>
         </div>
       </div>
-
-      <div class="slideshow-controls" role="group" aria-label="Slideshow controls">
-        <button class="slide-arrow prev" id="slidePrev" type="button" aria-label="Previous slide">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="slide-dots" id="slideDots" role="tablist" aria-label="Slides"></div>
-        <button class="slide-arrow next" id="slideNext" type="button" aria-label="Next slide">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
     </section>
 
-    <!-- ============ Fabric-type fading typographic carousel ============
-         Replaces the old marquee ticker with a curated, slow cross-fading
-         rotator of fabric names (large EB Garamond), driven by app.js.
-         Reduced-motion renders a static comma-separated line (no rotation). -->
+    <!-- ============ Fabric-type continuous rolling marquee ============
+         A continuous, seamlessly-looping horizontal auto-scroll marquee of
+         fabric names (large EB Garamond), driven by a CSS @keyframes track
+         that app.js builds (a duplicated track so there is no seam jump).
+         Pauses on hover. Reduced-motion / no-JS renders a static line. -->
     <section class="fabric-rotator" aria-label="Fabric types we carry">
       <p class="fabric-rotator-overline">Fabrics we carry</p>
       <div class="fabric-rotator-stage" id="fabricRotator" aria-hidden="true"></div>
@@ -144,15 +135,6 @@
       <!-- Fan layout is populated by app.js. Falls back to a static row if GSAP is unavailable. -->
       <div class="fan" id="fanCarousel">
         <div class="fan-layout" id="fanLayout"></div>
-        <div class="fan-controls" role="group" aria-label="Featured fabrics controls">
-          <button class="fan-arrow prev" id="fanPrev" type="button" aria-label="Previous fabric">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="fan-dots" id="fanDots" role="tablist" aria-label="Featured fabrics"></div>
-          <button class="fan-arrow next" id="fanNext" type="button" aria-label="Next fabric">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
       </div>
     </section>
 
