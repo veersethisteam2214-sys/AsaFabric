@@ -225,11 +225,32 @@
     </section>
 
     <!-- ============================================================
-         RESERVED: B2B animated world-map section will be inserted here
-         (after stats / featured / why / stock) in a follow-up pass.
-         Leave this placeholder in place.
+         B2B GLOBAL SUPPLY — animated dotted world map
+         Ported from a framer-motion + dotted-map "WorldMap" React
+         component to vanilla SVG. The dotted background lives in
+         assets/world-dots.svg (generated build-time with the
+         `dotted-map` npm package — see app.js header for regen notes).
+         The routes / travelling dots / pulses / labels are drawn by
+         buildWorldMap() in app.js as plain SVG, on-brand brown (#6F4E37).
+         Reduced-motion renders everything statically (no loop / dot / pulse).
          ============================================================ -->
-    <!-- <section class="world-map" id="reach"></section> -->
+    <section class="world-map" id="reach" aria-label="Global fabric supply">
+      <div class="world-inner">
+        <div class="world-copy reveal">
+          <p class="eyebrow">B2B Supply</p>
+          <h2>Supplying fabric to businesses worldwide.</h2>
+          <p>We work with businesses internationally, shipping fabric by the roll or cut to length. Send your specification and we'll arrange dispatch to your city.</p>
+          <a class="btn btn-solid" href="#contact">Enquire about wholesale <span aria-hidden="true">→</span></a>
+        </div>
+
+        <!-- Map figure. The SVG markup (dotted background + routes) is
+             injected by app.js into #worldMapStage. A static fallback
+             dot-pattern map renders if the generated SVG is missing. -->
+        <figure class="world-figure reveal" aria-hidden="true">
+          <div class="world-map-stage" id="worldMapStage"></div>
+        </figure>
+      </div>
+    </section>
 
     <!-- ============ Enquiry ============ -->
     <section class="contact-section" id="contact">

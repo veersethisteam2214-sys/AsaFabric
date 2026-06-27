@@ -465,6 +465,236 @@ function initFanCarousel() {
   }
 }
 
+/* ============================================================
+   B2B Global Supply — animated dotted world map
+   Ported from a framer-motion + `dotted-map` "WorldMap" React
+   component to vanilla SVG + JS.
+
+   Dotted background: assets/world-dots.svg, generated build-time with
+   the `dotted-map` npm package. To regenerate (no runtime dependency):
+     npm install dotted-map
+     node -e "import('dotted-map').then(({default:D})=>{ \
+       const m=new D({height:100,grid:'diagonal'}); \
+       process.stdout.write(m.getSVG({radius:0.22,color:'#1A1A1A40', \
+         shape:'circle',backgroundColor:'transparent'})); })" > assets/world-dots.svg
+
+   Projection (equirectangular, 800x400 viewBox), matching the original:
+     x = (lng + 180) * (800 / 360)
+     y = (90  - lat) * (400 / 180)
+   Quadratic-bezier control point: midX = (x1+x2)/2, midY = min(y1,y2) - 50.
+   ============================================================ */
+
+/* ---------- Supply routes data — EDIT HERE -----------------
+   `WORLD_HUB` is the origin; `WORLD_DESTINATIONS` are the cities the
+   routes fan out to. Each entry is { name, lat, lng }. Add / remove
+   cities or change the hub freely — coordinates are plain lat/lng.
+   Kept honest: city labels only, no claims, stats or client names. */
+const WORLD_HUB = { name: "Bangkok", lat: 13.7563, lng: 100.5018 };
+const WORLD_DESTINATIONS = [
+  { name: "London",    lat: 51.5074, lng: -0.1278  },
+  { name: "New York",  lat: 40.7128, lng: -74.0060 },
+  { name: "Dubai",     lat: 25.2048, lng: 55.2708  },
+  { name: "Milan",     lat: 45.4642, lng: 9.1900   },
+  { name: "Singapore", lat: 1.3521,  lng: 103.8198 },
+  { name: "Tokyo",     lat: 35.6762, lng: 139.6503 },
+  { name: "Mumbai",    lat: 19.0760, lng: 72.8777  },
+  { name: "Sydney",    lat: -33.8688, lng: 151.2093 }
+];
+
+const SVGNS = "http://www.w3.org/2000/svg";
+const WORLD_W = 800;
+const WORLD_H = 400;
+
+function worldProject(lat, lng) {
+  return {
+    x: (lng + 180) * (WORLD_W / 360),
+    y: (90 - lat) * (WORLD_H / 180)
+  };
+}
+
+function svgEl(name, attrs) {
+  const el = document.createElementNS(SVGNS, name);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+
+function buildWorldMap() {
+  const stage = document.querySelector("#worldMapStage");
+  if (!stage) return;
+
+  const ACCENT = "#6F4E37"; // on-brand brown (not the demo's blue)
+
+  // --- 1. Dotted-map background (static, baked-in asset). Guarded:
+  //     if the generated SVG is unavailable, a CSS dot-pattern fallback
+  //     <svg> is used so the section still reads as a dotted map. ---
+  const dots = new Image();
+  dots.className = "world-dots";
+  dots.alt = "";
+  dots.setAttribute("aria-hidden", "true");
+  dots.src = "assets/world-dots.svg";
+  dots.addEventListener("error", () => {
+    // Fallback: replace the failed <img> with an inline dot-grid SVG so
+    // the backdrop still resembles a dotted map (approximate, on-brand).
+    if (!dots.parentNode) return;
+    const fb = svgEl("svg", {
+      class: "world-dots",
+      viewBox: `0 0 ${WORLD_W} ${WORLD_H}`,
+      preserveAspectRatio: "xMidYMid meet"
+    });
+    const defs = svgEl("defs", {});
+    const pat = svgEl("pattern", {
+      id: "worldDotFallback", x: "0", y: "0",
+      width: "10", height: "10", patternUnits: "userSpaceOnUse"
+    });
+    pat.appendChild(svgEl("circle", { cx: "2", cy: "2", r: "1", fill: "#1A1A1A40" }));
+    defs.appendChild(pat);
+    fb.appendChild(defs);
+    fb.appendChild(svgEl("rect", {
+      x: "0", y: "0", width: WORLD_W, height: WORLD_H, fill: "url(#worldDotFallback)"
+    }));
+    dots.parentNode.replaceChild(fb, dots);
+  });
+  stage.appendChild(dots);
+
+  // --- 2. Routes / points / labels layer (vanilla SVG, on top) ---
+  const svg = svgEl("svg", {
+    class: "world-routes",
+    viewBox: `0 0 ${WORLD_W} ${WORLD_H}`,
+    preserveAspectRatio: "xMidYMid meet"
+  });
+
+  // glow filter (as in the original component)
+  const defs = svgEl("defs", {});
+  const filter = svgEl("filter", {
+    id: "worldGlow", x: "-50%", y: "-50%", width: "200%", height: "200%"
+  });
+  filter.appendChild(svgEl("feGaussianBlur", { stdDeviation: "2.2", result: "blur" }));
+  const merge = svgEl("feMerge", {});
+  merge.appendChild(svgEl("feMergeNode", { in: "blur" }));
+  merge.appendChild(svgEl("feMergeNode", { in: "SourceGraphic" }));
+  filter.appendChild(merge);
+  defs.appendChild(filter);
+  svg.appendChild(defs);
+
+  const hub = worldProject(WORLD_HUB.lat, WORLD_HUB.lng);
+
+  // Small flag so very-small viewports can hide secondary labels
+  function syncCompact() {
+    stage.classList.toggle("compact", stage.clientWidth < 520);
+  }
+  syncCompact();
+  window.addEventListener("resize", syncCompact, { passive: true });
+
+  const STAGGER = 0.3;   // seconds between routes
+  const DRAW_DUR = 1.6;  // seconds for a line to draw + dot to travel
+  const PERIOD = WORLD_DESTINATIONS.length * STAGGER + DRAW_DUR + 0.8;
+
+  WORLD_DESTINATIONS.forEach((dest, i) => {
+    const end = worldProject(dest.lat, dest.lng);
+    const midX = (hub.x + end.x) / 2;
+    const midY = Math.min(hub.y, end.y) - 50;
+    const d = `M ${hub.x} ${hub.y} Q ${midX} ${midY} ${end.x} ${end.y}`;
+
+    const path = svgEl("path", {
+      d, fill: "none", stroke: ACCENT, "stroke-width": "1",
+      "stroke-opacity": "0.55", "stroke-linecap": "round"
+    });
+    svg.appendChild(path);
+
+    if (!prefersReducedMotion) {
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = `${len}`;
+      path.style.strokeDashoffset = `${len}`;
+      const draw = svgEl("animate", {
+        attributeName: "stroke-dashoffset",
+        begin: `${i * STAGGER}s`, dur: `${PERIOD}s`,
+        repeatCount: "indefinite",
+        // draw in over the first ~45% of the period, then hold drawn,
+        // then snap back to undrawn just before the loop repeats
+        keyTimes: "0;0.45;0.97;1", values: `${len};0;0;${len}`,
+        calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1;0 0 1 1"
+      });
+      path.appendChild(draw);
+
+      // travelling glowing dot
+      const dot = svgEl("circle", {
+        r: "2.6", fill: ACCENT, filter: "url(#worldGlow)"
+      });
+      const motion = svgEl("animateMotion", {
+        path: d, begin: `${i * STAGGER}s`, dur: `${PERIOD}s`,
+        repeatCount: "indefinite",
+        keyPoints: "0;1;1", keyTimes: "0;0.45;1",
+        calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1"
+      });
+      dot.appendChild(motion);
+      // fade the dot out while it idles at the destination
+      const dotFade = svgEl("animate", {
+        attributeName: "opacity", begin: `${i * STAGGER}s`,
+        dur: `${PERIOD}s`, repeatCount: "indefinite",
+        keyTimes: "0;0.42;0.55;1", values: "1;1;0;0"
+      });
+      dot.appendChild(dotFade);
+      svg.appendChild(dot);
+    }
+  });
+
+  // points (origin + destinations) with pulse + label
+  function addPoint(p, name, isHub, secondary) {
+    // pulse (expanding fading ring)
+    if (!prefersReducedMotion) {
+      const pulse = svgEl("circle", {
+        cx: p.x, cy: p.y, r: "2", fill: "none",
+        stroke: ACCENT, "stroke-width": "1"
+      });
+      pulse.appendChild(svgEl("animate", {
+        attributeName: "r", from: "2", to: "10",
+        dur: "2s", begin: isHub ? "0s" : "0.4s", repeatCount: "indefinite"
+      }));
+      pulse.appendChild(svgEl("animate", {
+        attributeName: "opacity", from: "0.6", to: "0",
+        dur: "2s", begin: isHub ? "0s" : "0.4s", repeatCount: "indefinite"
+      }));
+      svg.appendChild(pulse);
+    }
+    // solid point
+    svg.appendChild(svgEl("circle", {
+      cx: p.x, cy: p.y, r: isHub ? "3.4" : "2.6", fill: ACCENT
+    }));
+    // label
+    const lbl = svgEl("text", {
+      x: p.x, y: p.y - 7, "text-anchor": "middle",
+      class: "world-route-label" + (secondary ? " secondary" : "")
+    });
+    lbl.textContent = name;
+    svg.appendChild(lbl);
+  }
+
+  addPoint(hub, WORLD_HUB.name, true, false);
+  WORLD_DESTINATIONS.forEach((dest, i) => {
+    const p = worldProject(dest.lat, dest.lng);
+    // mark some as secondary so they can be hidden on tiny screens
+    addPoint(p, dest.name, false, i >= 3);
+  });
+
+  stage.appendChild(svg);
+
+  // --- 3. Pause SMIL animations while the map is off-screen (perf).
+  //     Static under reduced motion, so this only matters when animating. ---
+  if (!prefersReducedMotion && "IntersectionObserver" in window &&
+      typeof svg.pauseAnimations === "function") {
+    try { svg.pauseAnimations(); } catch (e) { /* no-op */ }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        try {
+          if (e.isIntersecting) svg.unpauseAnimations();
+          else svg.pauseAnimations();
+        } catch (err) { /* no-op */ }
+      });
+    }, { threshold: 0.15 });
+    io.observe(stage);
+  }
+}
+
 /* ---------- Hero slideshow ---------- */
 function initSlideshow() {
   const root = document.querySelector("#slideshow");
@@ -647,6 +877,7 @@ function initYear() {
   if (year) year.textContent = new Date().getFullYear();
 }
 
+buildWorldMap();
 initFanCarousel();
 initSlideshow();
 initScrollProgress();
