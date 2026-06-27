@@ -11,10 +11,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- EB Garamond (serif), Montserrat (sans), Material Symbols (icons) -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260627-1">
+  <link rel="stylesheet" href="styles.css?v=20260627-2">
 
-  <!-- GSAP (CDN) for the Featured Fabrics fan-carousel; app.js feature-detects window.gsap -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- GSAP (self-hosted) for the Featured Fabrics fan-carousel; app.js feature-detects window.gsap -->
+  <script src="assets/gsap.min.js?v=20260627-1"></script>
 </head>
 <body id="top">
   <!-- paper-grain overlay -->
@@ -139,24 +139,17 @@
     </section>
 
     <!-- ============ Fabrics by use ============
-         TASK 8: two switchable design variants rendered from the SAME `useCases`
-         data — Variant A "Editorial Index" (stacked rows) and Variant B "Lookbook
-         Mosaic" (asymmetric image grid). The pill TOGGLE below is a TEMPORARY
-         COMPARE TOOL so the client can pick a direction; app.js renders both into
-         #useGrid and toggles the `.variant-index` / `.variant-mosaic` class on the
-         section. Default = Variant A (Index). Remove the toggle once a variant is
-         chosen. Reduced-motion safe: no motion is required to read either. -->
-    <section class="uses-section variant-index" id="uses">
+         Editorial Index layout (the chosen, permanent design): full-width
+         stacked rows rendered from the `useCases` data in app.js into #useGrid.
+         Large serif use-names, tracked overlines, hairline dividers, and an
+         image that reveals/zooms on hover with a light-blue accent on the
+         numeral + arrow. Reduced-motion safe (no motion required to read it). -->
+    <section class="uses-section" id="uses">
       <div class="uses-head">
         <div class="section-heading reveal">
           <p class="eyebrow">Fabrics by use</p>
           <h2>Start with what you're making.</h2>
           <p>Every roll is grouped by the garments it's built for — so you reach the right cloth in seconds.</p>
-        </div>
-        <!-- COMPARE TOGGLE (temporary): switch between the two candidate variants. -->
-        <div class="uses-toggle reveal" id="usesToggle" role="group" aria-label="Switch layout variant">
-          <button type="button" class="uses-toggle-btn is-active" data-variant="index" aria-pressed="true">Index</button>
-          <button type="button" class="uses-toggle-btn" data-variant="mosaic" aria-pressed="false">Mosaic</button>
         </div>
       </div>
       <div class="use-grid" id="useGrid"></div>
@@ -348,6 +341,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=20260627-1"></script>
+  <script src="app.js?v=20260627-2"></script>
 </body>
 </html>
