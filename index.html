@@ -102,22 +102,13 @@
           <span class="scroll-hint">Scroll to explore</span>
         </div>
       </div>
-
-      <div class="slideshow-controls" role="group" aria-label="Slideshow controls">
-        <button class="slide-arrow prev" id="slidePrev" type="button" aria-label="Previous slide">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="slide-dots" id="slideDots" role="tablist" aria-label="Slides"></div>
-        <button class="slide-arrow next" id="slideNext" type="button" aria-label="Next slide">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
     </section>
 
-    <!-- ============ Fabric-type fading typographic carousel ============
-         Replaces the old marquee ticker with a curated, slow cross-fading
-         rotator of fabric names (large EB Garamond), driven by app.js.
-         Reduced-motion renders a static comma-separated line (no rotation). -->
+    <!-- ============ Fabric-type continuous rolling marquee ============
+         A continuous, seamlessly-looping horizontal auto-scroll marquee of
+         fabric names (large EB Garamond), driven by a CSS @keyframes track
+         that app.js builds (a duplicated track so there is no seam jump).
+         Pauses on hover. Reduced-motion / no-JS renders a static line. -->
     <section class="fabric-rotator" aria-label="Fabric types we carry">
       <p class="fabric-rotator-overline">Fabrics we carry</p>
       <div class="fabric-rotator-stage" id="fabricRotator" aria-hidden="true"></div>
@@ -144,24 +135,29 @@
       <!-- Fan layout is populated by app.js. Falls back to a static row if GSAP is unavailable. -->
       <div class="fan" id="fanCarousel">
         <div class="fan-layout" id="fanLayout"></div>
-        <div class="fan-controls" role="group" aria-label="Featured fabrics controls">
-          <button class="fan-arrow prev" id="fanPrev" type="button" aria-label="Previous fabric">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="fan-dots" id="fanDots" role="tablist" aria-label="Featured fabrics"></div>
-          <button class="fan-arrow next" id="fanNext" type="button" aria-label="Next fabric">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
       </div>
     </section>
 
-    <!-- ============ Fabrics by use ============ -->
-    <section class="uses-section" id="uses">
-      <div class="section-heading reveal">
-        <p class="eyebrow">Fabrics by use</p>
-        <h2>Start with what you're making.</h2>
-        <p>Every roll is grouped by the garments it's built for — so you reach the right cloth in seconds.</p>
+    <!-- ============ Fabrics by use ============
+         TASK 8: two switchable design variants rendered from the SAME `useCases`
+         data — Variant A "Editorial Index" (stacked rows) and Variant B "Lookbook
+         Mosaic" (asymmetric image grid). The pill TOGGLE below is a TEMPORARY
+         COMPARE TOOL so the client can pick a direction; app.js renders both into
+         #useGrid and toggles the `.variant-index` / `.variant-mosaic` class on the
+         section. Default = Variant A (Index). Remove the toggle once a variant is
+         chosen. Reduced-motion safe: no motion is required to read either. -->
+    <section class="uses-section variant-index" id="uses">
+      <div class="uses-head">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Fabrics by use</p>
+          <h2>Start with what you're making.</h2>
+          <p>Every roll is grouped by the garments it's built for — so you reach the right cloth in seconds.</p>
+        </div>
+        <!-- COMPARE TOGGLE (temporary): switch between the two candidate variants. -->
+        <div class="uses-toggle reveal" id="usesToggle" role="group" aria-label="Switch layout variant">
+          <button type="button" class="uses-toggle-btn is-active" data-variant="index" aria-pressed="true">Index</button>
+          <button type="button" class="uses-toggle-btn" data-variant="mosaic" aria-pressed="false">Mosaic</button>
+        </div>
       </div>
       <div class="use-grid" id="useGrid"></div>
     </section>
@@ -240,7 +236,9 @@
          assets/world-dots.svg (generated build-time with the
          `dotted-map` npm package — see app.js header for regen notes).
          The routes / travelling dots / pulses / labels are drawn by
-         buildWorldMap() in app.js as plain SVG, on-brand brown (#6F4E37).
+         buildWorldMap() in app.js as plain SVG, in light blue (#0ea5e9 /
+         #38bdf8) per the accent system. The draw-on is JS-driven (rAF
+         stroke-dashoffset) and (re)plays each time the section scrolls in.
          Reduced-motion renders everything statically (no loop / dot / pulse).
          ============================================================ -->
     <section class="world-map" id="reach" aria-label="Global fabric supply">

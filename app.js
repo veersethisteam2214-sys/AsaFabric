@@ -110,20 +110,59 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
    "Fabrics by use" editorial grid. */
 const useGrid = document.querySelector("#useGrid");
 
+/* TASK 8 — "Fabrics by use": render BOTH candidate variants from the SAME
+   `useCases` data so the client can compare them with the pill toggle.
+     • Variant A "Editorial Index" — full-width stacked rows; large serif index
+       numeral + name on the left, overline label, and an image that elegantly
+       reveals/expands on hover on the right; hairline dividers between rows.
+     • Variant B "Lookbook Mosaic" — asymmetric image-forward grid (one large
+       feature tile + smaller tiles), image hover zoom, refined overlay captions.
+   Both keep a "More coming soon" tile. Visibility is switched by toggling the
+   .variant-index / .variant-mosaic class on the #uses section (see initUsesToggle).
+   Imagery uses the same woven-cloth weaveBackground() the site already uses. */
 function renderUseCases() {
   if (!useGrid) return;
-  const cards = useCases.map((item) => `
-    <article class="use-card ${item.tone} reveal" tabindex="0">
-      <span class="use-pattern" style="background-image: ${weaveBackground(item.palette)}"></span>
-      <small>${escapeHtml(item.overline || item.count)}</small>
-      <h3>${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
-      <p>${escapeHtml(item.description)}</p>
+
+  // --- Variant A: Editorial Index (stacked rows) ---
+  const indexRows = useCases.map((item, i) => `
+    <article class="use-row reveal" tabindex="0">
+      <span class="use-row-num" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+      <div class="use-row-body">
+        <small class="use-row-overline">${escapeHtml(item.overline || item.count)}</small>
+        <h3 class="use-row-title">${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
+        <p class="use-row-desc">${escapeHtml(item.description)}</p>
+      </div>
+      <span class="use-row-media" aria-hidden="true">
+        <span class="use-row-img" style="background-image: ${weaveBackground(item.palette)}"></span>
+      </span>
     </article>
   `).join("");
+  const indexSoon = `
+    <article class="use-row soon reveal">
+      <span class="use-row-num" aria-hidden="true">+</span>
+      <div class="use-row-body">
+        <small class="use-row-overline">In the works</small>
+        <h3 class="use-row-title">More coming soon</h3>
+        <p class="use-row-desc">Denims, linings and more uses are being added.</p>
+      </div>
+      <span class="use-row-media" aria-hidden="true"></span>
+    </article>
+  `;
 
-  const soon = `
-    <article class="use-card soon reveal">
-      <div>
+  // --- Variant B: Lookbook Mosaic (asymmetric grid) ---
+  const mosaicTiles = useCases.map((item, i) => `
+    <article class="use-tile ${item.tone} reveal" tabindex="0">
+      <span class="use-tile-img" style="background-image: ${weaveBackground(item.palette)}"></span>
+      <div class="use-tile-cap">
+        <small>${escapeHtml(item.overline || item.count)}</small>
+        <h3>${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
+        <p>${escapeHtml(item.description)}</p>
+      </div>
+    </article>
+  `).join("");
+  const mosaicSoon = `
+    <article class="use-tile soon reveal">
+      <div class="use-tile-soon">
         <span class="soon-mark" aria-hidden="true">+</span>
         <h3>More coming soon</h3>
         <p>Denims, linings and more uses are being added.</p>
@@ -131,10 +170,40 @@ function renderUseCases() {
     </article>
   `;
 
-  useGrid.innerHTML = cards + soon;
+  useGrid.innerHTML =
+    `<div class="use-index">${indexRows}${indexSoon}</div>` +
+    `<div class="use-mosaic">${mosaicTiles}${mosaicSoon}</div>`;
 }
 
 renderUseCases();
+
+/* TASK 8 — variant compare toggle (temporary). Two pill buttons near the
+   heading switch which variant is shown by toggling the section class. Default
+   is Variant A (Index). No motion required; purely a class swap. */
+function initUsesToggle() {
+  const section = document.querySelector("#uses");
+  const toggle = document.querySelector("#usesToggle");
+  if (!section || !toggle) return;
+  const buttons = Array.from(toggle.querySelectorAll(".uses-toggle-btn"));
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const variant = btn.dataset.variant; // "index" | "mosaic"
+      section.classList.toggle("variant-index", variant === "index");
+      section.classList.toggle("variant-mosaic", variant === "mosaic");
+      // The hidden block's .reveal items may never have intersected (display:none),
+      // so force them visible when their variant is switched on.
+      const block = section.querySelector(variant === "mosaic" ? ".use-mosaic" : ".use-index");
+      if (block) block.querySelectorAll(".reveal").forEach((el) => el.classList.add("in-view"));
+      buttons.forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+    });
+  });
+}
+
+initUsesToggle();
 
 /* ============================================================
    Featured Fabrics — fan carousel (ported from React+GSAP)
@@ -142,9 +211,6 @@ renderUseCases();
 function initFanCarousel() {
   const root = document.querySelector("#fanCarousel");
   const layout = document.querySelector("#fanLayout");
-  const dotsWrap = document.querySelector("#fanDots");
-  const prevBtn = document.querySelector("#fanPrev");
-  const nextBtn = document.querySelector("#fanNext");
   if (!root || !layout) return;
 
   const cards = FAN_CARDS;
@@ -186,10 +252,9 @@ function initFanCarousel() {
     return el;
   });
 
-  // ----- Static fallback (no GSAP or reduced motion) -----
+  // ----- Static fallback (no GSAP) -----
   if (!window.gsap) {
     layout.classList.add("static");
-    if (dotsWrap && dotsWrap.parentElement) dotsWrap.parentElement.style.display = "none";
     return;
   }
 
@@ -239,8 +304,6 @@ function initFanCarousel() {
         gsap.set(el, props);
       }
     });
-
-    updateDots();
   }
 
   function entrance() {
@@ -265,7 +328,6 @@ function initFanCarousel() {
           zIndex: 100 - Math.abs(offset) }
       );
     });
-    updateDots();
   }
 
   // hover handlers
@@ -274,47 +336,72 @@ function initFanCarousel() {
     el.addEventListener("mouseleave", () => { hovered = -1; applyLayout(true); });
   });
 
-  // dots
-  let dots = [];
-  function buildDots() {
-    if (!dotsWrap) return;
-    dots = cards.map((_, i) => {
-      const d = document.createElement("button");
-      d.type = "button";
-      d.setAttribute("role", "tab");
-      d.setAttribute("aria-label", `Featured fabric ${i + 1}`);
-      d.addEventListener("click", () => { center = i; applyLayout(true); });
-      dotsWrap.appendChild(d);
-      return d;
-    });
-  }
-  function updateDots() {
-    dots.forEach((d, i) => d.classList.toggle("active", i === center));
-  }
-  buildDots();
-
-  if (prevBtn) prevBtn.addEventListener("click", () => { center = (center - 1 + cards.length) % cards.length; applyLayout(true); });
-  if (nextBtn) nextBtn.addEventListener("click", () => { center = (center + 1) % cards.length; applyLayout(true); });
-
   window.addEventListener("resize", () => applyLayout(false), { passive: true });
 
-  // ----- Auto-advance while hovering the carousel (paused otherwise) -----
-  // Respects reduced motion (hasGsap is false under reduced motion, so this is gated).
-  let autoTimer = null;
-  const AUTO_INTERVAL = 1200;
-  function autoStart() {
-    if (autoTimer || prefersReducedMotion) return;
-    autoTimer = window.setInterval(() => {
-      center = (center + 1) % cards.length;
-      applyLayout(true);
-    }, AUTO_INTERVAL);
+  // ----- Hover-position-driven advance (replaces arrows + dots) -----
+  // While the cursor is over the carousel, the carousel advances: cursor on the
+  // LEFT half steps backward, on the RIGHT half steps forward — the same per-
+  // step motion the arrows produced. Speed eases with edge proximity (nearer the
+  // edge = faster; near center = slow/paused). It keeps advancing while hovered
+  // and STOPS on mouse-leave. Gated off under reduced motion (entrance still
+  // plays once; no auto hover-advance then). A rAF loop accumulates fractional
+  // steps so motion stays smooth, not frantic.
+  let hoverDir = 0;          // -1 back, +1 forward, 0 idle
+  let hoverStrength = 0;     // 0..1 eased by edge proximity
+  let rafId = null;
+  let stepAccum = 0;
+  let lastT = 0;
+  const MAX_STEPS_PER_SEC = 1.6;   // fastest cadence at the far edges
+  const DEAD_ZONE = 0.12;          // central fraction with no advance
+
+  function onMove(e) {
+    if (prefersReducedMotion) return;
+    const rect = layout.getBoundingClientRect();
+    if (rect.width <= 0) { hoverDir = 0; hoverStrength = 0; return; }
+    // position across the carousel, -1 (far left) .. +1 (far right)
+    const rel = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const mag = Math.abs(rel);
+    if (mag < DEAD_ZONE) {
+      hoverDir = 0; hoverStrength = 0;
+    } else {
+      hoverDir = rel < 0 ? -1 : 1;
+      // ease 0..1 from the dead-zone edge to the carousel edge
+      hoverStrength = Math.min(1, (mag - DEAD_ZONE) / (1 - DEAD_ZONE));
+    }
   }
-  function autoStop() {
-    if (autoTimer) { window.clearInterval(autoTimer); autoTimer = null; }
+
+  function loop(t) {
+    if (!lastT) lastT = t;
+    const dt = Math.min(0.05, (t - lastT) / 1000); // clamp big gaps
+    lastT = t;
+    if (hoverDir !== 0 && hoverStrength > 0) {
+      stepAccum += hoverDir * hoverStrength * MAX_STEPS_PER_SEC * dt;
+      while (stepAccum >= 1) {
+        center = (center + 1) % cards.length; applyLayout(true); stepAccum -= 1;
+      }
+      while (stepAccum <= -1) {
+        center = (center - 1 + cards.length) % cards.length; applyLayout(true); stepAccum += 1;
+      }
+    } else {
+      stepAccum = 0;
+    }
+    rafId = requestAnimationFrame(loop);
   }
-  root.addEventListener("mouseenter", autoStart);
-  root.addEventListener("mouseleave", autoStop);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) autoStop(); });
+
+  function startHover() {
+    if (prefersReducedMotion || rafId !== null) return;
+    lastT = 0; stepAccum = 0;
+    rafId = requestAnimationFrame(loop);
+  }
+  function stopHover() {
+    hoverDir = 0; hoverStrength = 0; stepAccum = 0;
+    if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+
+  root.addEventListener("mouseenter", startHover);
+  root.addEventListener("mousemove", onMove);
+  root.addEventListener("mouseleave", stopHover);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) stopHover(); });
 
   // Trigger entrance on scroll into view
   if (hasGsap && "IntersectionObserver" in window) {
@@ -391,7 +478,9 @@ function buildWorldMap() {
   const stage = document.querySelector("#worldMapStage");
   if (!stage) return;
 
-  const ACCENT = "#6F4E37"; // on-brand brown (not the demo's blue)
+  // TASK 7 + 9: routes / points / glow are light blue (#0ea5e9, #38bdf8 highlights).
+  const ACCENT = "#0ea5e9";       // light blue (replaces the earlier brown)
+  const ACCENT_SOFT = "#38bdf8";  // brighter highlight for gradient + glow dot
 
   // --- 1. Dotted-map background (static, baked-in asset). Guarded:
   //     if the generated SVG is unavailable, a CSS dot-pattern fallback
@@ -432,8 +521,9 @@ function buildWorldMap() {
     preserveAspectRatio: "xMidYMid meet"
   });
 
-  // glow filter (as in the original component)
   const defs = svgEl("defs", {});
+
+  // soft glow filter for the travelling dots + endpoints
   const filter = svgEl("filter", {
     id: "worldGlow", x: "-50%", y: "-50%", width: "200%", height: "200%"
   });
@@ -443,6 +533,18 @@ function buildWorldMap() {
   merge.appendChild(svgEl("feMergeNode", { in: "SourceGraphic" }));
   filter.appendChild(merge);
   defs.appendChild(filter);
+
+  // animated gradient stroke for the arcs — fades at both ends, bright in the
+  // middle, so each route reads as a luminous light-blue thread.
+  const grad = svgEl("linearGradient", {
+    id: "worldRouteGrad", x1: "0%", y1: "0%", x2: "100%", y2: "0%"
+  });
+  grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": ACCENT, "stop-opacity": "0" }));
+  grad.appendChild(svgEl("stop", { offset: "12%", "stop-color": ACCENT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "50%", "stop-color": ACCENT_SOFT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "88%", "stop-color": ACCENT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "100%", "stop-color": ACCENT, "stop-opacity": "0" }));
+  defs.appendChild(grad);
   svg.appendChild(defs);
 
   const hub = worldProject(WORLD_HUB.lat, WORLD_HUB.lng);
@@ -454,134 +556,168 @@ function buildWorldMap() {
   syncCompact();
   window.addEventListener("resize", syncCompact, { passive: true });
 
-  const STAGGER = 0.45;  // seconds between routes (clear staggered draw-in)
-  const DRAW_DUR = 1.7;  // seconds for a line to draw + dot to travel
-  // Period kept tight so the trace visibly loops rather than holding static.
-  const PERIOD = WORLD_DESTINATIONS.length * STAGGER + DRAW_DUR + 1.4;
-  // fraction of the period spent drawing (rest = brief hold + reset)
-  const DRAW_FRAC = Math.min(0.6, (DRAW_DUR) / PERIOD);
-
-  WORLD_DESTINATIONS.forEach((dest, i) => {
+  // ----- Build the routes. Each route owns its path (the visible arc), a
+  //       length, a travelling glow dot, and an endpoint pulse ring. The
+  //       actual draw-on is JS-driven (stroke-dashoffset via rAF) so it
+  //       ALWAYS animates (SMIL rendered static here previously). -----
+  const routes = WORLD_DESTINATIONS.map((dest, i) => {
     const end = worldProject(dest.lat, dest.lng);
     const midX = (hub.x + end.x) / 2;
     const midY = Math.min(hub.y, end.y) - 50;
     const d = `M ${hub.x} ${hub.y} Q ${midX} ${midY} ${end.x} ${end.y}`;
 
     const path = svgEl("path", {
-      d, fill: "none", stroke: ACCENT, "stroke-width": "1",
-      "stroke-opacity": "0.55", "stroke-linecap": "round"
+      d, fill: "none",
+      stroke: prefersReducedMotion ? ACCENT : "url(#worldRouteGrad)",
+      "stroke-width": "1.4", "stroke-opacity": "0.9", "stroke-linecap": "round"
     });
     svg.appendChild(path);
 
+    const len = path.getTotalLength();
+    // travelling glow dot — created up front, ridden along the path by JS
+    let dot = null;
     if (!prefersReducedMotion) {
-      const len = path.getTotalLength();
       path.style.strokeDasharray = `${len}`;
-      path.style.strokeDashoffset = `${len}`;
-      // key timings: draw in over DRAW_FRAC of the period, hold drawn briefly,
-      // then snap back to undrawn just before the loop repeats.
-      const tDraw = DRAW_FRAC.toFixed(3);
-      const tHold = Math.min(0.97, DRAW_FRAC + 0.45).toFixed(3);
-      const draw = svgEl("animate", {
-        attributeName: "stroke-dashoffset",
-        begin: `${(i * STAGGER).toFixed(3)}s`, dur: `${PERIOD}s`,
-        repeatCount: "indefinite",
-        keyTimes: `0;${tDraw};${tHold};1`, values: `${len};0;0;${len}`,
-        calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1;0 0 1 1"
-      });
-      path.appendChild(draw);
-
-      // travelling glowing dot — rides the curve while the line draws
-      const dot = svgEl("circle", {
-        r: "2.8", fill: ACCENT, filter: "url(#worldGlow)"
-      });
-      const motion = svgEl("animateMotion", {
-        path: d, begin: `${(i * STAGGER).toFixed(3)}s`, dur: `${PERIOD}s`,
-        repeatCount: "indefinite",
-        keyPoints: "0;1;1", keyTimes: `0;${tDraw};1`,
-        calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1"
-      });
-      dot.appendChild(motion);
-      // fade the dot out once it reaches the destination, hidden until next loop
-      const dotFade = svgEl("animate", {
-        attributeName: "opacity", begin: `${(i * STAGGER).toFixed(3)}s`,
-        dur: `${PERIOD}s`, repeatCount: "indefinite",
-        keyTimes: `0;${tDraw};${(Math.min(0.99, DRAW_FRAC + 0.08)).toFixed(3)};1`,
-        values: "1;1;0;0"
-      });
-      dot.appendChild(dotFade);
+      path.style.strokeDashoffset = `${len}`;   // start fully undrawn
+      dot = svgEl("circle", { r: "3.2", fill: ACCENT_SOFT, filter: "url(#worldGlow)", opacity: "0" });
       svg.appendChild(dot);
     }
+    return { path, len, d, end, dot, dest, i };
   });
 
   // points (origin + destinations) with pulse + label
   function addPoint(p, name, isHub, secondary) {
-    // pulse (expanding fading ring)
+    // pulse (expanding fading ring) — JS-driven so it plays on scroll-in
+    let pulse = null;
     if (!prefersReducedMotion) {
-      const pulse = svgEl("circle", {
-        cx: p.x, cy: p.y, r: "2", fill: "none",
-        stroke: ACCENT, "stroke-width": "1"
+      pulse = svgEl("circle", {
+        cx: p.x, cy: p.y, r: "2.6", fill: "none",
+        stroke: ACCENT_SOFT, "stroke-width": "1.2", opacity: "0"
       });
-      pulse.appendChild(svgEl("animate", {
-        attributeName: "r", from: "2", to: "10",
-        dur: "2s", begin: isHub ? "0s" : "0.4s", repeatCount: "indefinite"
-      }));
-      pulse.appendChild(svgEl("animate", {
-        attributeName: "opacity", from: "0.6", to: "0",
-        dur: "2s", begin: isHub ? "0s" : "0.4s", repeatCount: "indefinite"
-      }));
       svg.appendChild(pulse);
     }
     // solid point
     svg.appendChild(svgEl("circle", {
-      cx: p.x, cy: p.y, r: isHub ? "3.4" : "2.6", fill: ACCENT
+      cx: p.x, cy: p.y, r: isHub ? "3.6" : "2.8", fill: ACCENT,
+      filter: prefersReducedMotion ? null : "url(#worldGlow)"
     }));
     // label
     const lbl = svgEl("text", {
-      x: p.x, y: p.y - 7, "text-anchor": "middle",
+      x: p.x, y: p.y - 8, "text-anchor": "middle",
       class: "world-route-label" + (secondary ? " secondary" : "")
     });
     lbl.textContent = name;
     svg.appendChild(lbl);
+    return pulse;
   }
 
-  addPoint(hub, WORLD_HUB.name, true, false);
+  const pulses = [];
+  pulses.push({ ring: addPoint(hub, WORLD_HUB.name, true, false), x: hub.x, y: hub.y });
   WORLD_DESTINATIONS.forEach((dest, i) => {
     const p = worldProject(dest.lat, dest.lng);
     // mark some as secondary so they can be hidden on tiny screens
-    addPoint(p, dest.name, false, i >= 3);
+    pulses.push({ ring: addPoint(p, dest.name, false, i >= 3), x: p.x, y: p.y });
   });
 
   stage.appendChild(svg);
 
-  // --- 3. Play the route tracing when the section scrolls into view.
-  //     Animations stay paused (and reset) off-screen so the trace clearly
-  //     (re)plays from the start each time the map enters the viewport —
-  //     this is what makes it read as animating rather than a static image.
-  //     Static under reduced motion (no SMIL elements were added). ---
-  if (!prefersReducedMotion && "IntersectionObserver" in window &&
-      typeof svg.pauseAnimations === "function") {
-    try { svg.pauseAnimations(); svg.setCurrentTime(0); } catch (e) { /* no-op */ }
+  if (prefersReducedMotion) return; // static finished arcs + points, no JS loop
+
+  // ----- JS-driven animation (rAF). Each route draws on (dashoffset → 0) over
+  //       DRAW_MS with a staggered start; a glow dot rides the arc as it draws;
+  //       endpoint rings pulse continuously. Triggered by IntersectionObserver
+  //       and REPLAYED every time #reach re-enters the viewport. -----
+  const DRAW_MS = 1500;     // per-route draw duration
+  const STAGGER_MS = 320;   // delay between successive routes
+  const PULSE_MS = 2000;    // pulse-ring period
+  const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+  let startT = 0;
+  let raf = null;
+
+  // sample a quadratic-bezier point at parameter u (0..1) for the dot position
+  function pointAt(r, u) {
+    return r.path.getPointAtLength(r.len * u);
+  }
+
+  function frame(now) {
+    if (!startT) startT = now;
+    const elapsed = now - startT;
+
+    routes.forEach((r) => {
+      const local = elapsed - r.i * STAGGER_MS;
+      if (local <= 0) {
+        r.path.style.strokeDashoffset = `${r.len}`;
+        if (r.dot) r.dot.setAttribute("opacity", "0");
+        return;
+      }
+      const p = Math.min(1, local / DRAW_MS);
+      const e = easeInOut(p);
+      r.path.style.strokeDashoffset = `${r.len * (1 - e)}`;
+      if (r.dot) {
+        if (p < 1) {
+          const pt = pointAt(r, e);
+          r.dot.setAttribute("cx", pt.x);
+          r.dot.setAttribute("cy", pt.y);
+          r.dot.setAttribute("opacity", "1");
+        } else {
+          r.dot.setAttribute("opacity", "0");
+        }
+      }
+    });
+
+    // continuous endpoint pulses
+    pulses.forEach((pu, idx) => {
+      if (!pu.ring) return;
+      const phase = ((elapsed + idx * 240) % PULSE_MS) / PULSE_MS;
+      pu.ring.setAttribute("r", (2.6 + phase * 9).toFixed(2));
+      pu.ring.setAttribute("opacity", (0.55 * (1 - phase)).toFixed(3));
+    });
+
+    // keep looping for the pulses; draw-on completes once but rings continue
+    raf = requestAnimationFrame(frame);
+  }
+
+  function reset() {
+    routes.forEach((r) => {
+      r.path.style.strokeDashoffset = `${r.len}`;
+      if (r.dot) r.dot.setAttribute("opacity", "0");
+    });
+    pulses.forEach((pu) => { if (pu.ring) pu.ring.setAttribute("opacity", "0"); });
+  }
+
+  function play() {
+    stop();
+    reset();
+    startT = 0;
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+  }
+
+  // --- 3. Trigger on scroll-in; REPLAY each time #reach re-enters. ---
+  if ("IntersectionObserver" in window) {
+    reset();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        try {
-          if (e.isIntersecting) {
-            // restart the staggered trace from t=0, then run
-            svg.setCurrentTime(0);
-            svg.unpauseAnimations();
-          } else {
-            svg.pauseAnimations();
-          }
-        } catch (err) { /* no-op */ }
+        if (e.isIntersecting) play();
+        else stop();
       });
     }, { threshold: 0.25 });
     io.observe(stage);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); });
+  } else {
+    play();
   }
 }
 
 /* ============================================================
-   Fabric-type fading typographic carousel
-   Slow cross-fade between curated fabric names (~2.7s each).
-   Reduced motion: render a single static comma-separated line.
+   Fabric-type continuous rolling marquee
+   A seamlessly-looping horizontal auto-scroll of fabric names. The track
+   holds TWO identical sequences and translates by -50% via CSS @keyframes
+   (.fabric-rotator-track), so the loop has no seam jump. Pause on hover is
+   handled in CSS. Reduced motion / no-JS: a static comma-separated line.
    ============================================================ */
 const FABRIC_TYPES = [
   "Chambray",
@@ -598,7 +734,7 @@ function initFabricRotator() {
   const stage = document.querySelector("#fabricRotator");
   if (!stage) return;
 
-  // Reduced motion (or single item): static line, no rotation.
+  // Reduced motion (or single item): static line, no scrolling.
   if (prefersReducedMotion || FABRIC_TYPES.length < 2) {
     const p = document.createElement("p");
     p.className = "fabric-rotator-static";
@@ -607,80 +743,56 @@ function initFabricRotator() {
     return;
   }
 
-  const items = FABRIC_TYPES.map((name, i) => {
-    const el = document.createElement("p");
-    el.className = "fabric-rotator-item" + (i === 0 ? " is-active" : "");
-    el.textContent = name;
-    stage.appendChild(el);
-    return el;
-  });
-
-  let index = 0;
-  const INTERVAL = 2700; // ~2.7s per name
-  let timer = null;
-
-  function advance() {
-    items[index].classList.remove("is-active");
-    index = (index + 1) % items.length;
-    items[index].classList.add("is-active");
+  // Build a track containing the names twice so -50% translate loops seamlessly.
+  const track = document.createElement("div");
+  track.className = "fabric-rotator-track";
+  // Two passes of the full list, end to end.
+  for (let pass = 0; pass < 2; pass++) {
+    FABRIC_TYPES.forEach((name) => {
+      const el = document.createElement("span");
+      el.className = "fabric-rotator-item";
+      el.textContent = name;
+      track.appendChild(el);
+    });
   }
-  function start() { if (!timer) timer = window.setInterval(advance, INTERVAL); }
-  function stop() { if (timer) { window.clearInterval(timer); timer = null; } }
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) stop(); else start();
-  });
-  start();
+  stage.appendChild(track);
 }
 
-/* ---------- Hero slideshow ---------- */
+/* ---------- Hero slideshow — automatic crossfade (no manual controls) ----------
+   4 slides, ~5s each, smooth opacity crossfade (CSS handles the fade), looping
+   forever. Pauses while the tab is hidden and while the hero is hovered, then
+   resumes. Reduced motion: no auto-advance — the first slide stays static.
+   The <noscript> first-slide-visible fallback is in markup (slide.is-active). */
 function initSlideshow() {
   const root = document.querySelector("#slideshow");
   const slides = root ? Array.from(root.querySelectorAll(".slide")) : [];
-  const dotsWrap = document.querySelector("#slideDots");
-  const prevBtn = document.querySelector("#slidePrev");
-  const nextBtn = document.querySelector("#slideNext");
   if (!root || slides.length < 2) return;
 
-  const reduced = prefersReducedMotion;
-  const INTERVAL = 4500; // auto-advance every 4.5s (no clicks needed)
+  // Reduced motion: leave the first slide showing, never auto-advance.
+  if (prefersReducedMotion) return;
+
+  const INTERVAL = 5000; // ~5s per slide
   let current = 0;
   let timer = null;
 
-  const dots = slides.map((_, i) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.setAttribute("role", "tab");
-    dot.setAttribute("aria-label", `Slide ${i + 1}`);
-    if (i === 0) dot.classList.add("active");
-    dot.addEventListener("click", () => goTo(i, true));
-    if (dotsWrap) dotsWrap.appendChild(dot);
-    return dot;
-  });
-
-  function goTo(index, manual) {
-    current = (index + slides.length) % slides.length;
+  function next() {
+    current = (current + 1) % slides.length;
     slides.forEach((s, i) => s.classList.toggle("is-active", i === current));
-    dots.forEach((d, i) => d.classList.toggle("active", i === current));
-    if (manual) restart();
   }
 
-  function next() { goTo(current + 1); }
-
   function start() {
-    if (reduced || timer) return;
+    if (timer) return;
     timer = window.setInterval(next, INTERVAL);
   }
   function stop() {
     if (timer) { window.clearInterval(timer); timer = null; }
   }
-  function restart() { stop(); start(); }
 
-  if (nextBtn) nextBtn.addEventListener("click", () => goTo(current + 1, true));
-  if (prevBtn) prevBtn.addEventListener("click", () => goTo(current - 1, true));
-
-  root.addEventListener("mouseenter", stop);
-  root.addEventListener("mouseleave", start);
+  // Pause on hover over the hero, resume after.
+  const hero = root.closest(".hero") || root;
+  hero.addEventListener("mouseenter", stop);
+  hero.addEventListener("mouseleave", start);
+  // Pause while the tab is hidden, resume when visible.
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stop(); else start();
   });
@@ -755,6 +867,65 @@ function initNav() {
   }
 }
 
+/* ---------- Nav bar — macOS-dock hover magnification ----------
+   TASK 2. Target: .nav-links. Re-creates the AnimatedDock behaviour in vanilla
+   JS + CSS: as the cursor moves across the nav, the link nearest the cursor
+   scales up / lifts the most and neighbours fall off with distance; everything
+   settles back smoothly on mouse-leave. We track the cursor X and, per link,
+   compute a Gaussian-style falloff of distance from each link's centre to the
+   cursor, then write per-link scale + lift into CSS custom properties (the
+   springy easing lives in the CSS transition on .nav-links a). Reduced motion:
+   skip entirely — links keep their static size. */
+function initNavDock() {
+  if (prefersReducedMotion) return;
+  const nav = document.querySelector(".nav-links");
+  if (!nav) return;
+  const links = Array.from(nav.querySelectorAll("a"));
+  if (!links.length) return;
+
+  nav.classList.add("dock");
+
+  const MAX_SCALE = 0.22;   // peak extra scale at the cursor (→ ~1.22)
+  const MAX_LIFT = 6;       // px the nearest link lifts
+  const FALLOFF = 70;       // px — distance over which the effect fades
+
+  let raf = null;
+  let pending = null;
+
+  function apply(clientX) {
+    links.forEach((link) => {
+      const r = link.getBoundingClientRect();
+      const center = r.left + r.width / 2;
+      const dist = Math.abs(clientX - center);
+      // smooth Gaussian-ish falloff: 1 at the cursor → 0 far away
+      const t = Math.exp(-(dist * dist) / (2 * FALLOFF * FALLOFF));
+      link.style.setProperty("--dock-scale", (1 + MAX_SCALE * t).toFixed(3));
+      link.style.setProperty("--dock-lift", (-MAX_LIFT * t).toFixed(2) + "px");
+    });
+  }
+
+  function reset() {
+    links.forEach((link) => {
+      link.style.setProperty("--dock-scale", "1");
+      link.style.setProperty("--dock-lift", "0px");
+    });
+  }
+
+  nav.addEventListener("mousemove", (e) => {
+    pending = e.clientX;
+    if (raf === null) {
+      raf = requestAnimationFrame(() => { raf = null; if (pending !== null) apply(pending); });
+    }
+  });
+  nav.addEventListener("mouseleave", () => {
+    if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+    pending = null;
+    reset();
+  });
+
+  reset();
+}
+
 /* ---------- Smooth scroll for in-page anchors ---------- */
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
@@ -809,25 +980,77 @@ function initParallax() {
   window.addEventListener("resize", onScroll, { passive: true });
 }
 
-/* ---------- Stats blur -> clarity (JS fallback for scroll-driven anim) ----------
-   Where `animation-timeline: view()` is supported the CSS drives the effect
-   continuously with scroll. Elsewhere, toggle .in-clarity once the strip enters
-   view so the CSS transition resolves the numbers to clarity. Reduced motion is
-   gated in CSS (always clear). */
-function initStatsClarity() {
+/* ---------- Stats strip — scramble / decode reveal on scroll ----------
+   When the strip scrolls into view (IntersectionObserver, fired ONCE), each
+   value (`.stat > strong`) and label (`.stat > span`) starts with its
+   characters scrambled to random glyphs, then resolves char-by-char to the
+   exact final text. Numbers and symbols (–, +, /, letters) land exactly.
+   Reduced motion / no-IO: final text is left untouched (shown immediately),
+   preserving the <noscript> / no-JS values present in markup. */
+function initStatsScramble() {
   const strip = document.querySelector(".stats-strip");
   if (!strip) return;
-  if (prefersReducedMotion) { strip.classList.add("in-clarity"); return; }
 
-  // If the browser supports scroll-driven view() timelines, let CSS handle it.
-  const supportsViewTimeline =
-    window.CSS && CSS.supports && CSS.supports("animation-timeline: view()");
-  if (supportsViewTimeline) return;
+  const targets = Array.from(strip.querySelectorAll(".stat > strong, .stat > span"));
+  if (!targets.length) return;
 
-  if (!("IntersectionObserver" in window)) { strip.classList.add("in-clarity"); return; }
+  // Reduced motion or no IntersectionObserver: leave the final text as-is.
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
+
+  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789–+/#%@&*<>";
+
+  // Per-character animated scramble for one element. Spaces and the en-dash
+  // stay fixed; every other character scrambles until its resolve time passes.
+  function scramble(el) {
+    const finalText = el.dataset.finalText;
+    const chars = Array.from(finalText);
+    // Build per-character spans so each resolves independently.
+    el.textContent = "";
+    const spans = chars.map((ch) => {
+      const span = document.createElement("span");
+      span.className = "scramble-char";
+      span.textContent = ch === " " ? " " : ch;
+      el.appendChild(span);
+      return span;
+    });
+
+    const FRAME_MS = 45;          // glyph flicker cadence
+    const PER_CHAR_MS = 90;       // stagger between characters resolving
+    const start = performance.now();
+
+    function tick(now) {
+      let allDone = true;
+      const elapsed = now - start;
+      chars.forEach((ch, i) => {
+        const span = spans[i];
+        if (span.dataset.done) return;
+        const resolveAt = i * PER_CHAR_MS + 260;
+        if (ch === " " || elapsed >= resolveAt) {
+          span.textContent = ch === " " ? " " : ch;
+          span.classList.add("resolved");
+          span.dataset.done = "1";
+        } else {
+          allDone = false;
+          span.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+        }
+      });
+      if (!allDone) {
+        // throttle the flicker frame rate
+        setTimeout(() => requestAnimationFrame(tick), FRAME_MS);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Stash the final text so it's recoverable, then run once on scroll-in.
+  targets.forEach((el) => { el.dataset.finalText = el.textContent; });
+
   const io = new IntersectionObserver((entries, obs) => {
     entries.forEach((e) => {
-      if (e.isIntersecting) { strip.classList.add("in-clarity"); obs.unobserve(e.target); }
+      if (e.isIntersecting) {
+        targets.forEach((el) => scramble(el));
+        obs.disconnect();
+      }
     });
   }, { threshold: 0.35 });
   io.observe(strip);
@@ -846,8 +1069,9 @@ initSlideshow();
 initScrollProgress();
 initReveal();
 initNav();
+initNavDock();
 initSmoothScroll();
 initForm();
 initParallax();
-initStatsClarity();
+initStatsScramble();
 initYear();
