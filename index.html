@@ -25,17 +25,20 @@
 
   <!-- ============ Glass-pill nav ============ -->
   <header class="glass-nav" id="glassNav">
+    <!-- ============================================================
+         LOGO / WORDMARK — single swappable element.
+         Triangle mark removed per client. Clean "AF" serif monogram
+         (matches assets/logo.png from the client's Stitch export) rendered
+         as recolorable inline SVG so it works on the dark hero and the light
+         scrolled nav. To drop in a final raster/SVG logo later, replace the
+         <svg class="brand-mark"> below with:
+             <img class="brand-mark" src="assets/logo.png" alt="Asa Fabric">
+         and keep the .brand-text wordmark (or remove it if the logo includes type).
+         ============================================================ -->
     <a class="brand" href="#top" aria-label="Asa Fabric — home">
-      <!-- Swappable inline-SVG monogram wordmark. Replace this <svg> with a client logo later. -->
-      <svg class="brand-mark" viewBox="0 0 40 40" width="30" height="30" aria-hidden="true" focusable="false">
-        <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
-          <path d="M20 5 L33 34 H7 Z"/>
-          <path d="M13.5 22 H26.5"/>
-          <path d="M11 6 V34" opacity="0.28"/>
-          <path d="M29 6 V34" opacity="0.28"/>
-          <path d="M9 14 H31" opacity="0.18"/>
-          <path d="M8 27 H32" opacity="0.18"/>
-        </g>
+      <svg class="brand-mark" viewBox="0 0 60 44" width="42" height="31" aria-hidden="true" focusable="false">
+        <text x="30" y="30" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="34" fill="currentColor">AF</text>
+        <line x1="14" y1="38" x2="46" y2="38" stroke="currentColor" stroke-width="1.2"/>
       </svg>
       <span class="brand-text">
         <span class="brand-name">Asa</span>
@@ -71,7 +74,7 @@
   <main>
     <!-- ============ Hero slideshow ============ -->
     <section class="hero" aria-label="Asa Fabric">
-      <div class="slideshow" id="slideshow" aria-hidden="true">
+      <div class="slideshow" id="slideshow" data-parallax="0.18" aria-hidden="true">
         <!-- IMAGE SET — hero (swap these src URLs for your own fabric photos). Solid bg-color fallback applied in CSS. -->
         <div class="slide is-active" data-slide="0"><img class="slide-img" alt="" loading="eager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-LYmah0qxMDWkusl_mWHmxGx1VgMil9pUJ4zMyg73g_80LlL7b_JwvvIItlGnf7u8bD2J5HvMM67I45I1y-Dgmm_JxhHl1UHKyeoJ_0BWx8wo-OK9KuGPCEi2nDIsRW4WGxT7yRGULvMASfApnFNUND4cxnrbhom4BxhWhvOO2b-yom70Zdd8sEUMR58h0UJ53eEvDQhe8OIMzBFlgHleYZd0x_MWGL-dPONu3Hbk5OKNR3Ls1-ZnedkNih9mxf9ArBAcGDnKCVy-"></div>
         <div class="slide" data-slide="1"><img class="slide-img" alt="" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbvdngpXSNtB1nvFqZCpIBluAJKRDC6iQoLoZ51js-DFo0FEPWfpICn52zz12PdEKwNGCKhMeP4E_eRW-mHTnry34XgKUhkNcwXw8c4gEEOUXKp3SrAsb5MHIqjW6UXV9md4Oo1O0Yqc8DAdb39arWbesyxwO-gGhXRXShjwl998sn8t_IlNT_zqrxgdyNwExq_UQJd0gYfq4BIisRLxnifAZtqi9D3zRpm5C_Z125wsRDeu1VFfs07lwxzgw1cqlDZU_CgyPz6ST5"></div>
@@ -188,44 +191,45 @@
       </div>
     </section>
 
-    <!-- ============ Catalog ============ -->
-    <section class="catalog-shell" id="catalog">
-      <div class="catalog-inner">
-        <div class="catalog-banner reveal" role="note">
-          <span class="banner-dot" aria-hidden="true"></span>
-          <p><strong>Preview.</strong> The full interactive catalog — advanced filtering, swatch ordering and live stock — is being built by our catalogue team. Below is a working preview of the data and flow.</p>
-        </div>
-
-        <div class="catalog-top">
-          <div class="reveal">
-            <p class="eyebrow">The collection</p>
-            <h2>Available fabric lots</h2>
+    <!-- ============ Available Fabric Lots — teaser (no selling on landing) ============ -->
+    <!-- Teaser only: no price grid / search on the landing page. The full searchable,
+         filterable catalogue with live stock is built separately by the catalogue team.
+         The `fabrics` / `useCases` data arrays remain in app.js, reserved for that team. -->
+    <section class="stock-teaser" id="catalog">
+      <div class="stock-inner">
+        <div class="stock-copy reveal">
+          <p class="eyebrow">Available Fabric Lots</p>
+          <h2>A working stockroom, kept current.</h2>
+          <p>Fifty-plus lots of cottons, linens, twills and wool blends — held by the roll and cut to length. Shade, weight and availability are tracked so the right cloth is always within reach.</p>
+          <p>The full searchable catalogue, with live stock and swatch ordering, is being prepared by our catalogue team. Browse what's coming, or send an enquiry and we'll match you to today's lots.</p>
+          <div class="stock-actions">
+            <a class="btn btn-solid" href="#catalog-soon">View Available Stock <span aria-hidden="true">→</span></a>
+            <a class="btn-link" href="#contact">Or make an enquiry <span aria-hidden="true">→</span></a>
           </div>
-          <label class="search-wrap reveal" for="fabricSearch">
-            <span>Search the stockroom</span>
-            <div class="search-field">
-              <span class="material-symbols-outlined" aria-hidden="true">search</span>
-              <input id="fabricSearch" type="search" placeholder="Cotton, linen, twill, shirting…">
-            </div>
-          </label>
         </div>
 
-        <div class="filter-bar reveal" aria-label="Catalog filters">
-          <button class="filter-chip active" type="button" data-filter="all">All</button>
-          <button class="filter-chip" type="button" data-filter="School uniforms">Shirtings</button>
-          <button class="filter-chip" type="button" data-filter="Corporate wear">Suitings</button>
-          <button class="filter-chip" type="button" data-filter="Workwear">Trousers</button>
-          <button class="filter-chip" type="button" data-filter="Hospitality">Linens</button>
-          <button class="filter-chip" type="button" data-filter="Resale deals">Cottons</button>
-        </div>
-
-        <div class="catalog-grid" id="catalogGrid"></div>
-
-        <div class="catalog-foot reveal">
-          <a class="btn btn-solid" href="#contact">Request today's stock list <span aria-hidden="true">→</span></a>
+        <!-- representative preview collage (decorative; swap src URLs for client photos later) -->
+        <div class="stock-collage reveal" aria-hidden="true">
+          <span class="collage-img collage-a" data-parallax="0.04"></span>
+          <span class="collage-img collage-b" data-parallax="-0.05"></span>
+          <span class="collage-img collage-c" data-parallax="0.03"></span>
+          <span class="collage-badge">50+ lots in stock</span>
         </div>
       </div>
+
+      <!-- Anchor target for the catalogue team's full experience. -->
+      <div id="catalog-soon" class="catalog-soon reveal" role="note">
+        <span class="banner-dot" aria-hidden="true"></span>
+        <p><strong>Full catalogue, coming soon.</strong> Advanced filtering, live stock and swatch ordering are being built by our catalogue team. In the meantime, our team can send today's stock list on request.</p>
+      </div>
     </section>
+
+    <!-- ============================================================
+         RESERVED: B2B animated world-map section will be inserted here
+         (after stats / featured / why / stock) in a follow-up pass.
+         Leave this placeholder in place.
+         ============================================================ -->
+    <!-- <section class="world-map" id="reach"></section> -->
 
     <!-- ============ Enquiry ============ -->
     <section class="contact-section" id="contact">
@@ -275,13 +279,10 @@
     <div class="footer-grid">
       <div class="footer-brand-col">
         <a class="brand footer-brand" href="#top" aria-label="Asa Fabric — home">
-          <svg class="brand-mark" viewBox="0 0 40 40" width="30" height="30" aria-hidden="true" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
-              <path d="M20 5 L33 34 H7 Z"/>
-              <path d="M13.5 22 H26.5"/>
-              <path d="M11 6 V34" opacity="0.28"/>
-              <path d="M29 6 V34" opacity="0.28"/>
-            </g>
+          <!-- Same swappable "AF" wordmark as the nav (triangle removed). -->
+          <svg class="brand-mark" viewBox="0 0 60 44" width="42" height="31" aria-hidden="true" focusable="false">
+            <text x="30" y="30" text-anchor="middle" font-family="EB Garamond, Georgia, serif" font-size="34" fill="currentColor">AF</text>
+            <line x1="14" y1="38" x2="46" y2="38" stroke="currentColor" stroke-width="1.2"/>
           </svg>
           <span class="brand-text">
             <span class="brand-name">Asa</span>

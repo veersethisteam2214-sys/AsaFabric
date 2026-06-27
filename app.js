@@ -235,11 +235,11 @@ function escapeHtml(value) {
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------- Renderers ---------- */
+/* NOTE: the sellable price grid + search/filter has been removed from the landing
+   page (the "Available Fabric Lots" section is now a teaser only). The `fabrics`
+   array above is RESERVED for the catalogue team's full experience and is no longer
+   rendered here. `useCases` still drives the "Fabrics by use" editorial grid. */
 const useGrid = document.querySelector("#useGrid");
-const catalogGrid = document.querySelector("#catalogGrid");
-const filterButtons = document.querySelectorAll(".filter-chip");
-const searchInput = document.querySelector("#fabricSearch");
-let activeFilter = "all";
 
 function renderUseCases() {
   if (!useGrid) return;
@@ -265,69 +265,7 @@ function renderUseCases() {
   useGrid.innerHTML = cards + soon;
 }
 
-function renderCatalog() {
-  if (!catalogGrid) return;
-  const query = (searchInput ? searchInput.value : "").trim().toLowerCase();
-  const filtered = fabrics.filter((fabric) => {
-    const matchesFilter = activeFilter === "all" || fabric.use === activeFilter;
-    const searchable = `${fabric.name} ${fabric.material} ${fabric.use} ${fabric.status} ${fabric.width} ${fabric.gsm} ${fabric.detail} ${fabric.applications.join(" ")}`.toLowerCase();
-    return matchesFilter && searchable.includes(query);
-  });
-
-  catalogGrid.innerHTML = filtered.map((fabric) => `
-    <article class="fabric-card">
-      <div class="fabric-visual">
-        <div class="fabric-visual-img" style="background-image: ${weaveBackground(fabric.colors)}"></div>
-        <span class="status">${escapeHtml(fabric.status)}</span>
-      </div>
-      <div class="fabric-body">
-        <div class="fabric-heading">
-          <div>
-            <small>${escapeHtml(fabric.material)}</small>
-            <h3>${escapeHtml(fabric.name)}</h3>
-          </div>
-          <strong>${escapeHtml(fabric.grade)}</strong>
-        </div>
-        <p>${escapeHtml(fabric.detail)}</p>
-        <div class="spec-grid">
-          <div><span>Use</span><strong>${escapeHtml(fabric.use)}</strong></div>
-          <div><span>Width</span><strong>${escapeHtml(fabric.width)}</strong></div>
-          <div><span>Weight</span><strong>${escapeHtml(fabric.gsm)}</strong></div>
-          <div><span>Stock</span><strong>${escapeHtml(fabric.stock)}</strong></div>
-        </div>
-        <div class="application-tags">
-          ${fabric.applications.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
-        </div>
-        <div class="price-row">
-          <div>
-            <small>Full roll</small>
-            <strong>${escapeHtml(fabric.roll)}</strong>
-          </div>
-          <div>
-            <small>Cut length</small>
-            <strong>${escapeHtml(fabric.cut)}</strong>
-          </div>
-        </div>
-      </div>
-    </article>
-  `).join("") || `<p class="empty-state">No fabrics match that search yet. Try a different material or clear the filter.</p>`;
-}
-
-filterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    filterButtons.forEach((item) => item.classList.remove("active"));
-    button.classList.add("active");
-    activeFilter = button.dataset.filter;
-    renderCatalog();
-  });
-});
-
-if (searchInput) {
-  searchInput.addEventListener("input", renderCatalog);
-}
-
 renderUseCases();
-renderCatalog();
 
 /* ============================================================
    Featured Fabrics — fan carousel (ported from React+GSAP)
@@ -490,6 +428,24 @@ function initFanCarousel() {
   if (nextBtn) nextBtn.addEventListener("click", () => { center = (center + 1) % cards.length; applyLayout(true); });
 
   window.addEventListener("resize", () => applyLayout(false), { passive: true });
+
+  // ----- Auto-advance while hovering the carousel (paused otherwise) -----
+  // Respects reduced motion (hasGsap is false under reduced motion, so this is gated).
+  let autoTimer = null;
+  const AUTO_INTERVAL = 1200;
+  function autoStart() {
+    if (autoTimer || prefersReducedMotion) return;
+    autoTimer = window.setInterval(() => {
+      center = (center + 1) % cards.length;
+      applyLayout(true);
+    }, AUTO_INTERVAL);
+  }
+  function autoStop() {
+    if (autoTimer) { window.clearInterval(autoTimer); autoTimer = null; }
+  }
+  root.addEventListener("mouseenter", autoStart);
+  root.addEventListener("mouseleave", autoStop);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) autoStop(); });
 
   // Trigger entrance on scroll into view
   if (hasGsap && "IntersectionObserver" in window) {
@@ -658,6 +614,33 @@ function initForm() {
   });
 }
 
+/* ---------- Parallax (subtle, rAF-driven, reduced-motion gated) ---------- */
+function initParallax() {
+  if (prefersReducedMotion) return;
+  const items = Array.from(document.querySelectorAll("[data-parallax]"));
+  if (!items.length) return;
+
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const vh = window.innerHeight;
+    items.forEach((el) => {
+      const speed = parseFloat(el.dataset.parallax) || 0;
+      const rect = el.getBoundingClientRect();
+      // distance of element center from viewport center
+      const centerDelta = (rect.top + rect.height / 2) - vh / 2;
+      const shift = -centerDelta * speed;
+      el.style.transform = `translate3d(0, ${shift.toFixed(1)}px, 0)`;
+    });
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }
+  update();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+}
+
 /* ---------- Footer year ---------- */
 function initYear() {
   const year = document.querySelector("#year");
@@ -671,4 +654,5 @@ initReveal();
 initNav();
 initSmoothScroll();
 initForm();
+initParallax();
 initYear();
