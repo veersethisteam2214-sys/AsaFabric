@@ -4,85 +4,116 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Asa Fabric is a premium fabric house supplying shirtings, trousering, and suitings — beautifully organized by use, material, and availability.">
-  <title>Asa Fabric | A Premium Fabric House</title>
+  <meta name="theme-color" content="#FAF8F4">
+  <title>Asa Fabric — A Premium Fabric House</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <header class="site-header" id="siteHeader">
-    <a class="brand" href="#top" aria-label="Asa Fabric home">
-      <span class="brand-mark">AF</span>
+<body id="top">
+  <!-- scroll progress -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ============ Floating liquid-glass nav ============ -->
+  <header class="glass-nav" id="glassNav">
+    <a class="brand" href="#top" aria-label="Asa Fabric — home">
+      <svg class="brand-mark" viewBox="0 0 40 40" width="34" height="34" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+          <!-- warp threads (vertical) -->
+          <path d="M11 6 V34" opacity="0.55"/>
+          <path d="M20 4 V36"/>
+          <path d="M29 6 V34" opacity="0.55"/>
+          <!-- weft / interwoven A apex -->
+          <path d="M7 33 L20 7 L33 33"/>
+          <path d="M13 22 H27" opacity="0.9"/>
+          <!-- weft crossing hints -->
+          <path d="M9 15 H31" opacity="0.32"/>
+          <path d="M8 27 H32" opacity="0.32"/>
+        </g>
+      </svg>
       <span class="brand-text">
-        <strong>Asa Fabric</strong>
-        <small>Premium fabric house</small>
+        <span class="brand-name">Asa</span>
+        <span class="brand-sub">Fabric</span>
       </span>
     </a>
-    <nav class="nav-links" aria-label="Primary navigation">
+
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
       <a href="#uses">By Use</a>
       <a href="#why">Why Asa</a>
       <a href="#catalog">Catalog</a>
       <a href="#contact">Enquiry</a>
     </nav>
-    <a class="header-action" href="#catalog">View Catalog</a>
+
+    <a class="nav-cta" href="#catalog">View Catalog</a>
+
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="hero-bg" aria-hidden="true">
-        <span class="orb orb-1"></span>
-        <span class="orb orb-2"></span>
-        <span class="orb orb-3"></span>
-        <span class="weave-lines"></span>
+  <!-- mobile glass dropdown -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#uses">By Use</a>
+    <a href="#why">Why Asa</a>
+    <a href="#catalog">Catalog</a>
+    <a href="#contact">Enquiry</a>
+    <a class="mobile-cta" href="#catalog">View Catalog</a>
+  </div>
+
+  <main>
+    <!-- ============ Hero slideshow ============ -->
+    <section class="hero" aria-label="Asa Fabric">
+      <div class="slideshow" id="slideshow" aria-hidden="true">
+        <div class="slide is-active" data-slide="0"><div class="slide-img tex-1"></div></div>
+        <div class="slide" data-slide="1"><div class="slide-img tex-2"></div></div>
+        <div class="slide" data-slide="2"><div class="slide-img tex-3"></div></div>
+        <div class="slide" data-slide="3"><div class="slide-img tex-4"></div></div>
+        <div class="slide-scrim"></div>
       </div>
 
       <div class="hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow reveal">Shirtings &middot; Trousering &middot; Suitings</p>
-          <h1 class="hero-title">
-            <span class="line reveal">The fabric house</span>
-            <span class="line reveal">tailors, mills &amp; makers</span>
-            <span class="line reveal"><em>quietly</em> rely on.</span>
-          </h1>
-          <p class="hero-lede reveal">Asa Fabric curates ready-stock cloth — crisp shirtings, structured trousering, and refined suitings — into a clean, searchable buying experience organized by use, material, weight, and availability.</p>
-          <div class="hero-actions reveal">
-            <a class="button primary" href="#catalog">
-              Explore Catalog
-              <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <a class="button ghost" href="#contact">Get in touch</a>
-          </div>
+        <p class="eyebrow light reveal">Shirtings · Trousering · Suitings</p>
+        <h1 class="hero-title reveal">
+          The fabric house tailors,<br>mills &amp; makers <em>quietly</em> rely on.
+        </h1>
+        <p class="hero-lede reveal">A curated house of ready-stock cloth — crisp shirtings, structured trousering, refined suitings — organised by use, material, weight and live availability.</p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-ghost-light" href="#catalog">Explore Catalog</a>
+          <a class="btn-link light" href="#contact">Speak to a buyer <span aria-hidden="true">→</span></a>
         </div>
+      </div>
 
-        <div class="hero-card reveal" aria-label="Featured fabric">
-          <div class="hero-card-glow" aria-hidden="true"></div>
-          <div class="swatch-stack">
-            <span class="swatch s1"></span>
-            <span class="swatch s2"></span>
-            <span class="swatch s3"></span>
-            <span class="swatch s4"></span>
-          </div>
-          <div class="hero-card-meta">
-            <div>
-              <small>This week</small>
-              <strong>Wool Blend Suiting</strong>
-            </div>
-            <span class="pill">260 GSM &middot; Ready roll</span>
-          </div>
-        </div>
+      <div class="slideshow-controls" role="group" aria-label="Slideshow controls">
+        <button class="slide-arrow prev" id="slidePrev" type="button" aria-label="Previous slide">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="slide-dots" id="slideDots" role="tablist" aria-label="Slides"></div>
+        <button class="slide-arrow next" id="slideNext" type="button" aria-label="Next slide">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
     </section>
 
+    <!-- ============ Marquee strip ============ -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Shirtings</span><span class="dot">·</span><span>Trousering</span><span class="dot">·</span><span>Suitings</span><span class="dot">·</span><span>Chambray</span><span class="dot">·</span><span>Twills</span><span class="dot">·</span><span>Wool Blends</span><span class="dot">·</span><span>Est. Bangkok</span><span class="dot">·</span>
+        <span>Shirtings</span><span class="dot">·</span><span>Trousering</span><span class="dot">·</span><span>Suitings</span><span class="dot">·</span><span>Chambray</span><span class="dot">·</span><span>Twills</span><span class="dot">·</span><span>Wool Blends</span><span class="dot">·</span><span>Est. Bangkok</span><span class="dot">·</span>
+      </div>
+    </div>
+
+    <!-- ============ Stats ============ -->
     <section class="stats-strip" aria-label="At a glance">
       <div class="stat reveal"><strong data-count="12" data-suffix="+">12+</strong><span>fabric families in stock</span></div>
       <div class="stat reveal"><strong data-count="40" data-suffix="+">40+</strong><span>active ready-roll lots</span></div>
-      <div class="stat reveal"><strong data-count="90" data-prefix="" data-suffix="–260">90–260</strong><span>GSM weight range</span></div>
+      <div class="stat reveal"><strong data-count="90" data-suffix="–260">90–260</strong><span>GSM weight range</span></div>
       <div class="stat reveal"><strong>Same&nbsp;day</strong><span>lot &amp; price confirmation</span></div>
     </section>
 
+    <!-- ============ Fabrics by use ============ -->
     <section class="uses-section" id="uses">
-      <div class="section-heading center reveal">
+      <div class="section-heading reveal">
         <p class="eyebrow">Fabrics by use</p>
         <h2>Start with what you're making.</h2>
         <p>Every roll is grouped by the garments it's built for — so buyers reach the right cloth in seconds, not stockroom guesswork.</p>
@@ -90,6 +121,7 @@
       <div class="use-grid" id="useGrid"></div>
     </section>
 
+    <!-- ============ Why Asa ============ -->
     <section class="why-section" id="why">
       <div class="section-heading reveal">
         <p class="eyebrow">Why Asa</p>
@@ -98,28 +130,29 @@
       </div>
       <div class="why-grid">
         <article class="why-card reveal">
-          <span class="why-icon">01</span>
+          <span class="why-num">01</span>
           <h3>Mill-grade quality</h3>
           <p>Every lot is checked for shade continuity, hand-feel, and weave structure before it enters the catalog — so what ships matches the swatch.</p>
         </article>
         <article class="why-card reveal">
-          <span class="why-icon">02</span>
+          <span class="why-num">02</span>
           <h3>Deep sourcing</h3>
           <p>TC, poly cotton, wool blends, chambray, twills and more — sourced across reliable mills and held as ready stock for fast turnarounds.</p>
         </article>
         <article class="why-card reveal">
-          <span class="why-icon">03</span>
+          <span class="why-num">03</span>
           <h3>Real availability</h3>
           <p>Live roll counts and clear pricing for both full rolls and cut lengths. No phantom stock, no surprises at confirmation.</p>
         </article>
         <article class="why-card reveal">
-          <span class="why-icon">04</span>
+          <span class="why-num">04</span>
           <h3>Built for buyers</h3>
           <p>Filter by use, search by material, and request matching lots in one flow — designed around how factories and tailors actually buy.</p>
         </article>
       </div>
     </section>
 
+    <!-- ============ Catalog ============ -->
     <section class="catalog-shell" id="catalog">
       <div class="catalog-inner">
         <div class="catalog-banner reveal" role="note">
@@ -135,7 +168,7 @@
           <label class="search-wrap reveal" for="fabricSearch">
             <span>Search the stockroom</span>
             <div class="search-field">
-              <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M21 21l-4.3-4.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
               <input id="fabricSearch" type="search" placeholder="TC, chambray, suiting, trousering...">
             </div>
           </label>
@@ -151,9 +184,14 @@
         </div>
 
         <div class="catalog-grid" id="catalogGrid"></div>
+
+        <div class="catalog-foot reveal">
+          <a class="btn btn-ghost" href="#contact">Request today's stock list <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
 
+    <!-- ============ Enquiry ============ -->
     <section class="contact-section" id="contact">
       <div class="contact-copy reveal">
         <p class="eyebrow">Private buyer enquiry</p>
@@ -186,28 +224,44 @@
           Requirement
           <textarea name="requirement" placeholder="Fabric type, color, quantity, roll or cut length, target price..."></textarea>
         </label>
-        <button class="button primary" type="submit">Send enquiry</button>
+        <button class="btn btn-solid" type="submit">Send enquiry</button>
         <p class="form-note" id="formNote" hidden>Thanks — your enquiry is noted. The team will follow up shortly.</p>
       </form>
     </section>
   </main>
 
+  <!-- ============ Footer ============ -->
   <footer class="site-footer">
-    <div class="footer-brand">
-      <span class="brand-mark">AF</span>
-      <div>
-        <strong>Asa Fabric</strong>
-        <small>A premium fabric house — shirtings, trousering &amp; suitings.</small>
-      </div>
+    <div class="footer-top">
+      <a class="brand footer-brand" href="#top" aria-label="Asa Fabric — home">
+        <svg class="brand-mark" viewBox="0 0 40 40" width="32" height="32" aria-hidden="true" focusable="false">
+          <g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round">
+            <path d="M11 6 V34" opacity="0.55"/>
+            <path d="M20 4 V36"/>
+            <path d="M29 6 V34" opacity="0.55"/>
+            <path d="M7 33 L20 7 L33 33"/>
+            <path d="M13 22 H27" opacity="0.9"/>
+            <path d="M9 15 H31" opacity="0.32"/>
+            <path d="M8 27 H32" opacity="0.32"/>
+          </g>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">Asa</span>
+          <span class="brand-sub">Fabric</span>
+        </span>
+      </a>
+      <p class="footer-tagline">A premium fabric house — shirtings, trousering &amp; suitings, organised for the way buyers actually buy.</p>
     </div>
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <a href="#uses">By Use</a>
-      <a href="#why">Why Asa</a>
-      <a href="#catalog">Catalog</a>
-      <a href="#contact">Enquiry</a>
-      <a href="https://github.com/veersethisteam2214-sys/AsaFabric" target="_blank" rel="noreferrer">GitHub</a>
-    </nav>
-    <small class="footer-legal">&copy; <span id="year"></span> Asa Fabric. All rights reserved.</small>
+    <div class="footer-bottom">
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#uses">By Use</a>
+        <a href="#why">Why Asa</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#contact">Enquiry</a>
+        <a href="https://github.com/veersethisteam2214-sys/AsaFabric" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+      <small class="footer-legal">© <span id="year"></span> Asa Fabric. All rights reserved.</small>
+    </div>
   </footer>
 
   <script src="app.js"></script>

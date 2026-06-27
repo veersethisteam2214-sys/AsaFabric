@@ -175,9 +175,15 @@ const fabrics = [
 ];
 
 /* ---------- Helpers ---------- */
+// Refined woven-cloth texture from a fabric's palette.
+// (Unsplash CDN is blocked by this environment's egress policy, so we ship
+// crisp CSS fabric textures instead of broken remote images.)
 function weaveBackground(colors) {
   const [first, second, third] = colors;
-  return `linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.18) 1px, transparent 1px), radial-gradient(circle at 26% 20%, rgba(255,255,255,0.28), transparent 28%), linear-gradient(135deg, ${first}, ${second} 48%, ${third})`;
+  return `radial-gradient(120% 120% at 26% 18%, ${third}66, transparent 56%), ` +
+    `linear-gradient(135deg, ${first} 0%, ${second} 60%, ${third} 100%), ` +
+    `repeating-linear-gradient(90deg, rgba(255,255,255,0.10) 0 1px, transparent 1px 8px), ` +
+    `repeating-linear-gradient(0deg, rgba(0,0,0,0.16) 0 1px, transparent 1px 8px)`;
 }
 
 function escapeHtml(value) {
@@ -200,7 +206,7 @@ let activeFilter = "all";
 function renderUseCases() {
   if (!useGrid) return;
   const cards = useCases.map((item) => `
-    <article class="use-card ${item.tone}">
+    <article class="use-card ${item.tone}" tabindex="0">
       <span class="use-pattern" style="background-image: ${weaveBackground(item.palette)}"></span>
       <small>${escapeHtml(item.count)}</small>
       <h3>${escapeHtml(item.title)}</h3>
@@ -232,8 +238,9 @@ function renderCatalog() {
 
   catalogGrid.innerHTML = filtered.map((fabric) => `
     <article class="fabric-card">
-      <div class="fabric-visual" style="background-image: ${weaveBackground(fabric.colors)}">
-        <span>${escapeHtml(fabric.status)}</span>
+      <div class="fabric-visual">
+        <div class="fabric-visual-img" style="background-image: ${weaveBackground(fabric.colors)}"></div>
+        <span class="status">${escapeHtml(fabric.status)}</span>
       </div>
       <div class="fabric-body">
         <div class="fabric-heading">
@@ -284,11 +291,85 @@ if (searchInput) {
 renderUseCases();
 renderCatalog();
 
+/* ---------- Hero slideshow ---------- */
+function initSlideshow() {
+  const root = document.querySelector("#slideshow");
+  const slides = root ? Array.from(root.querySelectorAll(".slide")) : [];
+  const dotsWrap = document.querySelector("#slideDots");
+  const prevBtn = document.querySelector("#slidePrev");
+  const nextBtn = document.querySelector("#slideNext");
+  if (!root || slides.length < 2) return;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const INTERVAL = 5500;
+  let current = 0;
+  let timer = null;
+
+  // build dots
+  const dots = slides.map((_, i) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("role", "tab");
+    dot.setAttribute("aria-label", `Slide ${i + 1}`);
+    if (i === 0) dot.classList.add("active");
+    dot.addEventListener("click", () => goTo(i, true));
+    if (dotsWrap) dotsWrap.appendChild(dot);
+    return dot;
+  });
+
+  function goTo(index, manual) {
+    current = (index + slides.length) % slides.length;
+    slides.forEach((s, i) => s.classList.toggle("is-active", i === current));
+    dots.forEach((d, i) => d.classList.toggle("active", i === current));
+    if (manual) restart();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function start() {
+    if (reduced || timer) return;
+    timer = window.setInterval(next, INTERVAL);
+  }
+  function stop() {
+    if (timer) { window.clearInterval(timer); timer = null; }
+  }
+  function restart() { stop(); start(); }
+
+  if (nextBtn) nextBtn.addEventListener("click", () => goTo(current + 1, true));
+  if (prevBtn) prevBtn.addEventListener("click", () => goTo(current - 1, true));
+
+  // pause on hover
+  root.addEventListener("mouseenter", stop);
+  root.addEventListener("mouseleave", start);
+  // pause when tab hidden
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop(); else start();
+  });
+
+  start();
+}
+
+/* ---------- Scroll progress bar ---------- */
+function initScrollProgress() {
+  const bar = document.querySelector("#scrollProgress");
+  if (!bar) return;
+  const onScroll = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    bar.style.width = `${pct}%`;
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+}
+
 /* ---------- Scroll reveal (IntersectionObserver) ---------- */
 function initReveal() {
   const items = document.querySelectorAll(".reveal");
   if (!("IntersectionObserver" in window) || !items.length) {
-    items.forEach((el) => el.classList.add("in"));
+    items.forEach((el) => el.classList.add("in-view"));
     return;
   }
 
@@ -304,7 +385,7 @@ function initReveal() {
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("in");
+        entry.target.classList.add("in-view");
         obs.unobserve(entry.target);
       }
     });
@@ -313,13 +394,28 @@ function initReveal() {
   items.forEach((el) => observer.observe(el));
 }
 
-/* ---------- Sticky header on scroll ---------- */
-function initHeader() {
-  const header = document.querySelector("#siteHeader");
-  if (!header) return;
-  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 24);
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
+/* ---------- Floating nav on scroll + mobile menu ---------- */
+function initNav() {
+  const nav = document.querySelector("#glassNav");
+  if (nav) {
+    const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  const toggle = document.querySelector("#navToggle");
+  const menu = document.querySelector("#mobileMenu");
+  if (toggle && menu) {
+    const setOpen = (open) => {
+      menu.classList.toggle("open", open);
+      menu.setAttribute("aria-hidden", String(!open));
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    };
+    toggle.addEventListener("click", () => setOpen(!menu.classList.contains("open")));
+    menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setOpen(false)));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
+  }
 }
 
 /* ---------- Smooth scroll for in-page anchors ---------- */
@@ -392,8 +488,10 @@ function initYear() {
   if (year) year.textContent = new Date().getFullYear();
 }
 
+initSlideshow();
+initScrollProgress();
 initReveal();
-initHeader();
+initNav();
 initSmoothScroll();
 initStats();
 initForm();
