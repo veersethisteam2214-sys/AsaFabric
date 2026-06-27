@@ -193,9 +193,11 @@
 
     <!-- ============ Available Fabric Lots — teaser (no selling on landing) ============ -->
     <!-- Teaser only: no price grid / search on the landing page. The full searchable,
-         filterable catalogue with live stock is built separately by the catalogue team.
-         The `fabrics` / `useCases` data arrays remain in app.js, reserved for that team. -->
-    <section class="stock-teaser" id="catalog">
+         filterable catalogue with live stock is built separately by the catalogue team
+         inside the clean <section id="catalog"> slot below. The `useCases` data array
+         in app.js still drives the Fabrics-by-Use grid; catalogue product data is owned
+         by the catalogue team. -->
+    <section class="stock-teaser" id="stock-teaser">
       <div class="stock-inner">
         <div class="stock-copy reveal">
           <p class="eyebrow">Available Fabric Lots</p>
@@ -203,7 +205,7 @@
           <p>Fifty-plus lots of cottons, linens, twills and wool blends — held by the roll and cut to length. Shade, weight and availability are tracked so the right cloth is always within reach.</p>
           <p>The full searchable catalogue, with live stock and swatch ordering, is being prepared by our catalogue team. Browse what's coming, or send an enquiry and we'll match you to today's lots.</p>
           <div class="stock-actions">
-            <a class="btn btn-solid" href="#catalog-soon">View Available Stock <span aria-hidden="true">→</span></a>
+            <a class="btn btn-solid" href="#catalog">View Available Stock <span aria-hidden="true">→</span></a>
             <a class="btn-link" href="#contact">Or make an enquiry <span aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -216,13 +218,14 @@
           <span class="collage-badge">50+ lots in stock</span>
         </div>
       </div>
-
-      <!-- Anchor target for the catalogue team's full experience. -->
-      <div id="catalog-soon" class="catalog-soon reveal" role="note">
-        <span class="banner-dot" aria-hidden="true"></span>
-        <p><strong>Full catalogue, coming soon.</strong> Advanced filtering, live stock and swatch ordering are being built by our catalogue team. In the meantime, our team can send today's stock list on request.</p>
-      </div>
     </section>
+
+    <!-- CATALOGUE SECTION — intentionally left empty. To be implemented by the catalogue
+         team (Shaan). Build the catalogue UI inside this <section id="catalog"> — the
+         "View Available Stock" teaser button and the nav "Catalog" links resolve to this
+         anchor. Catalogue product data lives with the catalogue team (was the `fabrics`
+         array in app.js). Styled to near-zero height so the live page shows no empty band. -->
+    <section class="catalog-slot" id="catalog" aria-hidden="true"></section>
 
     <!-- ============================================================
          B2B GLOBAL SUPPLY — animated dotted world map

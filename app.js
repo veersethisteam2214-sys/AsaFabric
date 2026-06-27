@@ -46,143 +46,11 @@ const useCases = [
   }
 ];
 
-const fabrics = [
-  {
-    name: "TC Uniform Shirting",
-    material: "TC blend",
-    use: "School uniforms",
-    status: "Ready roll",
-    width: "58 in",
-    gsm: "120-145 GSM",
-    stock: "28 rolls",
-    grade: "Uniform grade",
-    roll: "THB 2,450 / roll",
-    cut: "THB 78 / meter",
-    detail: "Crisp everyday shirting with easy-care structure and reliable color continuity.",
-    applications: ["Shirts", "Daily uniforms", "Institution orders"],
-    colors: ["#f8f5ee", "#9fb7ca", "#0f2a44"]
-  },
-  {
-    name: "Poly Cotton Trousering",
-    material: "Poly cotton",
-    use: "School uniforms",
-    status: "Priority lot",
-    width: "60 in",
-    gsm: "185-220 GSM",
-    stock: "16 rolls",
-    grade: "High volume",
-    roll: "THB 3,900 / roll",
-    cut: "THB 118 / meter",
-    detail: "Structured trouser and skirt fabric for programs, office uniforms, and repeat tailoring orders.",
-    applications: ["Trousers", "Skirts", "Uniform sets"],
-    colors: ["#3f4242", "#b4a27a", "#e8dfd0"]
-  },
-  {
-    name: "Chambray Work Shirt",
-    material: "Chambray",
-    use: "Workwear",
-    status: "Ready roll",
-    width: "57 in",
-    gsm: "150 GSM",
-    stock: "11 rolls",
-    grade: "Breathable",
-    roll: "THB 2,980 / roll",
-    cut: "THB 92 / meter",
-    detail: "Light woven texture for utility shirts, shop uniforms, service crews, and casual workwear lines.",
-    applications: ["Work shirts", "Shop uniforms", "Service teams"],
-    colors: ["#7891a3", "#d8e0e3", "#39566b"]
-  },
-  {
-    name: "Wool Blend Suiting",
-    material: "Wool blend",
-    use: "Corporate wear",
-    status: "Premium lot",
-    width: "60 in",
-    gsm: "260 GSM",
-    stock: "9 rolls",
-    grade: "Executive",
-    roll: "THB 6,800 / roll",
-    cut: "THB 215 / meter",
-    detail: "Elevated suiting handfeel for tailored trousers, jackets, blazers, and front-office uniforms.",
-    applications: ["Blazers", "Trousers", "Office uniforms"],
-    colors: ["#2d3036", "#202a38", "#86785f"]
-  },
-  {
-    name: "TC Pocketing and Lining",
-    material: "TC blend",
-    use: "Resale deals",
-    status: "Clearance",
-    width: "44 in",
-    gsm: "90 GSM",
-    stock: "42 rolls",
-    grade: "Value lot",
-    roll: "THB 1,750 / roll",
-    cut: "THB 52 / meter",
-    detail: "Cost-efficient support fabric for linings, pockets, sampling, resale bundles, and production add-ons.",
-    applications: ["Pocketing", "Lining", "Bundle deals"],
-    colors: ["#efe4d2", "#1d1c1a", "#b88a44"]
-  },
-  {
-    name: "Poly Twill Utility Cloth",
-    material: "Poly twill",
-    use: "Workwear",
-    status: "Ready roll",
-    width: "60 in",
-    gsm: "235 GSM",
-    stock: "14 rolls",
-    grade: "Heavy duty",
-    roll: "THB 4,250 / roll",
-    cut: "THB 132 / meter",
-    detail: "Durable twill for aprons, factory trousers, operational uniforms, and long-wear utility garments.",
-    applications: ["Aprons", "Factory wear", "Utility trousers"],
-    colors: ["#59684d", "#c6af80", "#303329"]
-  },
-  {
-    name: "Oxford Staff Shirting",
-    material: "Cotton blend",
-    use: "Corporate wear",
-    status: "Ready roll",
-    width: "58 in",
-    gsm: "160 GSM",
-    stock: "18 rolls",
-    grade: "Polished",
-    roll: "THB 3,350 / roll",
-    cut: "THB 105 / meter",
-    detail: "Textured shirting with a refined business finish for office staff, hotel teams, and branded uniforms.",
-    applications: ["Office shirts", "Hotel shirts", "Staff programs"],
-    colors: ["#faf7ef", "#c3d6df", "#6b8390"]
-  },
-  {
-    name: "Hospitality Apron Twill",
-    material: "Cotton twill",
-    use: "Hospitality",
-    status: "Limited lot",
-    width: "59 in",
-    gsm: "210 GSM",
-    stock: "7 rolls",
-    grade: "Service grade",
-    roll: "THB 3,760 / roll",
-    cut: "THB 124 / meter",
-    detail: "Substantial apron and service jacket fabric for restaurants, hotels, cafes, and front-of-house teams.",
-    applications: ["Aprons", "Chef jackets", "Service uniforms"],
-    colors: ["#4b2034", "#f1e8db", "#8e785d"]
-  },
-  {
-    name: "Mixed Clearance Lot",
-    material: "Assorted",
-    use: "Resale deals",
-    status: "Bundle deal",
-    width: "44-60 in",
-    gsm: "Varies",
-    stock: "By lot",
-    grade: "Value lot",
-    roll: "Ask for lot price",
-    cut: "Limited cuts",
-    detail: "Assorted mixed stock positioned for resellers, export buyers, small shops, and fast-moving value bundles.",
-    applications: ["Resale", "Export", "Small shop bundles"],
-    colors: ["#733d2f", "#203d47", "#d6b472"]
-  }
-];
+/* ---------- Catalogue product data (owned by the catalogue team) ----------
+   The catalogue product dataset (formerly the `fabrics` array) and its render /
+   search / filter logic have been removed from this landing page. The catalogue
+   team (Shaan) owns that data and builds it inside the empty <section id="catalog">
+   in index.html. `useCases` above stays — it drives the Fabrics-by-Use grid. */
 
 /* ---------- Featured fabric image set (swap these URLs for your own portrait fabric photos) ---------- */
 /* Remote lh3 refs are used because the egress policy blocks downloads; each card has a solid bg fallback. */
@@ -236,9 +104,10 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 
 /* ---------- Renderers ---------- */
 /* NOTE: the sellable price grid + search/filter has been removed from the landing
-   page (the "Available Fabric Lots" section is now a teaser only). The `fabrics`
-   array above is RESERVED for the catalogue team's full experience and is no longer
-   rendered here. `useCases` still drives the "Fabrics by use" editorial grid. */
+   page (the "Available Fabric Lots" section is now a teaser only). Catalogue product
+   data has been removed entirely from this file and is owned by the catalogue team,
+   who build it inside the empty <section id="catalog">. `useCases` still drives the
+   "Fabrics by use" editorial grid. */
 const useGrid = document.querySelector("#useGrid");
 
 function renderUseCases() {

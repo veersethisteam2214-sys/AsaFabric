@@ -509,14 +509,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   box-shadow: 0 12px 26px -16px rgba(20,18,15,0.5), inset 0 1px 0 rgba(255,255,255,0.6);
 }
 
-/* catalogue-soon note (anchor target for catalogue team) */
-.catalog-soon {
-  display: flex; align-items: flex-start; gap: 14px;
-  max-width: var(--container); margin: 56px auto 0;
-  border: 1px solid var(--hairline); padding: 18px 22px; background: var(--canvas); border-radius: 14px;
-}
-.banner-dot { flex: none; width: 8px; height: 8px; border-radius: 9999px; background: var(--accent); margin-top: 6px; }
-.catalog-soon p { margin: 0; font-size: 14px; color: var(--muted); }
+/* ---------- Catalogue slot (empty — owned by the catalogue team) ----------
+   Intentionally renders with no visible content. `scroll-margin-top` keeps the
+   #catalog anchor landing clear of the fixed glass nav once the section is built. */
+.catalog-slot { scroll-margin-top: 96px; }
 
 /* ---------- B2B Global Supply — animated dotted world map ---------- */
 .world-map { max-width: var(--container); margin: 0 auto; padding: var(--section-gap) var(--margin); }
