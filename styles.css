@@ -94,36 +94,43 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
    Every button (.btn-solid, .btn-solid-light, .btn-ghost, .btn-link[.light]
    and the .nav-cta pill) shares one frosted-glass treatment: backdrop blur +
    saturation, a translucent tinted fill, a faint top highlight, a 1px
-   translucent border, and layered inner/outer shadow. The glass look comes
-   from depth + light — NOT from rounding: .btn* keep sharp 0px corners by
-   intent; only .nav-cta stays a pill. Hover lifts physically (translateY +
-   slight scale) with a sheen sweep; active presses in. Tints/blur are exposed
-   as variables below so the whole system tunes in one place. */
+   translucent border, and layered inner/outer shadow.
+   Per client feedback the glass is now ROUNDED (~12px) and genuinely
+   SEE-THROUGH ("less black"): the dark glass fill is dropped to ~0.36 so the
+   page/photo reads through it, and legibility is held with a crisp translucent
+   border, a soft shadow, a faint top highlight and a subtle text-shadow —
+   never an opaque fill. .nav-cta keeps its pill shape. Hover lifts physically
+   (translateY + slight scale) with a sheen sweep; active presses in. Tints/blur
+   are exposed as variables below so the whole system tunes in one place. */
 :root {
   --btn-ease: cubic-bezier(.2,.8,.2,1);
   --glass-ease: cubic-bezier(.22,.61,.36,1);
-  --glass-blur: blur(14px) saturate(160%);
-  /* dark glass (on cream sections) */
-  --glass-dark-bg: rgba(26,26,26,0.82);
-  --glass-dark-bg-hover: rgba(26,26,26,0.9);
-  --glass-dark-border: rgba(255,255,255,0.14);
-  /* light glass (must stay legible over the dark hero photo) */
-  --glass-light-bg: rgba(255,255,255,0.86);
-  --glass-light-bg-hover: rgba(255,255,255,0.94);
-  --glass-light-border: rgba(255,255,255,0.6);
+  --glass-blur: blur(16px) saturate(170%);
+  --btn-radius: 12px;
+  /* dark glass (on cream sections) — see-through, not black */
+  --glass-dark-bg: rgba(22,22,22,0.40);
+  --glass-dark-bg-hover: rgba(22,22,22,0.56);
+  --glass-dark-border: rgba(255,255,255,0.32);
+  /* light glass (must stay legible over the dark hero photo) — translucent */
+  --glass-light-bg: rgba(255,255,255,0.40);
+  --glass-light-bg-hover: rgba(255,255,255,0.56);
+  --glass-light-border: rgba(255,255,255,0.55);
   /* shared highlight + shadow */
-  --glass-highlight: rgba(255,255,255,0.5);
+  --glass-highlight: rgba(255,255,255,0.55);
   --glass-shadow: 0 10px 28px -14px rgba(20,18,15,0.5);
   --glass-shadow-hover: 0 18px 38px -16px rgba(20,18,15,0.6);
+  /* soft text-shadow keeps labels crisp on a see-through fill */
+  --glass-text-shadow-dark: 0 1px 3px rgba(0,0,0,0.55);
+  --glass-text-shadow-light: 0 1px 1px rgba(255,255,255,0.6);
 }
 .btn {
   position: relative; overflow: hidden; isolation: isolate;
   display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--sans); font-size: 13px; font-weight: 500;
+  font-family: var(--sans); font-size: 13px; font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 16px 32px; border: 1px solid var(--glass-dark-border); border-radius: 0;
+  padding: 16px 32px; border: 1px solid var(--glass-dark-border); border-radius: var(--btn-radius);
   /* faint top highlight baked into the fill */
-  background-image: linear-gradient(180deg, var(--glass-highlight) 0%, rgba(255,255,255,0) 42%);
+  background-image: linear-gradient(180deg, var(--glass-highlight) 0%, rgba(255,255,255,0) 46%);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
@@ -145,8 +152,12 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .btn:active { transform: translateY(0) scale(0.99); box-shadow: var(--glass-shadow), inset 0 2px 6px rgba(20,18,15,0.35); }
 .btn:hover span { transform: translateX(3px); }
 
-/* solid (dark glass) — PRIMARY: reads as strong, opaque-leaning dark glass */
-.btn-solid { background-color: var(--glass-dark-bg); color: var(--btn-fg); border-color: var(--glass-dark-border); }
+/* solid (dark glass) — PRIMARY: see-through dark glass. The page reads through
+   the fill; white label stays crisp via a soft text-shadow + crisp rim. */
+.btn-solid {
+  background-color: var(--glass-dark-bg); color: var(--btn-fg);
+  border-color: var(--glass-dark-border); text-shadow: var(--glass-text-shadow-dark);
+}
 .btn-solid:hover { background-color: var(--glass-dark-bg-hover); }
 
 /* ghost — translucent over cream, ink text + ink hairline; fills to dark glass */
@@ -154,13 +165,13 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   background-color: rgba(26,26,26,0.04); color: var(--ink);
   border-color: rgba(26,26,26,0.5);
 }
-.btn-ghost:hover { background-color: var(--glass-dark-bg-hover); color: #fff; border-color: var(--glass-dark-border); }
+.btn-ghost:hover { background-color: var(--glass-dark-bg-hover); color: #fff; border-color: var(--glass-dark-border); text-shadow: var(--glass-text-shadow-dark); }
 
-/* light (on dark hero photo) — PRIMARY over photo: high-opacity white glass
-   so text stays crisp on the dark scrim; depth from border + shadow, not see-through. */
+/* light (on dark hero photo) — PRIMARY over photo: see-through white glass.
+   Stays legible on the dark scrim via the crisp rim, ink text + faint highlight. */
 .btn-solid-light {
   background-color: var(--glass-light-bg); color: var(--ink);
-  border-color: var(--glass-light-border);
+  border-color: var(--glass-light-border); text-shadow: var(--glass-text-shadow-light);
 }
 .btn-solid-light:hover { background-color: var(--glass-light-bg-hover); }
 
@@ -170,7 +181,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   font-family: var(--sans); font-size: 13px; font-weight: 500;
   letter-spacing: 0.1em; text-transform: uppercase;
   border-bottom: 1px solid transparent; padding: 6px 4px; padding-bottom: 4px;
-  border-radius: 0;
+  border-radius: 8px;
   transition: transform 0.2s var(--glass-ease), letter-spacing 0.2s var(--glass-ease),
               color 0.2s var(--glass-ease), border-color 0.2s var(--glass-ease),
               background-color 0.2s var(--glass-ease), box-shadow 0.2s var(--glass-ease);
@@ -195,22 +206,22 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* @supports fallback — where backdrop-filter is unsupported, lean on MORE
    opaque tinted fills so no glass button ever renders see-through/invisible. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .btn-solid { background-color: rgba(26,26,26,0.96); }
+  .btn-solid { background-color: rgba(26,26,26,0.92); text-shadow: none; }
   .btn-solid:hover { background-color: #2c2c2c; }
   .btn-ghost { background-color: transparent; }
-  .btn-ghost:hover { background-color: var(--ink); }
-  .btn-solid-light { background-color: rgba(255,255,255,0.98); }
+  .btn-ghost:hover { background-color: var(--ink); text-shadow: none; }
+  .btn-solid-light { background-color: rgba(255,255,255,0.96); text-shadow: none; }
   .btn-solid-light:hover { background-color: #fff; }
   .btn-link:hover { background-color: rgba(26,26,26,0.1); }
   .btn-link.light:hover { background-color: rgba(255,255,255,0.22); }
-  .nav-cta { background-color: rgba(26,26,26,0.96); }
+  .nav-cta { background-color: rgba(26,26,26,0.92); }
   .nav-cta:hover { background-color: #2c2c2c; }
 }
 
 /* ---------- Soft rounding override ----------
-   The base design uses sharp 0px corners. Per client, soften the
-   IMAGE / CARD / CAROUSEL elements specifically (~12–20px) for a
-   glassier, more premium feel. Buttons/inputs stay as-is. */
+   Per client, soften the IMAGE / CARD / CAROUSEL elements (~12–20px) for a
+   glassier, more premium feel. Buttons now carry their own ~12px radius
+   (see the liquid-glass system above); inputs stay sharp. */
 .fan-card,
 .use-tile,
 .stock-collage,
@@ -864,7 +875,34 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .lead-form input::placeholder, .lead-form textarea::placeholder {
   color: var(--muted); opacity: 0.55; font-style: italic;
 }
-.lead-form select { font-style: normal; cursor: pointer; }
+/* ---------- Fabric Interest select — bespoke, not a raw native dropdown ----------
+   Strip the OS chrome and rebuild as a refined field that matches the other
+   inputs: serif value, hairline bottom-border, the same wipe-in focus underline,
+   plus a custom chevron (inline SVG) and a light-blue accent on focus/hover.
+   The <select> stays a real, accessible control; option styling is applied as
+   far as CSS allows (background/color/padding where supported). */
+.lead-form select {
+  font-style: normal; cursor: pointer;
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  /* room for the chevron on the right */
+  padding-right: 36px;
+  /* custom elegant chevron (light-blue stroke), via inline SVG */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%230ea5e9' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  background-size: 14px 9px;
+  transition: border-color 0.4s var(--btn-ease, ease), background-position 0.35s var(--btn-ease, ease);
+}
+.lead-form select::-ms-expand { display: none; }
+/* hover/focus: nudge the chevron + warm the value toward the ink */
+.lead-form select:hover { background-position: right 0 center; }
+.lead-form select:focus { background-position: right 0 center; }
+/* style the dropdown list as far as browsers allow */
+.lead-form select option {
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  color: var(--ink); background: var(--canvas); padding: 10px 12px;
+}
+.lead-form select option:checked { color: var(--accent-blue); }
 /* animated focus underline (wipes in over the hairline) */
 .lead-form .field::after {
   content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
@@ -873,6 +911,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 }
 .lead-form .field:focus-within::after { transform: scaleX(1); }
 .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus { border-color: var(--ink); }
+/* select field gets the light-blue accent underline + border on focus */
+.lead-form .field:focus-within:has(select)::after { background: var(--accent-blue); }
+.lead-form select:focus { border-color: var(--accent-blue); }
 .lead-form textarea { resize: vertical; min-height: 96px; line-height: 1.5; }
 .lead-form .btn { align-self: flex-start; margin-top: 6px; }
 .form-note { font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; text-transform: none; color: var(--accent); }
