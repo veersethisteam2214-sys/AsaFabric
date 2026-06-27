@@ -1,36 +1,46 @@
+/* ============================================================
+   Asa Fabric — data + interactions (vanilla JS, no build)
+   ============================================================ */
+
+/* ---------- Catalog dataset (preserved) ---------- */
 const useCases = [
   {
     title: "Shirtings",
-    description: "Crisp TC shirting, oxford, and chambray — easy-care cloth with reliable shade continuity for uniforms and staff shirts.",
-    count: "9 matching lots",
+    overline: "Fine Weaves",
+    description: "Crisp shirting, oxford, and chambray — easy-care cloth with reliable shade continuity.",
+    count: "9 lots",
     tone: "academy",
     palette: ["#0f2a44", "#f4f0e7", "#b9c6d0"]
   },
   {
-    title: "Pants & Trousers",
-    description: "Structured poly cotton and twill trousering for school programs, office uniforms, and repeat tailoring orders.",
-    count: "7 matching lots",
+    title: "Trousers",
+    overline: "Durable Twills",
+    description: "Structured cotton and twill trousering for everyday wear and repeat tailoring orders.",
+    count: "7 lots",
     tone: "executive",
     palette: ["#202631", "#b08a4f", "#d8dde2"]
   },
   {
     title: "Suitings",
-    description: "Elevated wool-blend suiting with refined hand-feel for tailored trousers, jackets, blazers, and front-office uniforms.",
-    count: "5 matching lots",
+    overline: "Refined Wools",
+    description: "Wool-blend suiting with a refined hand-feel for tailored trousers, jackets, and blazers.",
+    count: "5 lots",
     tone: "utility",
     palette: ["#33483d", "#c1a06a", "#2a2b28"]
   },
   {
-    title: "Workwear & Utility",
-    description: "Hard-wearing twills, apron cloth, and utility shirting built for factory floors, service crews, and long-wear garments.",
-    count: "6 matching lots",
+    title: "Workwear",
+    overline: "Heavy Canvas",
+    description: "Hard-wearing twills, apron cloth, and utility shirting built for long-wear garments.",
+    count: "6 lots",
     tone: "service",
     palette: ["#4b2034", "#f1e8db", "#8e785d"]
   },
   {
-    title: "Resale & Clearance",
-    description: "Mixed dead stock, lining, and pocketing bundles priced for value buyers, resellers, and export sourcing.",
-    count: "8 matching lots",
+    title: "Linens",
+    overline: "Natural Fibres",
+    description: "Breathable linen and linen blends for shirts, dresses, and relaxed summer pieces.",
+    count: "8 lots",
     tone: "clearance",
     palette: ["#733d2f", "#203d47", "#d6b472"]
   }
@@ -48,7 +58,7 @@ const fabrics = [
     grade: "Uniform grade",
     roll: "THB 2,450 / roll",
     cut: "THB 78 / meter",
-    detail: "Crisp everyday shirting for school uniforms with easy-care structure and reliable color continuity.",
+    detail: "Crisp everyday shirting with easy-care structure and reliable color continuity.",
     applications: ["Shirts", "Daily uniforms", "Institution orders"],
     colors: ["#f8f5ee", "#9fb7ca", "#0f2a44"]
   },
@@ -63,7 +73,7 @@ const fabrics = [
     grade: "High volume",
     roll: "THB 3,900 / roll",
     cut: "THB 118 / meter",
-    detail: "Structured trouser and skirt fabric for school programs, office uniforms, and repeat tailoring orders.",
+    detail: "Structured trouser and skirt fabric for programs, office uniforms, and repeat tailoring orders.",
     applications: ["Trousers", "Skirts", "Uniform sets"],
     colors: ["#3f4242", "#b4a27a", "#e8dfd0"]
   },
@@ -165,19 +175,45 @@ const fabrics = [
     width: "44-60 in",
     gsm: "Varies",
     stock: "By lot",
-    grade: "Dead stock",
+    grade: "Value lot",
     roll: "Ask for lot price",
     cut: "Limited cuts",
-    detail: "Assorted dead stock positioned for resellers, export buyers, small shops, and fast-moving value bundles.",
+    detail: "Assorted mixed stock positioned for resellers, export buyers, small shops, and fast-moving value bundles.",
     applications: ["Resale", "Export", "Small shop bundles"],
     colors: ["#733d2f", "#203d47", "#d6b472"]
   }
 ];
 
+/* ---------- Featured fabric image set (swap these URLs for your own portrait fabric photos) ---------- */
+/* Remote lh3 refs are used because the egress policy blocks downloads; each card has a solid bg fallback. */
+const FAN_IMAGES = [
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuA-LYmah0qxMDWkusl_mWHmxGx1VgMil9pUJ4zMyg73g_80LlL7b_JwvvIItlGnf7u8bD2J5HvMM67I45I1y-Dgmm_JxhHl1UHKyeoJ_0BWx8wo-OK9KuGPCEi2nDIsRW4WGxT7yRGULvMASfApnFNUND4cxnrbhom4BxhWhvOO2b-yom70Zdd8sEUMR58h0UJ53eEvDQhe8OIMzBFlgHleYZd0x_MWGL-dPONu3Hbk5OKNR3Ls1-ZnedkNih9mxf9ArBAcGDnKCVy-",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBbvdngpXSNtB1nvFqZCpIBluAJKRDC6iQoLoZ51js-DFo0FEPWfpICn52zz12PdEKwNGCKhMeP4E_eRW-mHTnry34XgKUhkNcwXw8c4gEEOUXKp3SrAsb5MHIqjW6UXV9md4Oo1O0Yqc8DAdb39arWbesyxwO-gGhXRXShjwl998sn8t_IlNT_zqrxgdyNwExq_UQJd0gYfq4BIisRLxnifAZtqi9D3zRpm5C_Z125wsRDeu1VFfs07lwxzgw1cqlDZU_CgyPz6ST5",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBlVeETFTkn2Z1TvnKzeFQ6MlAN5PJ-ZTGBtVPnaBIbMzCC7JfXXUWA-qy9lGbvVJV7_bT92y83lImVAZFxbZhBFsEb-LtXysXVuY70za2fAjmyTo1CiWYXuB7JeHvPJE19ydp4EV0e3nYPSecrtZs5Weu-4Xcor65k9pV7FtBJn_JOlNZe2uxxQba2Ri6Fh0Ox9nODXGbMT1ZgNuqsehHm2cijt2S-30CUOkNa3r4KS_sB1zpeNO2h-b9bcTvsZbHJjYtMiVv6c-45",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuC0k6HkXhr7ICsGOHVnruShsBIhp_jKMM46JuvxliUfYLS308zy5XVz48kLhmYcpDgL0mBH0s6MAQR6aqLVM-AC1dsFX--Y-SqzP2fH9LWCxM99O1G7o81KcVjE7d1RsWYTMsOhTyw999beI0vrcHIueeKoE4mflngslpxHv0HaubJZGc8dPLK_R7_kx9LC7eBm6C_PYlvdZ9nt5WmfBZZgR1kMt_LbR_ZdSLyBcIJQXXv4Vnv7gwJgeHQouiXPExSZN4Rqy2cPpvoO",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBrKRQMPkj9whqTBcEcouVjVqOH2EsvXNRuWmsTNc8z2O-iNCOAqIstqbVIl3plTLQs5VSroutOGgdXgMN6DuaPpuqFlooc3YrWNtAmg5vJdklfIbhr1fejbaz3Sy9tKhMuQVMvjsNfLlga2EnaGtgDCQ7D6GARKpGSBq0QWzK5YlS1UXs1-M_py-RjBxs-MDlJxkNuqe-zSf4d0Ibna0ETQhcxwwvKoW92kTs3w7szc5aAwTU9k4wM20psFQIEvAtsX93x-LB-9x0O",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCCB7nLQ7jDAhplw-nI9tQGWOilcDCCIyE5o_SI90kx1x02cXMljZ4gsoy3-yNpH10VFWGLydYHAPT8iRDbRMplkgvedtJWEBqAvl8LMP9F0gxOTSfxV0EHsqg0HAiiW5F4_6GQiZC9myK_GmhwPNAIRbCdeYmyVv6Reu7szcvRoSfafDHWs_j--8AcaELGX57iL-92QJsPXyY0ph_DNL1okzV8pnt9l0vf9JOITUCoebmvi7Vkzi0wCcfCOPforkIjzmGLfLBAQ305",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCfAohK-OLcYjqNf2faapYfSd4VC1sPUcAwXsQmaL1JkYXaGoI4vSrDiMCpJXfisheTRRsfUKWx9cD7T1uTu8v3kYSIG8Erqhw9EL_UuSOkfZ_B9ERsdr2hhFkJkWvHoy613yX0eBI4ljQKca_VpBkjNJlOwx9xHyZN-gd9k7M2IUnXYQOs_cDlNAXhXt2XzURQrJD8Z1QeuDRfu9QJqzMng8kYHqz-JN3gyN2G_YdGVjlxp_fZJ0R3JvdeFcBxSbvlR_jN_1fXw07E",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCxKJqw7r5w9WNHWlw7hH5NkqcsXT0NVAZmArsBT4a8OywePWWOA5pqtI-iBEQZ3BqbyIHj9Lcxjc_-E29nsjw4xf4inDeT05I5IIdFVU8NOhNGtHp1REKfJZSo7AB2QbjsVTMpZ9hT8kchFH2IxczacAOJ1P367awNht2GVHb_Ki502qwU8dECoyEQ53OrDy7wCHPR-EWmMNH6b3-mqTDvrZUZvwbonDba69eAJEwT_dUoYOz3-hYlgb-NMfRa65ewPicGPXp1SDYZ",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDS1EyKV4GaCuS-UPMXCirvcg_bK6CNWPvuEBfe73CwbY3CclVj_R1bnxzaCnghf8y8AIgOL58Hh70qkdjK1XbsNnQKcQqtSUrCcb5QQXkCodGNxRaf5_xv7EcWbcWFjYUq-SEMHpDgvVJeqtFt48zHhYy615LZfMyhZLGyC3M41c7QUvkvxTzsq7O70BFtE55SjyQ99iDDqYZygjGiCHabOoCkl2ntJZtZpNlpT9DmlvDJZ5sWg6BJf5tJ6OSD0Dx-gwWWcw2vUDic",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDX4w398VAU_gaoZRJlDRLUCjtjCoZ4nuQ-Mo0Rw3ocJHdkuZstAHAShx9TQUDkZChmEbhiB7OwnQJsRR4Ehha_-Qx8YLH6fkQkgmtt67L4vp77Ss1_ro8Jw5hBasoF7vOtP6CsiqKj0H-gFfhJFPyBxEPlUYkUzqypLSjpVGeCb6AIcJPEo-j5rn-_pkCDTXby4Zyv7W2_GWb2MkW28dpike1VLEyNNrT4KLlHrdwy27gMVFMcsFqDMNVRju9zCILw4Y3WKFuY_3Na"
+];
+
+const FAN_CARDS = [
+  { title: "Egyptian Giza Cotton", tag: "Cotton" },
+  { title: "Organic Irish Linen", tag: "Linen" },
+  { title: "Oxford Shirting", tag: "Cotton" },
+  { title: "Heavyweight Twill", tag: "Twill" },
+  { title: "Chambray Weave", tag: "Cotton" },
+  { title: "Wool-Blend Suiting", tag: "Wool" },
+  { title: "Washed Linen", tag: "Linen" },
+  { title: "Cotton Poplin", tag: "Cotton" },
+  { title: "Raw Canvas", tag: "Cotton" },
+  { title: "Soft Flannel", tag: "Cotton" }
+].map((c, i) => ({ ...c, img: FAN_IMAGES[i % FAN_IMAGES.length] }));
+
 /* ---------- Helpers ---------- */
-// Refined woven-cloth texture from a fabric's palette.
-// (Unsplash CDN is blocked by this environment's egress policy, so we ship
-// crisp CSS fabric textures instead of broken remote images.)
+// Refined woven-cloth texture from a fabric's palette (CSS fallback that always renders).
 function weaveBackground(colors) {
   const [first, second, third] = colors;
   return `radial-gradient(120% 120% at 26% 18%, ${third}66, transparent 56%), ` +
@@ -196,6 +232,8 @@ function escapeHtml(value) {
   }[ch]));
 }
 
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 /* ---------- Renderers ---------- */
 const useGrid = document.querySelector("#useGrid");
 const catalogGrid = document.querySelector("#catalogGrid");
@@ -206,20 +244,20 @@ let activeFilter = "all";
 function renderUseCases() {
   if (!useGrid) return;
   const cards = useCases.map((item) => `
-    <article class="use-card ${item.tone}" tabindex="0">
+    <article class="use-card ${item.tone} reveal" tabindex="0">
       <span class="use-pattern" style="background-image: ${weaveBackground(item.palette)}"></span>
-      <small>${escapeHtml(item.count)}</small>
-      <h3>${escapeHtml(item.title)}</h3>
+      <small>${escapeHtml(item.overline || item.count)}</small>
+      <h3>${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
       <p>${escapeHtml(item.description)}</p>
     </article>
   `).join("");
 
   const soon = `
-    <article class="use-card soon">
+    <article class="use-card soon reveal">
       <div>
         <span class="soon-mark" aria-hidden="true">+</span>
         <h3>More coming soon</h3>
-        <p>Denims, linings, fashion fabrics and more uses are being added to the house.</p>
+        <p>Denims, linings and more uses are being added.</p>
       </div>
     </article>
   `;
@@ -291,6 +329,186 @@ if (searchInput) {
 renderUseCases();
 renderCatalog();
 
+/* ============================================================
+   Featured Fabrics — fan carousel (ported from React+GSAP)
+   ============================================================ */
+function initFanCarousel() {
+  const root = document.querySelector("#fanCarousel");
+  const layout = document.querySelector("#fanLayout");
+  const dotsWrap = document.querySelector("#fanDots");
+  const prevBtn = document.querySelector("#fanPrev");
+  const nextBtn = document.querySelector("#fanNext");
+  if (!root || !layout) return;
+
+  const cards = FAN_CARDS;
+  const VISIBLE = Math.min(7, cards.length);
+
+  // Fan positions for up to 7 visible cards (offset from center: -3..3)
+  // rot -21..21, scale ~0.78..1.0, x in rem (* responsive multiplier), y per offset
+  const FAN_POSITIONS = {
+    "-3": { rot: -21, scale: 0.78, x: -30, y: 6 },
+    "-2": { rot: -14, scale: 0.85, x: -20, y: 2.5 },
+    "-1": { rot: -7,  scale: 0.92, x: -10, y: 0.8 },
+    "0":  { rot: 0,   scale: 1.0,  x: 0,   y: 0 },
+    "1":  { rot: 7,   scale: 0.92, x: 10,  y: 0.8 },
+    "2":  { rot: 14,  scale: 0.85, x: 20,  y: 2.5 },
+    "3":  { rot: 21,  scale: 0.78, x: 30,  y: 6 }
+  };
+
+  function responsiveMultiplier() {
+    const w = window.innerWidth;
+    if (w < 480) return 0.28;
+    if (w < 768) return 0.38;
+    if (w < 1024) return 0.5;
+    if (w < 1280) return 0.75;
+    return 1.0;
+  }
+
+  const hasGsap = !!window.gsap && !prefersReducedMotion;
+
+  // Build card elements
+  const els = cards.map((card, i) => {
+    const el = document.createElement("div");
+    el.className = "fan-card";
+    el.dataset.index = String(i);
+    el.innerHTML = `
+      <img alt="" loading="lazy" src="${card.img}">
+      <div class="fan-cap"><small>${escapeHtml(card.tag)}</small><strong>${escapeHtml(card.title)}</strong></div>
+    `;
+    layout.appendChild(el);
+    return el;
+  });
+
+  // ----- Static fallback (no GSAP or reduced motion) -----
+  if (!window.gsap) {
+    layout.classList.add("static");
+    if (dotsWrap && dotsWrap.parentElement) dotsWrap.parentElement.style.display = "none";
+    return;
+  }
+
+  // ----- GSAP fan -----
+  let center = Math.floor(cards.length / 2);
+  let hovered = -1;
+  let entered = false;
+
+  function applyLayout(animate) {
+    const mult = responsiveMultiplier();
+    const half = Math.floor(VISIBLE / 2);
+
+    els.forEach((el, i) => {
+      // circular distance from current center
+      let offset = i - center;
+      const n = cards.length;
+      if (offset > n / 2) offset -= n;
+      if (offset < -n / 2) offset += n;
+
+      if (Math.abs(offset) > half) {
+        // off the fan — hide
+        gsap.set(el, { autoAlpha: 0, scale: 0.6, x: 0, y: 0, rotation: 0, zIndex: 0, pointerEvents: "none" });
+        return;
+      }
+
+      const pos = FAN_POSITIONS[String(offset)] || FAN_POSITIONS["0"];
+      let x = pos.x * mult * 16; // rem -> px (1rem ~ 16px)
+      let y = pos.y * 16;
+      let scale = pos.scale;
+      let rot = pos.rot;
+
+      // hover push-apart + lift
+      if (hovered >= 0 && hovered !== i) {
+        const dir = i > hovered ? 1 : -1;
+        x += dir * 28 * mult;
+      }
+      if (hovered === i) {
+        y -= 28; scale += 0.04; rot = rot * 0.5;
+      }
+
+      const zIndex = 100 - Math.abs(offset) + (hovered === i ? 50 : 0);
+      const props = { autoAlpha: 1, x, y, scale, rotation: rot, zIndex, pointerEvents: "auto" };
+
+      if (animate) {
+        gsap.to(el, { ...props, duration: 0.5, ease: "power3.out", overwrite: "auto" });
+      } else {
+        gsap.set(el, props);
+      }
+    });
+
+    updateDots();
+  }
+
+  function entrance() {
+    if (entered) return;
+    entered = true;
+    const mult = responsiveMultiplier();
+    const half = Math.floor(VISIBLE / 2);
+    els.forEach((el, i) => {
+      let offset = i - center;
+      const n = cards.length;
+      if (offset > n / 2) offset -= n;
+      if (offset < -n / 2) offset += n;
+      if (Math.abs(offset) > half) { gsap.set(el, { autoAlpha: 0 }); return; }
+
+      const pos = FAN_POSITIONS[String(offset)] || FAN_POSITIONS["0"];
+      const x = pos.x * mult * 16;
+      const y = pos.y * 16;
+      gsap.fromTo(el,
+        { autoAlpha: 0, x: 0, y: 80, scale: 0.6, rotation: 0 },
+        { autoAlpha: 1, x, y, scale: pos.scale, rotation: pos.rot,
+          duration: 1.1, ease: "elastic.out(1, 0.7)", delay: Math.abs(offset) * 0.08,
+          zIndex: 100 - Math.abs(offset) }
+      );
+    });
+    updateDots();
+  }
+
+  // hover handlers
+  els.forEach((el, i) => {
+    el.addEventListener("mouseenter", () => { hovered = i; applyLayout(true); });
+    el.addEventListener("mouseleave", () => { hovered = -1; applyLayout(true); });
+  });
+
+  // dots
+  let dots = [];
+  function buildDots() {
+    if (!dotsWrap) return;
+    dots = cards.map((_, i) => {
+      const d = document.createElement("button");
+      d.type = "button";
+      d.setAttribute("role", "tab");
+      d.setAttribute("aria-label", `Featured fabric ${i + 1}`);
+      d.addEventListener("click", () => { center = i; applyLayout(true); });
+      dotsWrap.appendChild(d);
+      return d;
+    });
+  }
+  function updateDots() {
+    dots.forEach((d, i) => d.classList.toggle("active", i === center));
+  }
+  buildDots();
+
+  if (prevBtn) prevBtn.addEventListener("click", () => { center = (center - 1 + cards.length) % cards.length; applyLayout(true); });
+  if (nextBtn) nextBtn.addEventListener("click", () => { center = (center + 1) % cards.length; applyLayout(true); });
+
+  window.addEventListener("resize", () => applyLayout(false), { passive: true });
+
+  // Trigger entrance on scroll into view
+  if (hasGsap && "IntersectionObserver" in window) {
+    applyLayout(false);
+    // hide for entrance
+    els.forEach((el) => gsap.set(el, { autoAlpha: 0 }));
+    const obs = new IntersectionObserver((entries, o) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { entrance(); o.disconnect(); }
+      });
+    }, { threshold: 0.25 });
+    obs.observe(root);
+  } else {
+    // GSAP present but reduced motion: show fan statically
+    entered = true;
+    applyLayout(false);
+  }
+}
+
 /* ---------- Hero slideshow ---------- */
 function initSlideshow() {
   const root = document.querySelector("#slideshow");
@@ -300,12 +518,11 @@ function initSlideshow() {
   const nextBtn = document.querySelector("#slideNext");
   if (!root || slides.length < 2) return;
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const INTERVAL = 5500;
+  const reduced = prefersReducedMotion;
+  const INTERVAL = 6000;
   let current = 0;
   let timer = null;
 
-  // build dots
   const dots = slides.map((_, i) => {
     const dot = document.createElement("button");
     dot.type = "button";
@@ -325,7 +542,6 @@ function initSlideshow() {
   }
 
   function next() { goTo(current + 1); }
-  function prev() { goTo(current - 1); }
 
   function start() {
     if (reduced || timer) return;
@@ -339,10 +555,8 @@ function initSlideshow() {
   if (nextBtn) nextBtn.addEventListener("click", () => goTo(current + 1, true));
   if (prevBtn) prevBtn.addEventListener("click", () => goTo(current - 1, true));
 
-  // pause on hover
   root.addEventListener("mouseenter", stop);
   root.addEventListener("mouseleave", start);
-  // pause when tab hidden
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stop(); else start();
   });
@@ -373,7 +587,6 @@ function initReveal() {
     return;
   }
 
-  // Stagger items within shared parents for a sequenced feel.
   const groups = new Map();
   items.forEach((el) => {
     const parent = el.parentElement;
@@ -394,7 +607,7 @@ function initReveal() {
   items.forEach((el) => observer.observe(el));
 }
 
-/* ---------- Floating nav on scroll + mobile menu ---------- */
+/* ---------- Glass nav on scroll + mobile menu ---------- */
 function initNav() {
   const nav = document.querySelector("#glassNav");
   if (nav) {
@@ -427,47 +640,10 @@ function initSmoothScroll() {
       const target = document.querySelector(id);
       if (!target) return;
       event.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
       history.replaceState(null, "", id);
     });
   });
-}
-
-/* ---------- Animated stat count-up ---------- */
-function initStats() {
-  const nums = document.querySelectorAll(".stat strong[data-count]");
-  if (!nums.length) return;
-
-  const animate = (el) => {
-    const target = parseFloat(el.dataset.count);
-    const prefix = el.dataset.prefix || "";
-    const suffix = el.dataset.suffix || "";
-    const duration = 1100;
-    const start = performance.now();
-    const step = (now) => {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = `${prefix}${Math.round(target * eased)}${suffix}`;
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
-
-  if (!("IntersectionObserver" in window)) {
-    nums.forEach(animate);
-    return;
-  }
-
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        animate(entry.target);
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.6 });
-
-  nums.forEach((el) => observer.observe(el));
 }
 
 /* ---------- Enquiry form ---------- */
@@ -488,11 +664,11 @@ function initYear() {
   if (year) year.textContent = new Date().getFullYear();
 }
 
+initFanCarousel();
 initSlideshow();
 initScrollProgress();
 initReveal();
 initNav();
 initSmoothScroll();
-initStats();
 initForm();
 initYear();
