@@ -14,6 +14,12 @@
   --tonal-2: #e9e8e5;
   --img-fallback: #e3e2e0;
   --accent: #6F4E37;
+  /* TASK 9: light-blue accent — defined ONCE here, referenced everywhere.
+     Used as restrained touches (overlines, heading underlines, link/card hover,
+     map routes, faint section washes, glass-button tint) — never as a solid
+     section background fill. Tweak these two values to retune the whole site. */
+  --accent-blue: #0ea5e9;
+  --accent-blue-soft: #38bdf8;
   --btn-bg: #000000;
   --btn-fg: #ffffff;
 
@@ -76,6 +82,13 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   margin: 0 0 16px;
 }
 .eyebrow.light { color: rgba(255,255,255,0.75); }
+/* TASK 9: a short light-blue accent tick before each overline (quiet luxury) */
+.eyebrow::before {
+  content: ""; display: inline-block; width: 18px; height: 1px;
+  margin: 0 10px 3px 0; vertical-align: middle;
+  background: var(--accent-blue);
+}
+.eyebrow.light::before { background: var(--accent-blue-soft); }
 
 /* ---------- Buttons — unified "liquid glass" system ----------
    Every button (.btn-solid, .btn-solid-light, .btn-ghost, .btn-link[.light]
@@ -166,9 +179,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* SECONDARY: stays light/underline-style, but shares the glass feel + motion.
    On hover a faint glass panel appears behind it for consistency. */
 .btn-link:hover {
-  letter-spacing: 0.12em; border-bottom-color: currentColor;
+  /* TASK 9: secondary links underline in light blue on hover */
+  letter-spacing: 0.12em; border-bottom-color: var(--accent-blue);
   transform: translateY(-2px) scale(1.02);
-  background-color: rgba(26,26,26,0.05);
+  background-color: rgba(14,165,233,0.06);
   -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
   box-shadow: inset 0 1px 0 var(--glass-highlight);
 }
@@ -198,11 +212,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
    IMAGE / CARD / CAROUSEL elements specifically (~12–20px) for a
    glassier, more premium feel. Buttons/inputs stay as-is. */
 .fan-card,
-.use-card,
+.use-tile,
 .stock-collage,
 .collage-img,
 .stock-collage .collage-badge { border-radius: 16px; }
-.use-card { border-radius: 16px; }
 
 /* ---------- Glass-pill nav (see-through premium glass) ---------- */
 .glass-nav {
@@ -251,11 +264,31 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .glass-nav.scrolled .brand-logo-img.dark { opacity: 1; }
 .nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-links a {
+  position: relative;
   font-family: var(--sans); font-size: 11px; font-weight: 600;
   letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink);
   opacity: 0.6; transition: opacity 0.3s ease;
 }
 .nav-links a:hover { opacity: 1; }
+/* TASK 9: light-blue underline grows in on nav-link hover */
+.nav-links a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1.5px;
+  background: var(--accent-blue); transform: scaleX(0); transform-origin: left center;
+  transition: transform 0.32s var(--btn-ease, ease);
+}
+.nav-links a:hover::after, .nav-links a:focus-visible::after { transform: scaleX(1); }
+/* ---------- TASK 2: dock-style hover magnification ----------
+   JS (initNavDock) writes --dock-scale (1 → ~1.22) and --dock-lift per link
+   from the cursor distance; the springy cubic-bezier transition here gives the
+   macOS-dock settle. transform-origin bottom so links lift from their baseline.
+   Reduced motion: JS never adds .dock, so links stay static (see media query). */
+.nav-links.dock a {
+  --dock-scale: 1; --dock-lift: 0px;
+  display: inline-block; transform-origin: center bottom; will-change: transform;
+  transform: translateY(var(--dock-lift)) scale(var(--dock-scale));
+  transition: opacity 0.3s ease, transform 0.28s cubic-bezier(.34,1.56,.64,1);
+}
+.nav-links.dock a:hover { opacity: 1; }
 /* nav "View Catalog" pill — same liquid-glass treatment, PRIMARY dark glass,
    but keeps its rounded-pill shape (the one glass button that stays round). */
 .nav-cta {
@@ -435,6 +468,12 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   font-family: var(--serif); font-size: clamp(32px, 5vw, 48px);
   line-height: 1.15; letter-spacing: -0.01em; margin-bottom: 18px;
 }
+/* TASK 9: a short light-blue rule under section headings */
+.section-heading h2::after {
+  content: ""; display: block; width: 44px; height: 2px; margin-top: 18px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-blue-soft));
+}
+.section-heading.center h2::after { margin-left: auto; margin-right: auto; }
 .section-heading p { color: var(--muted); font-size: 17px; max-width: 480px; }
 .section-heading.center p { margin-left: auto; margin-right: auto; }
 
@@ -493,82 +532,154 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* hover-position-driven carousel: subtle cursor affordance over the active fan */
 .fan-layout:not(.static) { cursor: ew-resize; }
 
-/* ---------- Fabrics by use — high-end editorial lookbook ---------- */
+/* ============================================================
+   TASK 8 — Fabrics by use: TWO switchable variants
+   Both render from the same `useCases` data into #useGrid (.use-index +
+   .use-mosaic blocks). The #uses section carries .variant-index OR
+   .variant-mosaic; only the matching block is shown. A pill toggle near the
+   heading swaps the class (temporary compare tool). Default: Index.
+   ============================================================ */
 .uses-section { max-width: var(--container); margin: 0 auto; padding: var(--section-gap) var(--margin); }
-.uses-section .section-heading { max-width: 720px; }
-.use-grid {
-  display: grid; grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: 340px; gap: 28px;
+.uses-section .section-heading { max-width: 720px; margin-bottom: 0; }
+/* heading row with the compare toggle on the right */
+.uses-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  flex-wrap: wrap; gap: 24px; margin-bottom: 56px;
 }
-/* asymmetric spans so it doesn't read as a plain box grid */
-.use-grid > .use-card:nth-child(1) { grid-column: span 4; grid-row: span 1; } /* Shirtings — wide */
-.use-grid > .use-card:nth-child(2) { grid-column: span 2; grid-row: span 1; } /* Trousers */
-.use-grid > .use-card:nth-child(3) { grid-column: span 2; grid-row: span 1; } /* Suitings */
-.use-grid > .use-card:nth-child(4) { grid-column: span 2; grid-row: span 1; } /* Workwear */
-.use-grid > .use-card:nth-child(5) { grid-column: span 2; grid-row: span 1; } /* Linens */
-.use-grid > .use-card:nth-child(6) { grid-column: span 6; grid-row: span 1; } /* More coming soon — full width */
+/* compare toggle — small pill segmented control (temporary) */
+.uses-toggle {
+  display: inline-flex; padding: 4px; border-radius: 9999px;
+  background: var(--tonal); border: 1px solid var(--hairline);
+}
+.uses-toggle-btn {
+  font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  background: transparent; border: none; border-radius: 9999px;
+  padding: 9px 20px; transition: color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+.uses-toggle-btn.is-active {
+  color: var(--ink); background: var(--canvas);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 6px 16px -10px rgba(20,18,15,0.5);
+}
+.uses-toggle-btn.is-active { box-shadow: 0 6px 16px -10px rgba(20,18,15,0.5), inset 0 0 0 1px var(--accent-blue); }
+.uses-toggle-btn:hover { color: var(--ink); }
 
-.use-card {
+/* only one variant block is visible at a time */
+.use-mosaic { display: none; }
+.uses-section.variant-mosaic .use-index { display: none; }
+.uses-section.variant-mosaic .use-mosaic { display: grid; }
+
+/* ---------- Variant A — Editorial Index (stacked rows) ---------- */
+.use-index { display: block; border-top: 1px solid var(--hairline); }
+.use-row {
+  position: relative; display: grid;
+  grid-template-columns: auto 1fr 280px; align-items: center; gap: 40px;
+  padding: 32px 0; outline: none;
+  border-bottom: 1px solid var(--hairline);
+  transition: padding-left 0.45s var(--btn-ease, ease);
+}
+.use-row:hover, .use-row:focus-visible { padding-left: 12px; }
+.use-row-num {
+  font-family: var(--serif); font-size: clamp(34px, 4vw, 52px); line-height: 1;
+  color: var(--muted-2); opacity: 0.55; font-variant-numeric: tabular-nums;
+}
+.use-row:hover .use-row-num, .use-row:focus-visible .use-row-num { color: var(--accent-blue); opacity: 1; }
+.use-row-body { min-width: 0; }
+.use-row-overline {
+  display: block; font-family: var(--sans); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted-2);
+  margin-bottom: 10px;
+}
+.use-row-title {
+  font-family: var(--serif); font-size: clamp(26px, 3vw, 40px); line-height: 1.06;
+  display: flex; align-items: baseline; gap: 12px; margin: 0 0 8px;
+}
+.use-row-title .arrow {
+  font-size: 0.55em; color: var(--accent-blue); opacity: 0;
+  transform: translateX(-6px); transition: transform 0.4s var(--btn-ease, ease), opacity 0.4s ease;
+}
+.use-row:hover .use-row-title .arrow, .use-row:focus-visible .use-row-title .arrow { opacity: 1; transform: translateX(0); }
+.use-row-desc { color: var(--muted); font-size: 15px; line-height: 1.6; margin: 0; max-width: 52ch; }
+/* image reveals/expands on hover on the right */
+.use-row-media {
+  justify-self: end; width: 280px; height: 96px; overflow: hidden; border-radius: 12px;
+  transition: height 0.5s var(--btn-ease, ease), box-shadow 0.5s ease;
+  box-shadow: 0 18px 40px -28px rgba(20,18,15,0.5);
+}
+.use-row:hover .use-row-media, .use-row:focus-visible .use-row-media {
+  height: 168px; box-shadow: 0 28px 56px -26px rgba(20,18,15,0.55);
+}
+.use-row-img {
+  display: block; width: 100%; height: 100%;
+  background-size: cover; background-position: center; transform: scale(1.04);
+  transition: transform 1s var(--btn-ease, ease), filter 0.6s ease; filter: saturate(0.92);
+}
+.use-row:hover .use-row-img, .use-row:focus-visible .use-row-img { transform: scale(1.1); filter: saturate(1); }
+/* index "more coming soon" row */
+.use-row.soon .use-row-num { color: var(--muted); opacity: 0.6; }
+.use-row.soon:hover { padding-left: 0; }
+.use-row.soon .use-row-title { color: var(--muted-2); }
+.use-row.soon .use-row-desc { font-style: italic; }
+
+/* ---------- Variant B — Lookbook Mosaic (asymmetric grid) ---------- */
+.use-mosaic {
+  grid-template-columns: repeat(6, 1fr); grid-auto-rows: 240px; gap: 20px;
+}
+/* asymmetric arrangement: one large feature + varied smaller tiles */
+.use-mosaic > .use-tile:nth-child(1) { grid-column: span 4; grid-row: span 2; } /* feature */
+.use-mosaic > .use-tile:nth-child(2) { grid-column: span 2; grid-row: span 1; }
+.use-mosaic > .use-tile:nth-child(3) { grid-column: span 2; grid-row: span 1; }
+.use-mosaic > .use-tile:nth-child(4) { grid-column: span 3; grid-row: span 1; }
+.use-mosaic > .use-tile:nth-child(5) { grid-column: span 3; grid-row: span 1; }
+.use-mosaic > .use-tile:nth-child(6) { grid-column: span 6; grid-row: span 1; } /* soon — full width */
+
+.use-tile {
   position: relative; display: flex; flex-direction: column; justify-content: flex-end;
-  min-height: 0; height: 100%; padding: 34px; overflow: hidden;
-  background: var(--img-fallback); color: #fff; outline: none;
+  overflow: hidden; padding: 30px; color: #fff; outline: none; border-radius: 16px;
+  background: var(--img-fallback);
   box-shadow: 0 24px 50px -28px rgba(20,18,15,0.5);
   transition: box-shadow 0.5s var(--btn-ease, ease), transform 0.5s var(--btn-ease, ease);
 }
-.use-card:hover, .use-card:focus-visible {
-  box-shadow: 0 38px 70px -30px rgba(20,18,15,0.6); transform: translateY(-5px);
+.use-tile:hover, .use-tile:focus-visible {
+  transform: translateY(-5px); box-shadow: 0 38px 70px -30px rgba(20,18,15,0.6);
 }
-/* refined hairline frame, inset a touch for an editorial mat-board feel */
-.use-card::before {
-  content: ""; position: absolute; inset: 14px; z-index: 3; pointer-events: none;
-  border: 1px solid rgba(255,255,255,0.22); border-radius: 6px;
-  opacity: 0; transition: opacity 0.5s var(--btn-ease, ease);
+.use-tile-img {
+  position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center;
+  transform: scale(1.03); filter: saturate(0.92);
+  transition: transform 1.2s var(--btn-ease, ease), filter 0.6s ease;
 }
-.use-card:hover::before, .use-card:focus-visible::before { opacity: 1; }
-.use-pattern {
-  position: absolute; inset: 0; z-index: 0; background-size: cover;
-  background-position: center; transform: scale(1.03);
-  transition: transform 1.3s var(--btn-ease, ease), filter 0.6s ease;
-  filter: saturate(0.92);
-}
-.use-card::after {
+.use-tile:hover .use-tile-img, .use-tile:focus-visible .use-tile-img { transform: scale(1.12); filter: saturate(1); }
+.use-tile::after {
   content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.06) 58%);
-  transition: background 0.5s ease;
+  background: linear-gradient(to top, rgba(0,0,0,0.72), rgba(0,0,0,0.06) 60%);
 }
-.use-card:hover .use-pattern, .use-card:focus-visible .use-pattern { transform: scale(1.1); filter: saturate(1); }
-.use-card small, .use-card h3, .use-card p { position: relative; z-index: 2; }
-/* editorial overline — always visible, refined tracking, hairline rule */
-.use-card small {
-  font-family: var(--sans); font-size: 10px; font-weight: 600;
-  letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.82);
-  margin-bottom: 12px; padding-bottom: 12px; position: relative;
+.use-tile-cap { position: relative; z-index: 2; }
+.use-tile-cap small {
+  display: block; font-family: var(--sans); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.28em; text-transform: uppercase; color: var(--accent-blue-soft); margin-bottom: 10px;
 }
-.use-card small::after {
-  content: ""; position: absolute; left: 0; bottom: 0; width: 28px; height: 1px;
-  background: rgba(255,255,255,0.5); transition: width 0.5s var(--btn-ease, ease);
+.use-tile-cap h3 {
+  font-family: var(--serif); font-size: clamp(24px, 2.4vw, 32px); line-height: 1.08;
+  margin: 0 0 6px; display: flex; align-items: baseline; gap: 10px;
 }
-.use-card:hover small::after, .use-card:focus-visible small::after { width: 56px; }
-.use-card h3 {
-  font-family: var(--serif); font-size: clamp(26px, 2.6vw, 34px); line-height: 1.08;
-  margin-bottom: 6px; display: flex; align-items: baseline; gap: 10px;
+.use-tile-cap h3 .arrow { font-size: 0.7em; opacity: 0.85; transition: transform 0.4s var(--btn-ease, ease); }
+.use-tile:hover .use-tile-cap h3 .arrow, .use-tile:focus-visible .use-tile-cap h3 .arrow { transform: translateX(8px); opacity: 1; }
+.use-tile-cap p {
+  font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.88);
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height 0.55s var(--btn-ease, ease), opacity 0.45s ease, margin 0.45s ease;
 }
-.use-card h3 .arrow { font-size: 0.7em; transition: transform 0.4s var(--btn-ease, ease); opacity: 0.85; }
-.use-card:hover h3 .arrow, .use-card:focus-visible h3 .arrow { transform: translateX(8px); opacity: 1; }
-.use-card p { font-size: 14px; line-height: 1.55; color: rgba(255,255,255,0.88); max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.55s var(--btn-ease, ease), opacity 0.45s ease, margin 0.45s ease; }
-.use-card:hover p, .use-card:focus-visible p { max-height: 140px; opacity: 1; margin-top: 10px; }
-/* "More coming soon" — quiet, editorial tile */
-.use-card.soon {
+.use-tile:hover .use-tile-cap p, .use-tile:focus-visible .use-tile-cap p { max-height: 160px; opacity: 1; margin-top: 10px; }
+/* mosaic "more coming soon" tile */
+.use-tile.soon {
   background: var(--tonal); color: var(--ink); align-items: center; justify-content: center; text-align: center;
-  box-shadow: none; min-height: 180px; border: 1px solid var(--hairline);
+  border: 1px solid var(--hairline); box-shadow: none;
 }
-.use-card.soon:hover { transform: none; box-shadow: none; }
-.use-card.soon::after, .use-card.soon::before { display: none; }
-.use-card.soon .soon-mark { font-size: 40px; font-family: var(--serif); color: var(--muted); display: block; margin-bottom: 6px; }
-.use-card.soon h3 { color: var(--ink); justify-content: center; }
-.use-card.soon small { opacity: 1; transform: none; color: var(--muted-2); }
-.use-card.soon small::after { left: 50%; transform: translateX(-50%); }
-.use-card.soon p { font-style: italic; color: var(--muted); max-height: none; opacity: 1; margin-top: 8px; }
+.use-tile.soon:hover { transform: none; box-shadow: none; }
+.use-tile.soon::after { display: none; }
+.use-tile.soon .soon-mark { font-size: 40px; font-family: var(--serif); color: var(--accent-blue); display: block; margin-bottom: 6px; }
+.use-tile.soon h3 { color: var(--ink); }
+.use-tile.soon p { font-style: italic; color: var(--muted); margin-top: 6px; }
 
 /* ---------- Why Asa — clean 4-up, rebuilt for zero overlap ----------
    Equal-width columns with a shared top rule and column dividers drawn as
@@ -591,7 +702,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* top hover accent rule */
 .why-card::before {
   content: ""; position: absolute; top: -1px; left: 0; width: 0; height: 2px;
-  background: var(--ink); transition: width 0.5s var(--btn-ease, ease);
+  /* TASK 9: top hover accent rule in light blue */
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-blue-soft));
+  transition: width 0.5s var(--btn-ease, ease);
 }
 .why-card:hover::before { width: 100%; }
 .why-num {
@@ -675,7 +788,14 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .catalog-slot { scroll-margin-top: 96px; }
 
 /* ---------- B2B Global Supply — animated dotted world map ---------- */
-.world-map { max-width: var(--container); margin: 0 auto; padding: var(--section-gap) var(--margin); }
+/* TASK 9: a very faint light-blue wash bleeds in from the right, tying the
+   blue map routes into the section without a solid colour fill. */
+.world-map {
+  position: relative; max-width: var(--container); margin: 0 auto;
+  padding: var(--section-gap) var(--margin);
+  background:
+    radial-gradient(120% 90% at 88% 50%, rgba(14,165,233,0.07), transparent 60%);
+}
 .world-inner {
   display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: center;
 }
@@ -767,7 +887,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); margin-bottom: 18px;
 }
 .footer-col a { display: block; color: var(--muted); font-size: 14px; padding: 6px 0; transition: color 0.3s ease; }
-.footer-col a:hover { color: var(--ink); }
+/* TASK 9: footer links pick up the light-blue accent on hover */
+.footer-col a:hover { color: var(--accent-blue); }
 .footer-bottom {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
   gap: 16px; border-top: 1px solid var(--hairline); padding-top: 28px;
@@ -802,11 +923,16 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   /* row rule under the first row (cards 1 and 2) */
   .why-card:nth-child(1), .why-card:nth-child(2) { border-bottom: 1px solid var(--hairline); padding-bottom: 40px; }
   .why-card:nth-child(3), .why-card:nth-child(4) { padding-top: 40px; }
-  /* uses grid collapses to two columns */
-  .use-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 280px; }
-  .use-grid > .use-card:nth-child(1) { grid-column: span 2; }
-  .use-grid > .use-card:nth-child(n+2) { grid-column: span 1; }
-  .use-grid > .use-card:nth-child(6) { grid-column: span 2; }
+  /* TASK 8: mosaic collapses to two columns (index rows reflow below) */
+  .use-mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 240px; }
+  .use-mosaic > .use-tile:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+  .use-mosaic > .use-tile:nth-child(n+2) { grid-column: span 1; }
+  .use-mosaic > .use-tile:nth-child(4),
+  .use-mosaic > .use-tile:nth-child(5) { grid-column: span 1; }
+  .use-mosaic > .use-tile:nth-child(6) { grid-column: span 2; }
+  /* index rows: drop the media column on tablet */
+  .use-row { grid-template-columns: auto 1fr; }
+  .use-row-media { display: none; }
   .stock-inner { grid-template-columns: 1fr; gap: 48px; }
   .stock-collage { height: 420px; max-width: 560px; }
   .world-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -819,8 +945,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   .nav-toggle { display: flex; }
   .glass-nav { gap: 16px; }
   .stats-strip { grid-template-columns: repeat(2, 1fr); row-gap: 40px; padding: 56px var(--margin); }
-  .use-grid { grid-template-columns: 1fr; grid-auto-rows: 260px; }
-  .use-grid > .use-card:nth-child(n) { grid-column: span 1; }
+  /* TASK 8: mosaic single column on phones */
+  .use-mosaic { grid-template-columns: 1fr; grid-auto-rows: 240px; }
+  .use-mosaic > .use-tile:nth-child(n) { grid-column: span 1; }
   /* mobile: single column, stacked. Reset all side dividers; use a row
      rule between each stacked item. Uniform padding, no overlap. */
   .why-grid { grid-template-columns: 1fr; gap: 0; }
@@ -864,4 +991,6 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   .nav-cta, .nav-cta:hover, .nav-cta:active { transform: none !important; }
   .btn:hover span, .btn-link:hover span { transform: none !important; }
   .btn::before, .nav-cta::before { transform: translateX(-120%) !important; }
+  /* TASK 2: nav dock magnification disabled under reduced motion */
+  .nav-links.dock a { transform: none !important; }
 }

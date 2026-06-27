@@ -110,20 +110,59 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
    "Fabrics by use" editorial grid. */
 const useGrid = document.querySelector("#useGrid");
 
+/* TASK 8 — "Fabrics by use": render BOTH candidate variants from the SAME
+   `useCases` data so the client can compare them with the pill toggle.
+     • Variant A "Editorial Index" — full-width stacked rows; large serif index
+       numeral + name on the left, overline label, and an image that elegantly
+       reveals/expands on hover on the right; hairline dividers between rows.
+     • Variant B "Lookbook Mosaic" — asymmetric image-forward grid (one large
+       feature tile + smaller tiles), image hover zoom, refined overlay captions.
+   Both keep a "More coming soon" tile. Visibility is switched by toggling the
+   .variant-index / .variant-mosaic class on the #uses section (see initUsesToggle).
+   Imagery uses the same woven-cloth weaveBackground() the site already uses. */
 function renderUseCases() {
   if (!useGrid) return;
-  const cards = useCases.map((item) => `
-    <article class="use-card ${item.tone} reveal" tabindex="0">
-      <span class="use-pattern" style="background-image: ${weaveBackground(item.palette)}"></span>
-      <small>${escapeHtml(item.overline || item.count)}</small>
-      <h3>${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
-      <p>${escapeHtml(item.description)}</p>
+
+  // --- Variant A: Editorial Index (stacked rows) ---
+  const indexRows = useCases.map((item, i) => `
+    <article class="use-row reveal" tabindex="0">
+      <span class="use-row-num" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
+      <div class="use-row-body">
+        <small class="use-row-overline">${escapeHtml(item.overline || item.count)}</small>
+        <h3 class="use-row-title">${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
+        <p class="use-row-desc">${escapeHtml(item.description)}</p>
+      </div>
+      <span class="use-row-media" aria-hidden="true">
+        <span class="use-row-img" style="background-image: ${weaveBackground(item.palette)}"></span>
+      </span>
     </article>
   `).join("");
+  const indexSoon = `
+    <article class="use-row soon reveal">
+      <span class="use-row-num" aria-hidden="true">+</span>
+      <div class="use-row-body">
+        <small class="use-row-overline">In the works</small>
+        <h3 class="use-row-title">More coming soon</h3>
+        <p class="use-row-desc">Denims, linings and more uses are being added.</p>
+      </div>
+      <span class="use-row-media" aria-hidden="true"></span>
+    </article>
+  `;
 
-  const soon = `
-    <article class="use-card soon reveal">
-      <div>
+  // --- Variant B: Lookbook Mosaic (asymmetric grid) ---
+  const mosaicTiles = useCases.map((item, i) => `
+    <article class="use-tile ${item.tone} reveal" tabindex="0">
+      <span class="use-tile-img" style="background-image: ${weaveBackground(item.palette)}"></span>
+      <div class="use-tile-cap">
+        <small>${escapeHtml(item.overline || item.count)}</small>
+        <h3>${escapeHtml(item.title)} <span class="arrow" aria-hidden="true">→</span></h3>
+        <p>${escapeHtml(item.description)}</p>
+      </div>
+    </article>
+  `).join("");
+  const mosaicSoon = `
+    <article class="use-tile soon reveal">
+      <div class="use-tile-soon">
         <span class="soon-mark" aria-hidden="true">+</span>
         <h3>More coming soon</h3>
         <p>Denims, linings and more uses are being added.</p>
@@ -131,10 +170,40 @@ function renderUseCases() {
     </article>
   `;
 
-  useGrid.innerHTML = cards + soon;
+  useGrid.innerHTML =
+    `<div class="use-index">${indexRows}${indexSoon}</div>` +
+    `<div class="use-mosaic">${mosaicTiles}${mosaicSoon}</div>`;
 }
 
 renderUseCases();
+
+/* TASK 8 — variant compare toggle (temporary). Two pill buttons near the
+   heading switch which variant is shown by toggling the section class. Default
+   is Variant A (Index). No motion required; purely a class swap. */
+function initUsesToggle() {
+  const section = document.querySelector("#uses");
+  const toggle = document.querySelector("#usesToggle");
+  if (!section || !toggle) return;
+  const buttons = Array.from(toggle.querySelectorAll(".uses-toggle-btn"));
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const variant = btn.dataset.variant; // "index" | "mosaic"
+      section.classList.toggle("variant-index", variant === "index");
+      section.classList.toggle("variant-mosaic", variant === "mosaic");
+      // The hidden block's .reveal items may never have intersected (display:none),
+      // so force them visible when their variant is switched on.
+      const block = section.querySelector(variant === "mosaic" ? ".use-mosaic" : ".use-index");
+      if (block) block.querySelectorAll(".reveal").forEach((el) => el.classList.add("in-view"));
+      buttons.forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle("is-active", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+    });
+  });
+}
+
+initUsesToggle();
 
 /* ============================================================
    Featured Fabrics — fan carousel (ported from React+GSAP)
@@ -409,7 +478,9 @@ function buildWorldMap() {
   const stage = document.querySelector("#worldMapStage");
   if (!stage) return;
 
-  const ACCENT = "#6F4E37"; // on-brand brown (not the demo's blue)
+  // TASK 7 + 9: routes / points / glow are light blue (#0ea5e9, #38bdf8 highlights).
+  const ACCENT = "#0ea5e9";       // light blue (replaces the earlier brown)
+  const ACCENT_SOFT = "#38bdf8";  // brighter highlight for gradient + glow dot
 
   // --- 1. Dotted-map background (static, baked-in asset). Guarded:
   //     if the generated SVG is unavailable, a CSS dot-pattern fallback
@@ -450,8 +521,9 @@ function buildWorldMap() {
     preserveAspectRatio: "xMidYMid meet"
   });
 
-  // glow filter (as in the original component)
   const defs = svgEl("defs", {});
+
+  // soft glow filter for the travelling dots + endpoints
   const filter = svgEl("filter", {
     id: "worldGlow", x: "-50%", y: "-50%", width: "200%", height: "200%"
   });
@@ -461,6 +533,18 @@ function buildWorldMap() {
   merge.appendChild(svgEl("feMergeNode", { in: "SourceGraphic" }));
   filter.appendChild(merge);
   defs.appendChild(filter);
+
+  // animated gradient stroke for the arcs — fades at both ends, bright in the
+  // middle, so each route reads as a luminous light-blue thread.
+  const grad = svgEl("linearGradient", {
+    id: "worldRouteGrad", x1: "0%", y1: "0%", x2: "100%", y2: "0%"
+  });
+  grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": ACCENT, "stop-opacity": "0" }));
+  grad.appendChild(svgEl("stop", { offset: "12%", "stop-color": ACCENT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "50%", "stop-color": ACCENT_SOFT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "88%", "stop-color": ACCENT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "100%", "stop-color": ACCENT, "stop-opacity": "0" }));
+  defs.appendChild(grad);
   svg.appendChild(defs);
 
   const hub = worldProject(WORLD_HUB.lat, WORLD_HUB.lng);
@@ -472,127 +556,159 @@ function buildWorldMap() {
   syncCompact();
   window.addEventListener("resize", syncCompact, { passive: true });
 
-  const STAGGER = 0.45;  // seconds between routes (clear staggered draw-in)
-  const DRAW_DUR = 1.7;  // seconds for a line to draw + dot to travel
-  // Period kept tight so the trace visibly loops rather than holding static.
-  const PERIOD = WORLD_DESTINATIONS.length * STAGGER + DRAW_DUR + 1.4;
-  // fraction of the period spent drawing (rest = brief hold + reset)
-  const DRAW_FRAC = Math.min(0.6, (DRAW_DUR) / PERIOD);
-
-  WORLD_DESTINATIONS.forEach((dest, i) => {
+  // ----- Build the routes. Each route owns its path (the visible arc), a
+  //       length, a travelling glow dot, and an endpoint pulse ring. The
+  //       actual draw-on is JS-driven (stroke-dashoffset via rAF) so it
+  //       ALWAYS animates (SMIL rendered static here previously). -----
+  const routes = WORLD_DESTINATIONS.map((dest, i) => {
     const end = worldProject(dest.lat, dest.lng);
     const midX = (hub.x + end.x) / 2;
     const midY = Math.min(hub.y, end.y) - 50;
     const d = `M ${hub.x} ${hub.y} Q ${midX} ${midY} ${end.x} ${end.y}`;
 
     const path = svgEl("path", {
-      d, fill: "none", stroke: ACCENT, "stroke-width": "1",
-      "stroke-opacity": "0.55", "stroke-linecap": "round"
+      d, fill: "none",
+      stroke: prefersReducedMotion ? ACCENT : "url(#worldRouteGrad)",
+      "stroke-width": "1.4", "stroke-opacity": "0.9", "stroke-linecap": "round"
     });
     svg.appendChild(path);
 
+    const len = path.getTotalLength();
+    // travelling glow dot — created up front, ridden along the path by JS
+    let dot = null;
     if (!prefersReducedMotion) {
-      const len = path.getTotalLength();
       path.style.strokeDasharray = `${len}`;
-      path.style.strokeDashoffset = `${len}`;
-      // key timings: draw in over DRAW_FRAC of the period, hold drawn briefly,
-      // then snap back to undrawn just before the loop repeats.
-      const tDraw = DRAW_FRAC.toFixed(3);
-      const tHold = Math.min(0.97, DRAW_FRAC + 0.45).toFixed(3);
-      const draw = svgEl("animate", {
-        attributeName: "stroke-dashoffset",
-        begin: `${(i * STAGGER).toFixed(3)}s`, dur: `${PERIOD}s`,
-        repeatCount: "indefinite",
-        keyTimes: `0;${tDraw};${tHold};1`, values: `${len};0;0;${len}`,
-        calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1;0 0 1 1"
-      });
-      path.appendChild(draw);
-
-      // travelling glowing dot — rides the curve while the line draws
-      const dot = svgEl("circle", {
-        r: "2.8", fill: ACCENT, filter: "url(#worldGlow)"
-      });
-      const motion = svgEl("animateMotion", {
-        path: d, begin: `${(i * STAGGER).toFixed(3)}s`, dur: `${PERIOD}s`,
-        repeatCount: "indefinite",
-        keyPoints: "0;1;1", keyTimes: `0;${tDraw};1`,
-        calcMode: "spline", keySplines: "0.4 0 0.2 1;0 0 1 1"
-      });
-      dot.appendChild(motion);
-      // fade the dot out once it reaches the destination, hidden until next loop
-      const dotFade = svgEl("animate", {
-        attributeName: "opacity", begin: `${(i * STAGGER).toFixed(3)}s`,
-        dur: `${PERIOD}s`, repeatCount: "indefinite",
-        keyTimes: `0;${tDraw};${(Math.min(0.99, DRAW_FRAC + 0.08)).toFixed(3)};1`,
-        values: "1;1;0;0"
-      });
-      dot.appendChild(dotFade);
+      path.style.strokeDashoffset = `${len}`;   // start fully undrawn
+      dot = svgEl("circle", { r: "3.2", fill: ACCENT_SOFT, filter: "url(#worldGlow)", opacity: "0" });
       svg.appendChild(dot);
     }
+    return { path, len, d, end, dot, dest, i };
   });
 
   // points (origin + destinations) with pulse + label
   function addPoint(p, name, isHub, secondary) {
-    // pulse (expanding fading ring)
+    // pulse (expanding fading ring) — JS-driven so it plays on scroll-in
+    let pulse = null;
     if (!prefersReducedMotion) {
-      const pulse = svgEl("circle", {
-        cx: p.x, cy: p.y, r: "2", fill: "none",
-        stroke: ACCENT, "stroke-width": "1"
+      pulse = svgEl("circle", {
+        cx: p.x, cy: p.y, r: "2.6", fill: "none",
+        stroke: ACCENT_SOFT, "stroke-width": "1.2", opacity: "0"
       });
-      pulse.appendChild(svgEl("animate", {
-        attributeName: "r", from: "2", to: "10",
-        dur: "2s", begin: isHub ? "0s" : "0.4s", repeatCount: "indefinite"
-      }));
-      pulse.appendChild(svgEl("animate", {
-        attributeName: "opacity", from: "0.6", to: "0",
-        dur: "2s", begin: isHub ? "0s" : "0.4s", repeatCount: "indefinite"
-      }));
       svg.appendChild(pulse);
     }
     // solid point
     svg.appendChild(svgEl("circle", {
-      cx: p.x, cy: p.y, r: isHub ? "3.4" : "2.6", fill: ACCENT
+      cx: p.x, cy: p.y, r: isHub ? "3.6" : "2.8", fill: ACCENT,
+      filter: prefersReducedMotion ? null : "url(#worldGlow)"
     }));
     // label
     const lbl = svgEl("text", {
-      x: p.x, y: p.y - 7, "text-anchor": "middle",
+      x: p.x, y: p.y - 8, "text-anchor": "middle",
       class: "world-route-label" + (secondary ? " secondary" : "")
     });
     lbl.textContent = name;
     svg.appendChild(lbl);
+    return pulse;
   }
 
-  addPoint(hub, WORLD_HUB.name, true, false);
+  const pulses = [];
+  pulses.push({ ring: addPoint(hub, WORLD_HUB.name, true, false), x: hub.x, y: hub.y });
   WORLD_DESTINATIONS.forEach((dest, i) => {
     const p = worldProject(dest.lat, dest.lng);
     // mark some as secondary so they can be hidden on tiny screens
-    addPoint(p, dest.name, false, i >= 3);
+    pulses.push({ ring: addPoint(p, dest.name, false, i >= 3), x: p.x, y: p.y });
   });
 
   stage.appendChild(svg);
 
-  // --- 3. Play the route tracing when the section scrolls into view.
-  //     Animations stay paused (and reset) off-screen so the trace clearly
-  //     (re)plays from the start each time the map enters the viewport —
-  //     this is what makes it read as animating rather than a static image.
-  //     Static under reduced motion (no SMIL elements were added). ---
-  if (!prefersReducedMotion && "IntersectionObserver" in window &&
-      typeof svg.pauseAnimations === "function") {
-    try { svg.pauseAnimations(); svg.setCurrentTime(0); } catch (e) { /* no-op */ }
+  if (prefersReducedMotion) return; // static finished arcs + points, no JS loop
+
+  // ----- JS-driven animation (rAF). Each route draws on (dashoffset → 0) over
+  //       DRAW_MS with a staggered start; a glow dot rides the arc as it draws;
+  //       endpoint rings pulse continuously. Triggered by IntersectionObserver
+  //       and REPLAYED every time #reach re-enters the viewport. -----
+  const DRAW_MS = 1500;     // per-route draw duration
+  const STAGGER_MS = 320;   // delay between successive routes
+  const PULSE_MS = 2000;    // pulse-ring period
+  const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+  let startT = 0;
+  let raf = null;
+
+  // sample a quadratic-bezier point at parameter u (0..1) for the dot position
+  function pointAt(r, u) {
+    return r.path.getPointAtLength(r.len * u);
+  }
+
+  function frame(now) {
+    if (!startT) startT = now;
+    const elapsed = now - startT;
+
+    routes.forEach((r) => {
+      const local = elapsed - r.i * STAGGER_MS;
+      if (local <= 0) {
+        r.path.style.strokeDashoffset = `${r.len}`;
+        if (r.dot) r.dot.setAttribute("opacity", "0");
+        return;
+      }
+      const p = Math.min(1, local / DRAW_MS);
+      const e = easeInOut(p);
+      r.path.style.strokeDashoffset = `${r.len * (1 - e)}`;
+      if (r.dot) {
+        if (p < 1) {
+          const pt = pointAt(r, e);
+          r.dot.setAttribute("cx", pt.x);
+          r.dot.setAttribute("cy", pt.y);
+          r.dot.setAttribute("opacity", "1");
+        } else {
+          r.dot.setAttribute("opacity", "0");
+        }
+      }
+    });
+
+    // continuous endpoint pulses
+    pulses.forEach((pu, idx) => {
+      if (!pu.ring) return;
+      const phase = ((elapsed + idx * 240) % PULSE_MS) / PULSE_MS;
+      pu.ring.setAttribute("r", (2.6 + phase * 9).toFixed(2));
+      pu.ring.setAttribute("opacity", (0.55 * (1 - phase)).toFixed(3));
+    });
+
+    // keep looping for the pulses; draw-on completes once but rings continue
+    raf = requestAnimationFrame(frame);
+  }
+
+  function reset() {
+    routes.forEach((r) => {
+      r.path.style.strokeDashoffset = `${r.len}`;
+      if (r.dot) r.dot.setAttribute("opacity", "0");
+    });
+    pulses.forEach((pu) => { if (pu.ring) pu.ring.setAttribute("opacity", "0"); });
+  }
+
+  function play() {
+    stop();
+    reset();
+    startT = 0;
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+  }
+
+  // --- 3. Trigger on scroll-in; REPLAY each time #reach re-enters. ---
+  if ("IntersectionObserver" in window) {
+    reset();
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        try {
-          if (e.isIntersecting) {
-            // restart the staggered trace from t=0, then run
-            svg.setCurrentTime(0);
-            svg.unpauseAnimations();
-          } else {
-            svg.pauseAnimations();
-          }
-        } catch (err) { /* no-op */ }
+        if (e.isIntersecting) play();
+        else stop();
       });
     }, { threshold: 0.25 });
     io.observe(stage);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); });
+  } else {
+    play();
   }
 }
 
@@ -751,6 +867,65 @@ function initNav() {
   }
 }
 
+/* ---------- Nav bar — macOS-dock hover magnification ----------
+   TASK 2. Target: .nav-links. Re-creates the AnimatedDock behaviour in vanilla
+   JS + CSS: as the cursor moves across the nav, the link nearest the cursor
+   scales up / lifts the most and neighbours fall off with distance; everything
+   settles back smoothly on mouse-leave. We track the cursor X and, per link,
+   compute a Gaussian-style falloff of distance from each link's centre to the
+   cursor, then write per-link scale + lift into CSS custom properties (the
+   springy easing lives in the CSS transition on .nav-links a). Reduced motion:
+   skip entirely — links keep their static size. */
+function initNavDock() {
+  if (prefersReducedMotion) return;
+  const nav = document.querySelector(".nav-links");
+  if (!nav) return;
+  const links = Array.from(nav.querySelectorAll("a"));
+  if (!links.length) return;
+
+  nav.classList.add("dock");
+
+  const MAX_SCALE = 0.22;   // peak extra scale at the cursor (→ ~1.22)
+  const MAX_LIFT = 6;       // px the nearest link lifts
+  const FALLOFF = 70;       // px — distance over which the effect fades
+
+  let raf = null;
+  let pending = null;
+
+  function apply(clientX) {
+    links.forEach((link) => {
+      const r = link.getBoundingClientRect();
+      const center = r.left + r.width / 2;
+      const dist = Math.abs(clientX - center);
+      // smooth Gaussian-ish falloff: 1 at the cursor → 0 far away
+      const t = Math.exp(-(dist * dist) / (2 * FALLOFF * FALLOFF));
+      link.style.setProperty("--dock-scale", (1 + MAX_SCALE * t).toFixed(3));
+      link.style.setProperty("--dock-lift", (-MAX_LIFT * t).toFixed(2) + "px");
+    });
+  }
+
+  function reset() {
+    links.forEach((link) => {
+      link.style.setProperty("--dock-scale", "1");
+      link.style.setProperty("--dock-lift", "0px");
+    });
+  }
+
+  nav.addEventListener("mousemove", (e) => {
+    pending = e.clientX;
+    if (raf === null) {
+      raf = requestAnimationFrame(() => { raf = null; if (pending !== null) apply(pending); });
+    }
+  });
+  nav.addEventListener("mouseleave", () => {
+    if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
+    pending = null;
+    reset();
+  });
+
+  reset();
+}
+
 /* ---------- Smooth scroll for in-page anchors ---------- */
 function initSmoothScroll() {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
@@ -894,6 +1069,7 @@ initSlideshow();
 initScrollProgress();
 initReveal();
 initNav();
+initNavDock();
 initSmoothScroll();
 initForm();
 initParallax();
