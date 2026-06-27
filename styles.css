@@ -77,60 +77,121 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 }
 .eyebrow.light { color: rgba(255,255,255,0.75); }
 
-/* ---------- Buttons ----------
-   Premium interactive hover: a background-slide-in fill (via a ::before
-   pseudo that wipes across), a subtle scale(1.02), and a slight
-   letter-spacing open — all on a refined cubic-bezier. No glow/gloss. */
-:root { --btn-ease: cubic-bezier(.2,.8,.2,1); }
+/* ---------- Buttons — unified "liquid glass" system ----------
+   Every button (.btn-solid, .btn-solid-light, .btn-ghost, .btn-link[.light]
+   and the .nav-cta pill) shares one frosted-glass treatment: backdrop blur +
+   saturation, a translucent tinted fill, a faint top highlight, a 1px
+   translucent border, and layered inner/outer shadow. The glass look comes
+   from depth + light — NOT from rounding: .btn* keep sharp 0px corners by
+   intent; only .nav-cta stays a pill. Hover lifts physically (translateY +
+   slight scale) with a sheen sweep; active presses in. Tints/blur are exposed
+   as variables below so the whole system tunes in one place. */
+:root {
+  --btn-ease: cubic-bezier(.2,.8,.2,1);
+  --glass-ease: cubic-bezier(.22,.61,.36,1);
+  --glass-blur: blur(14px) saturate(160%);
+  /* dark glass (on cream sections) */
+  --glass-dark-bg: rgba(26,26,26,0.82);
+  --glass-dark-bg-hover: rgba(26,26,26,0.9);
+  --glass-dark-border: rgba(255,255,255,0.14);
+  /* light glass (must stay legible over the dark hero photo) */
+  --glass-light-bg: rgba(255,255,255,0.86);
+  --glass-light-bg-hover: rgba(255,255,255,0.94);
+  --glass-light-border: rgba(255,255,255,0.6);
+  /* shared highlight + shadow */
+  --glass-highlight: rgba(255,255,255,0.5);
+  --glass-shadow: 0 10px 28px -14px rgba(20,18,15,0.5);
+  --glass-shadow-hover: 0 18px 38px -16px rgba(20,18,15,0.6);
+}
 .btn {
   position: relative; overflow: hidden; isolation: isolate;
   display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--sans); font-size: 13px; font-weight: 500;
   letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 16px 32px; border: 1px solid transparent; border-radius: 0;
-  transition: transform 0.45s var(--btn-ease), letter-spacing 0.45s var(--btn-ease),
-              color 0.4s var(--btn-ease), border-color 0.4s var(--btn-ease),
-              box-shadow 0.45s var(--btn-ease);
+  padding: 16px 32px; border: 1px solid var(--glass-dark-border); border-radius: 0;
+  /* faint top highlight baked into the fill */
+  background-image: linear-gradient(180deg, var(--glass-highlight) 0%, rgba(255,255,255,0) 42%);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+  transition: transform 0.2s var(--glass-ease), letter-spacing 0.2s var(--glass-ease),
+              color 0.2s var(--glass-ease), border-color 0.2s var(--glass-ease),
+              background-color 0.2s var(--glass-ease), box-shadow 0.2s var(--glass-ease);
 }
-/* sliding fill layer */
+/* sheen sweep layer — a soft highlight that wipes across on hover */
 .btn::before {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  transform: scaleX(0); transform-origin: left center;
-  transition: transform 0.5s var(--btn-ease);
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
+  transform: translateX(-120%);
+  transition: transform 0.5s var(--glass-ease);
 }
 .btn > * { position: relative; z-index: 1; }
-.btn span { transition: transform 0.45s var(--btn-ease); }
-.btn:hover { transform: scale(1.02); letter-spacing: 0.13em; }
-.btn:hover::before { transform: scaleX(1); }
-.btn:active { transform: scale(0.99); }
+.btn span { transition: transform 0.2s var(--glass-ease); }
+.btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: var(--glass-shadow-hover), inset 0 1px 0 var(--glass-highlight); }
+.btn:hover::before { transform: translateX(120%); }
+.btn:active { transform: translateY(0) scale(0.99); box-shadow: var(--glass-shadow), inset 0 2px 6px rgba(20,18,15,0.35); }
 .btn:hover span { transform: translateX(3px); }
 
-/* solid (dark) — slides to a slightly lifted dark + hairline frame */
-.btn-solid { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
-.btn-solid::before { background: #2c2c2c; }
-.btn-solid:hover { border-color: #2c2c2c; box-shadow: 0 14px 30px -16px rgba(20,18,15,0.55); }
+/* solid (dark glass) — PRIMARY: reads as strong, opaque-leaning dark glass */
+.btn-solid { background-color: var(--glass-dark-bg); color: var(--btn-fg); border-color: var(--glass-dark-border); }
+.btn-solid:hover { background-color: var(--glass-dark-bg-hover); }
 
-/* ghost — fills with ink on hover */
-.btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
-.btn-ghost::before { background: var(--ink); }
-.btn-ghost:hover { color: #fff; }
+/* ghost — translucent over cream, ink text + ink hairline; fills to dark glass */
+.btn-ghost {
+  background-color: rgba(26,26,26,0.04); color: var(--ink);
+  border-color: rgba(26,26,26,0.5);
+}
+.btn-ghost:hover { background-color: var(--glass-dark-bg-hover); color: #fff; border-color: var(--glass-dark-border); }
 
-/* light (on dark hero) — white base, slides to cream */
-.btn-solid-light { background: #fff; color: var(--ink); border-color: #fff; }
-.btn-solid-light::before { background: var(--canvas); }
-.btn-solid-light:hover { border-color: var(--canvas); box-shadow: 0 14px 30px -16px rgba(0,0,0,0.4); }
+/* light (on dark hero photo) — PRIMARY over photo: high-opacity white glass
+   so text stays crisp on the dark scrim; depth from border + shadow, not see-through. */
+.btn-solid-light {
+  background-color: var(--glass-light-bg); color: var(--ink);
+  border-color: var(--glass-light-border);
+}
+.btn-solid-light:hover { background-color: var(--glass-light-bg-hover); }
 
 .btn-link {
+  position: relative; isolation: isolate;
   display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--sans); font-size: 13px; font-weight: 500;
   letter-spacing: 0.1em; text-transform: uppercase;
-  border-bottom: 1px solid transparent; padding-bottom: 2px;
-  transition: letter-spacing 0.4s var(--btn-ease), border-color 0.4s var(--btn-ease);
+  border-bottom: 1px solid transparent; padding: 6px 4px; padding-bottom: 4px;
+  border-radius: 0;
+  transition: transform 0.2s var(--glass-ease), letter-spacing 0.2s var(--glass-ease),
+              color 0.2s var(--glass-ease), border-color 0.2s var(--glass-ease),
+              background-color 0.2s var(--glass-ease), box-shadow 0.2s var(--glass-ease);
 }
-.btn-link span { transition: transform 0.4s var(--btn-ease); }
-.btn-link:hover { letter-spacing: 0.12em; border-bottom-color: currentColor; }
+.btn-link span { transition: transform 0.2s var(--glass-ease); }
+/* SECONDARY: stays light/underline-style, but shares the glass feel + motion.
+   On hover a faint glass panel appears behind it for consistency. */
+.btn-link:hover {
+  letter-spacing: 0.12em; border-bottom-color: currentColor;
+  transform: translateY(-2px) scale(1.02);
+  background-color: rgba(26,26,26,0.05);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+}
+.btn-link:active { transform: translateY(0) scale(0.99); }
 .btn-link:hover span { transform: translateX(4px); }
 .btn-link.light { color: #fff; }
+/* light secondary over the dark hero photo — tint stays dark-ish for legibility */
+.btn-link.light:hover { background-color: rgba(255,255,255,0.14); }
+
+/* @supports fallback — where backdrop-filter is unsupported, lean on MORE
+   opaque tinted fills so no glass button ever renders see-through/invisible. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .btn-solid { background-color: rgba(26,26,26,0.96); }
+  .btn-solid:hover { background-color: #2c2c2c; }
+  .btn-ghost { background-color: transparent; }
+  .btn-ghost:hover { background-color: var(--ink); }
+  .btn-solid-light { background-color: rgba(255,255,255,0.98); }
+  .btn-solid-light:hover { background-color: #fff; }
+  .btn-link:hover { background-color: rgba(26,26,26,0.1); }
+  .btn-link.light:hover { background-color: rgba(255,255,255,0.22); }
+  .nav-cta { background-color: rgba(26,26,26,0.96); }
+  .nav-cta:hover { background-color: #2c2c2c; }
+}
 
 /* ---------- Soft rounding override ----------
    The base design uses sharp 0px corners. Per client, soften the
@@ -195,21 +256,35 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   opacity: 0.6; transition: opacity 0.3s ease;
 }
 .nav-links a:hover { opacity: 1; }
+/* nav "View Catalog" pill — same liquid-glass treatment, PRIMARY dark glass,
+   but keeps its rounded-pill shape (the one glass button that stays round). */
 .nav-cta {
   position: relative; overflow: hidden; isolation: isolate;
   font-family: var(--sans); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink);
-  padding: 9px 20px; border: 1px solid var(--ink); border-radius: 9999px;
-  transition: color 0.4s var(--btn-ease), transform 0.4s var(--btn-ease),
-              letter-spacing 0.4s var(--btn-ease);
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--btn-fg);
+  padding: 9px 20px; border: 1px solid var(--glass-dark-border); border-radius: 9999px;
+  background-color: var(--glass-dark-bg);
+  background-image: linear-gradient(180deg, var(--glass-highlight) 0%, rgba(255,255,255,0) 50%);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+  transition: color 0.2s var(--glass-ease), transform 0.2s var(--glass-ease),
+              letter-spacing 0.2s var(--glass-ease),
+              background-color 0.2s var(--glass-ease), box-shadow 0.2s var(--glass-ease);
 }
 .nav-cta::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink);
-  transform: scaleX(0); transform-origin: left center;
-  transition: transform 0.45s var(--btn-ease);
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
+  transform: translateX(-120%);
+  transition: transform 0.5s var(--glass-ease);
 }
-.nav-cta:hover { color: #fff; transform: scale(1.02); letter-spacing: 0.17em; }
-.nav-cta:hover::before { transform: scaleX(1); }
+.nav-cta:hover {
+  background-color: var(--glass-dark-bg-hover);
+  transform: translateY(-2px) scale(1.02); letter-spacing: 0.17em;
+  box-shadow: var(--glass-shadow-hover), inset 0 1px 0 var(--glass-highlight);
+}
+.nav-cta:hover::before { transform: translateX(120%); }
+.nav-cta:active { transform: translateY(0) scale(0.99); box-shadow: var(--glass-shadow), inset 0 2px 6px rgba(20,18,15,0.35); }
 .nav-toggle {
   display: none; flex-direction: column; gap: 5px; background: none;
   border: none; padding: 6px;
@@ -828,4 +903,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
     transform: none !important; opacity: 1 !important; animation: none !important;
   }
   /* fabric rotator already static under reduced motion (handled in JS) */
+  /* liquid-glass buttons: keep the glass styling, but no lift/scale/sheen motion */
+  .btn, .btn:hover, .btn:active,
+  .btn-link, .btn-link:hover, .btn-link:active,
+  .nav-cta, .nav-cta:hover, .nav-cta:active { transform: none !important; }
+  .btn:hover span, .btn-link:hover span { transform: none !important; }
+  .btn::before, .nav-cta::before { transform: translateX(-120%) !important; }
 }
