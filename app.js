@@ -58,6 +58,23 @@ const useCases = [
    card also keeps a solid bg-color fallback in CSS. To use real photos later,
    simply replace these files (or repoint each path) — one entry per card. */
 const FAN_IMAGES = [
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuA-LYmah0qxMDWkusl_mWHmxGx1VgMil9pUJ4zMyg73g_80LlL7b_JwvvIItlGnf7u8bD2J5HvMM67I45I1y-Dgmm_JxhHl1UHKyeoJ_0BWx8wo-OK9KuGPCEi2nDIsRW4WGxT7yRGULvMASfApnFNUND4cxnrbhom4BxhWhvOO2b-yom70Zdd8sEUMR58h0UJ53eEvDQhe8OIMzBFlgHleYZd0x_MWGL-dPONu3Hbk5OKNR3Ls1-ZnedkNih9mxf9ArBAcGDnKCVy-",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBbvdngpXSNtB1nvFqZCpIBluAJKRDC6iQoLoZ51js-DFo0FEPWfpICn52zz12PdEKwNGCKhMeP4E_eRW-mHTnry34XgKUhkNcwXw8c4gEEOUXKp3SrAsb5MHIqjW6UXV9md4Oo1O0Yqc8DAdb39arWbesyxwO-gGhXRXShjwl998sn8t_IlNT_zqrxgdyNwExq_UQJd0gYfq4BIisRLxnifAZtqi9D3zRpm5C_Z125wsRDeu1VFfs07lwxzgw1cqlDZU_CgyPz6ST5",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBlVeETFTkn2Z1TvnKzeFQ6MlAN5PJ-ZTGBtVPnaBIbMzCC7JfXXUWA-qy9lGbvVJV7_bT92y83lImVAZFxbZhBFsEb-LtXysXVuY70za2fAjmyTo1CiWYXuB7JeHvPJE19ydp4EV0e3nYPSecrtZs5Weu-4Xcor65k9pV7FtBJn_JOlNZe2uxxQba2Ri6Fh0Ox9nODXGbMT1ZgNuqsehHm2cijt2S-30CUOkNa3r4KS_sB1zpeNO2h-b9bcTvsZbHJjYtMiVv6c-45",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuC0k6HkXhr7ICsGOHVnruShsBIhp_jKMM46JuvxliUfYLS308zy5XVz48kLhmYcpDgL0mBH0s6MAQR6aqLVM-AC1dsFX--Y-SqzP2fH9LWCxM99O1G7o81KcVjE7d1RsWYTMsOhTyw999beI0vrcHIueeKoE4mflngslpxHv0HaubJZGc8dPLK_R7_kx9LC7eBm6C_PYlvdZ9nt5WmfBZZgR1kMt_LbR_ZdSLyBcIJQXXv4Vnv7gwJgeHQouiXPExSZN4Rqy2cPpvoO",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuBrKRQMPkj9whqTBcEcouVjVqOH2EsvXNRuWmsTNc8z2O-iNCOAqIstqbVIl3plTLQs5VSroutOGgdXgMN6DuaPpuqFlooc3YrWNtAmg5vJdklfIbhr1fejbaz3Sy9tKhMuQVMvjsNfLlga2EnaGtgDCQ7D6GARKpGSBq0QWzK5YlS1UXs1-M_py-RjBxs-MDlJxkNuqe-zSf4d0Ibna0ETQhcxwwvKoW92kTs3w7szc5aAwTU9k4wM20psFQIEvAtsX93x-LB-9x0O",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCCB7nLQ7jDAhplw-nI9tQGWOilcDCCIyE5o_SI90kx1x02cXMljZ4gsoy3-yNpH10VFWGLydYHAPT8iRDbRMplkgvedtJWEBqAvl8LMP9F0gxOTSfxV0EHsqg0HAiiW5F4_6GQiZC9myK_GmhwPNAIRbCdeYmyVv6Reu7szcvRoSfafDHWs_j--8AcaELGX57iL-92QJsPXyY0ph_DNL1okzV8pnt9l0vf9JOITUCoebmvi7Vkzi0wCcfCOPforkIjzmGLfLBAQ305",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCfAohK-OLcYjqNf2faapYfSd4VC1sPUcAwXsQmaL1JkYXaGoI4vSrDiMCpJXfisheTRRsfUKWx9cD7T1uTu8v3kYSIG8Erqhw9EL_UuSOkfZ_B9ERsdr2hhFkJkWvHoy613yX0eBI4ljQKca_VpBkjNJlOwx9xHyZN-gd9k7M2IUnXYQOs_cDlNAXhXt2XzURQrJD8Z1QeuDRfu9QJqzMng8kYHqz-JN3gyN2G_YdGVjlxp_fZJ0R3JvdeFcBxSbvlR_jN_1fXw07E",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCxKJqw7r5w9WNHWlw7hH5NkqcsXT0NVAZmArsBT4a8OywePWWOA5pqtI-iBEQZ3BqbyIHj9Lcxjc_-E29nsjw4xf4inDeT05I5IIdFVU8NOhNGtHp1REKfJZSo7AB2QbjsVTMpZ9hT8kchFH2IxczacAOJ1P367awNht2GVHb_Ki502qwU8dECoyEQ53OrDy7wCHPR-EWmMNH6b3-mqTDvrZUZvwbonDba69eAJEwT_dUoYOz3-hYlgb-NMfRa65ewPicGPXp1SDYZ",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDS1EyKV4GaCuS-UPMXCirvcg_bK6CNWPvuEBfe73CwbY3CclVj_R1bnxzaCnghf8y8AIgOL58Hh70qkdjK1XbsNnQKcQqtSUrCcb5QQXkCodGNxRaf5_xv7EcWbcWFjYUq-SEMHpDgvVJeqtFt48zHhYy615LZfMyhZLGyC3M41c7QUvkvxTzsq7O70BFtE55SjyQ99iDDqYZygjGiCHabOoCkl2ntJZtZpNlpT9DmlvDJZ5sWg6BJf5tJ6OSD0Dx-gwWWcw2vUDic",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDX4w398VAU_gaoZRJlDRLUCjtjCoZ4nuQ-Mo0Rw3ocJHdkuZstAHAShx9TQUDkZChmEbhiB7OwnQJsRR4Ehha_-Qx8YLH6fkQkgmtt67L4vp77Ss1_ro8Jw5hBasoF7vOtP6CsiqKj0H-gFfhJFPyBxEPlUYkUzqypLSjpVGeCb6AIcJPEo-j5rn-_pkCDTXby4Zyv7W2_GWb2MkW28dpike1VLEyNNrT4KLlHrdwy27gMVFMcsFqDMNVRju9zCILw4Y3WKFuY_3Na"
+];
+
+/* Local fabric-swatch fallbacks (assets/fabrics/fan-N.svg) — one per FAN_IMAGES
+   entry, in the SAME order. If a remote photo above ever fails to load, the
+   card <img> onerror handler silently swaps in the matching local swatch so a
+   card is never blank. Do not delete these files. */
+const FAN_IMAGES_FALLBACK = [
   "assets/fabrics/fan-1.svg",
   "assets/fabrics/fan-2.svg",
   "assets/fabrics/fan-3.svg",
@@ -81,7 +98,11 @@ const FAN_CARDS = [
   { title: "Cotton Poplin", tag: "Cotton" },
   { title: "Raw Canvas", tag: "Cotton" },
   { title: "Soft Flannel", tag: "Cotton" }
-].map((c, i) => ({ ...c, img: FAN_IMAGES[i % FAN_IMAGES.length] }));
+].map((c, i) => ({
+  ...c,
+  img: FAN_IMAGES[i % FAN_IMAGES.length],
+  fallback: FAN_IMAGES_FALLBACK[i % FAN_IMAGES_FALLBACK.length]
+}));
 
 /* ---------- Helpers ---------- */
 // Refined woven-cloth texture from a fabric's palette (CSS fallback that always renders).
@@ -199,7 +220,7 @@ function initFanCarousel() {
     el.className = "fan-card";
     el.dataset.index = String(i);
     el.innerHTML = `
-      <img alt="" loading="lazy" src="${card.img}">
+      <img alt="" loading="lazy" src="${card.img}" data-fallback="${card.fallback}" onerror="this.onerror=null;this.src=this.dataset.fallback">
       <div class="fan-cap"><small>${escapeHtml(card.tag)}</small><strong>${escapeHtml(card.title)}</strong></div>
     `;
     layout.appendChild(el);
@@ -731,7 +752,7 @@ function initSlideshow() {
   // Reduced motion: leave the first slide showing, never auto-advance.
   if (prefersReducedMotion) return;
 
-  const INTERVAL = 5000; // ~5s per slide
+  const INTERVAL = 3500; // 3.5s per slide
   let current = 0;
   let timer = null;
 
@@ -1024,7 +1045,8 @@ function initStatsScramble() {
     });
 
     const FRAME_MS = 45;          // glyph flicker cadence
-    const PER_CHAR_MS = 90;       // stagger between characters resolving
+    const PER_CHAR_MS = 70;       // stagger between characters resolving
+    const HOLD_MS = 1000;         // all chars cycle random glyphs for ~1s first
     const start = performance.now();
 
     function tick(now) {
@@ -1034,7 +1056,8 @@ function initStatsScramble() {
       chars.forEach((ch, i) => {
         const span = spans[i];
         if (span.dataset.done) return;
-        const resolveAt = i * PER_CHAR_MS + 260;
+        // Hold the full scramble visible for HOLD_MS, then resolve char-by-char.
+        const resolveAt = HOLD_MS + i * PER_CHAR_MS;
         if (ch === " " || elapsed >= resolveAt) {
           span.textContent = ch === " " ? " " : ch;
           span.classList.add("resolved");
@@ -1058,6 +1081,10 @@ function initStatsScramble() {
   targets.forEach((el) => { el.dataset.finalText = el.textContent; });
   let playedThisView = false;
 
+  // Replay once for each fresh scroll-in, slightly before the strip is fully in
+  // view (modest threshold + a rootMargin that pulls the trigger up a touch).
+  // rootMargin's negative bottom margin means it fires as the strip enters the
+  // lower viewport; leaving the viewport re-arms it for the next scroll-in.
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (e.isIntersecting && !playedThisView) {
@@ -1067,8 +1094,19 @@ function initStatsScramble() {
         playedThisView = false;
       }
     });
-  }, { threshold: 0.35 });
+  }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
   io.observe(strip);
+
+  // Safety net: if the strip is ALREADY within the viewport on load (so the
+  // observer might not re-fire), trigger on the next frame.
+  requestAnimationFrame(() => {
+    const r = strip.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    if (r.top < vh * 0.9 && r.bottom > 0 && !playedThisView) {
+      playedThisView = true;
+      targets.forEach((el) => scramble(el));
+    }
+  });
 }
 
 /* ---------- Footer year ---------- */

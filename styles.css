@@ -739,20 +739,29 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   background: linear-gradient(to top, rgba(0,0,0,0.16), rgba(255,255,255,0.16) 70%);
 }
 .collage-a { width: 58%; height: 72%; top: 0; left: 0; z-index: 2; }
-/* Stock collage tiles use LOCAL fabric swatches (assets/fabrics/) so nothing
-   depends on expiring remote URLs. Swap these files for client photos later. */
+/* Stock collage tiles use the ORIGINAL remote fabric photos (Google Stitch lh3
+   URLs) as the PRIMARY image. A LOCAL fabric swatch (assets/fabrics/collage-N.svg)
+   is layered BEHIND it and a solid background-color sits behind that, so if a
+   remote photo ever fails to load the tile silently falls back to the local
+   swatch / colour instead of showing grey. Do not delete the local svgs. */
 .collage-a::before {
+  background-color: #e7e1d6;
   background-image: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)),
+    url("https://lh3.googleusercontent.com/aida-public/AB6AXuA-LYmah0qxMDWkusl_mWHmxGx1VgMil9pUJ4zMyg73g_80LlL7b_JwvvIItlGnf7u8bD2J5HvMM67I45I1y-Dgmm_JxhHl1UHKyeoJ_0BWx8wo-OK9KuGPCEi2nDIsRW4WGxT7yRGULvMASfApnFNUND4cxnrbhom4BxhWhvOO2b-yom70Zdd8sEUMR58h0UJ53eEvDQhe8OIMzBFlgHleYZd0x_MWGL-dPONu3Hbk5OKNR3Ls1-ZnedkNih9mxf9ArBAcGDnKCVy-"),
     url("assets/fabrics/collage-1.svg");
 }
 .collage-b { width: 46%; height: 52%; right: 0; top: 14%; z-index: 3; }
 .collage-b::before {
+  background-color: #d8dde2;
   background-image: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)),
+    url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbvdngpXSNtB1nvFqZCpIBluAJKRDC6iQoLoZ51js-DFo0FEPWfpICn52zz12PdEKwNGCKhMeP4E_eRW-mHTnry34XgKUhkNcwXw8c4gEEOUXKp3SrAsb5MHIqjW6UXV9md4Oo1O0Yqc8DAdb39arWbesyxwO-gGhXRXShjwl998sn8t_IlNT_zqrxgdyNwExq_UQJd0gYfq4BIisRLxnifAZtqi9D3zRpm5C_Z125wsRDeu1VFfs07lwxzgw1cqlDZU_CgyPz6ST5"),
     url("assets/fabrics/collage-2.svg");
 }
 .collage-c { width: 44%; height: 40%; right: 8%; bottom: 0; z-index: 4; }
 .collage-c::before {
+  background-color: #cfcac0;
   background-image: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)),
+    url("https://lh3.googleusercontent.com/aida-public/AB6AXuBlVeETFTkn2Z1TvnKzeFQ6MlAN5PJ-ZTGBtVPnaBIbMzCC7JfXXUWA-qy9lGbvVJV7_bT92y83lImVAZFxbZhBFsEb-LtXysXVuY70za2fAjmyTo1CiWYXuB7JeHvPJE19ydp4EV0e3nYPSecrtZs5Weu-4Xcor65k9pV7FtBJn_JOlNZe2uxxQba2Ri6Fh0Ox9nODXGbMT1ZgNuqsehHm2cijt2S-30CUOkNa3r4KS_sB1zpeNO2h-b9bcTvsZbHJjYtMiVv6c-45"),
     url("assets/fabrics/collage-3.svg");
 }
 .collage-badge {

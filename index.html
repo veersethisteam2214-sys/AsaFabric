@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- EB Garamond (serif), Montserrat (sans), Material Symbols (icons) -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260628-3">
+  <link rel="stylesheet" href="styles.css?v=20260627-6">
 
   <!-- GSAP (self-hosted) for the Featured Fabrics fan-carousel; app.js feature-detects window.gsap -->
   <script src="assets/gsap.min.js?v=20260627-1"></script>
@@ -75,15 +75,16 @@
     <!-- ============ Hero slideshow ============ -->
     <section class="hero" aria-label="Asa Fabric">
       <div class="slideshow" id="slideshow" data-parallax="0.18" aria-hidden="true">
-        <!-- IMAGE SET — hero. LOCAL fabric swatches under assets/fabrics/ that ALWAYS load
-             (no expiring remote URLs). To use real photos later, just replace these four
-             files (or repoint the src) — keep one slide per <div>. Solid bg-color fallback
-             also applied in CSS (.slide-img background). Four visibly DISTINCT cloth tones:
-             warm ecru linen, soft blue chambray, charcoal/grey wool, natural cotton. -->
-        <div class="slide is-active" data-slide="0"><img class="slide-img" alt="" loading="eager" src="assets/fabrics/hero-1.svg"></div>
-        <div class="slide" data-slide="1"><img class="slide-img" alt="" loading="lazy" src="assets/fabrics/hero-2.svg"></div>
-        <div class="slide" data-slide="2"><img class="slide-img" alt="" loading="lazy" src="assets/fabrics/hero-3.svg"></div>
-        <div class="slide" data-slide="3"><img class="slide-img" alt="" loading="lazy" src="assets/fabrics/hero-4.svg"></div>
+        <!-- IMAGE SET — hero. PRIMARY src is the original remote fabric photo (Google
+             Stitch lh3 URL). If a remote image ever fails to load, the onerror handler
+             silently swaps in the matching LOCAL fabric swatch under assets/fabrics/
+             (hero-N.svg) so the slide is never blank/grey. Solid bg-color fallback also
+             applied in CSS (.slide-img background). To use new photos later, swap the
+             primary src (and, optionally, the local fallback file). -->
+        <div class="slide is-active" data-slide="0"><img class="slide-img" alt="" loading="eager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-LYmah0qxMDWkusl_mWHmxGx1VgMil9pUJ4zMyg73g_80LlL7b_JwvvIItlGnf7u8bD2J5HvMM67I45I1y-Dgmm_JxhHl1UHKyeoJ_0BWx8wo-OK9KuGPCEi2nDIsRW4WGxT7yRGULvMASfApnFNUND4cxnrbhom4BxhWhvOO2b-yom70Zdd8sEUMR58h0UJ53eEvDQhe8OIMzBFlgHleYZd0x_MWGL-dPONu3Hbk5OKNR3Ls1-ZnedkNih9mxf9ArBAcGDnKCVy-" onerror="this.onerror=null;this.src='assets/fabrics/hero-1.svg'"></div>
+        <div class="slide" data-slide="1"><img class="slide-img" alt="" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbvdngpXSNtB1nvFqZCpIBluAJKRDC6iQoLoZ51js-DFo0FEPWfpICn52zz12PdEKwNGCKhMeP4E_eRW-mHTnry34XgKUhkNcwXw8c4gEEOUXKp3SrAsb5MHIqjW6UXV9md4Oo1O0Yqc8DAdb39arWbesyxwO-gGhXRXShjwl998sn8t_IlNT_zqrxgdyNwExq_UQJd0gYfq4BIisRLxnifAZtqi9D3zRpm5C_Z125wsRDeu1VFfs07lwxzgw1cqlDZU_CgyPz6ST5" onerror="this.onerror=null;this.src='assets/fabrics/hero-2.svg'"></div>
+        <div class="slide" data-slide="2"><img class="slide-img" alt="" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlVeETFTkn2Z1TvnKzeFQ6MlAN5PJ-ZTGBtVPnaBIbMzCC7JfXXUWA-qy9lGbvVJV7_bT92y83lImVAZFxbZhBFsEb-LtXysXVuY70za2fAjmyTo1CiWYXuB7JeHvPJE19ydp4EV0e3nYPSecrtZs5Weu-4Xcor65k9pV7FtBJn_JOlNZe2uxxQba2Ri6Fh0Ox9nODXGbMT1ZgNuqsehHm2cijt2S-30CUOkNa3r4KS_sB1zpeNO2h-b9bcTvsZbHJjYtMiVv6c-45" onerror="this.onerror=null;this.src='assets/fabrics/hero-3.svg'"></div>
+        <div class="slide" data-slide="3"><img class="slide-img" alt="" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0k6HkXhr7ICsGOHVnruShsBIhp_jKMM46JuvxliUfYLS308zy5XVz48kLhmYcpDgL0mBH0s6MAQR6aqLVM-AC1dsFX--Y-SqzP2fH9LWCxM99O1G7o81KcVjE7d1RsWYTMsOhTyw999beI0vrcHIueeKoE4mflngslpxHv0HaubJZGc8dPLK_R7_kx9LC7eBm6C_PYlvdZ9nt5WmfBZZgR1kMt_LbR_ZdSLyBcIJQXXv4Vnv7gwJgeHQouiXPExSZN4Rqy2cPpvoO" onerror="this.onerror=null;this.src='assets/fabrics/hero-4.svg'"></div>
         <div class="slide-scrim"></div>
       </div>
 
@@ -354,6 +355,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=20260628-3"></script>
+  <script src="app.js?v=20260627-6"></script>
 </body>
 </html>
