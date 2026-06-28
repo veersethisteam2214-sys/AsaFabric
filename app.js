@@ -579,7 +579,10 @@ function buildWorldMap() {
   //       and REPLAYED every time #reach re-enters the viewport. -----
   const DRAW_MS = 1500;     // per-route draw duration
   const STAGGER_MS = 320;   // delay between successive routes
+  const HOLD_MS = 1700;      // pause with all routes visible before reset
   const PULSE_MS = 2000;    // pulse-ring period
+  const ALL_ROUTES_MS = (routes.length - 1) * STAGGER_MS + DRAW_MS;
+  const CYCLE_MS = ALL_ROUTES_MS + HOLD_MS;
   const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
   let startT = 0;
@@ -593,26 +596,27 @@ function buildWorldMap() {
   function frame(now) {
     if (!startT) startT = now;
     const elapsed = now - startT;
+    const cycleElapsed = elapsed % CYCLE_MS;
 
     routes.forEach((r) => {
-      const local = elapsed - r.i * STAGGER_MS;
+      const local = cycleElapsed - r.i * STAGGER_MS;
       if (local <= 0) {
         r.path.style.strokeDashoffset = `${r.len}`;
         if (r.dot) r.dot.setAttribute("opacity", "0");
         return;
       }
+
       const p = Math.min(1, local / DRAW_MS);
       const e = easeInOut(p);
       r.path.style.strokeDashoffset = `${r.len * (1 - e)}`;
-      if (r.dot) {
-        if (p < 1) {
-          const pt = pointAt(r, e);
-          r.dot.setAttribute("cx", pt.x);
-          r.dot.setAttribute("cy", pt.y);
-          r.dot.setAttribute("opacity", "1");
-        } else {
-          r.dot.setAttribute("opacity", "0");
-        }
+      if (!r.dot) return;
+      if (p < 1) {
+        const pt = pointAt(r, e);
+        r.dot.setAttribute("cx", pt.x);
+        r.dot.setAttribute("cy", pt.y);
+        r.dot.setAttribute("opacity", "1");
+      } else {
+        r.dot.setAttribute("opacity", "0");
       }
     });
 
@@ -624,7 +628,7 @@ function buildWorldMap() {
       pu.ring.setAttribute("opacity", (0.55 * (1 - phase)).toFixed(3));
     });
 
-    // keep looping for the pulses; draw-on completes once but rings continue
+    // keep looping for the route waves and endpoint pulses while visible
     raf = requestAnimationFrame(frame);
   }
 
@@ -1002,6 +1006,9 @@ function initStatsScramble() {
   function scramble(el) {
     const finalText = el.dataset.finalText;
     const chars = Array.from(finalText);
+    const runId = String((Number(el.dataset.scrambleRun) || 0) + 1);
+    el.dataset.scrambleRun = runId;
+    el.classList.add("is-scrambling");
     // Build per-character spans so each resolves independently.
     el.textContent = "";
     const spans = chars.map((ch) => {
@@ -1017,6 +1024,7 @@ function initStatsScramble() {
     const start = performance.now();
 
     function tick(now) {
+      if (el.dataset.scrambleRun !== runId) return;
       let allDone = true;
       const elapsed = now - start;
       chars.forEach((ch, i) => {
@@ -1035,19 +1043,24 @@ function initStatsScramble() {
       if (!allDone) {
         // throttle the flicker frame rate
         setTimeout(() => requestAnimationFrame(tick), FRAME_MS);
+      } else {
+        el.classList.remove("is-scrambling");
       }
     }
     requestAnimationFrame(tick);
   }
 
-  // Stash the final text so it's recoverable, then run once on scroll-in.
+  // Stash the final text so it's recoverable, then replay once for each scroll-in.
   targets.forEach((el) => { el.dataset.finalText = el.textContent; });
+  let playedThisView = false;
 
-  const io = new IntersectionObserver((entries, obs) => {
+  const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
-      if (e.isIntersecting) {
+      if (e.isIntersecting && !playedThisView) {
+        playedThisView = true;
         targets.forEach((el) => scramble(el));
-        obs.disconnect();
+      } else if (!e.isIntersecting) {
+        playedThisView = false;
       }
     });
   }, { threshold: 0.35 });
