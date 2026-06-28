@@ -104,6 +104,10 @@ function escapeHtml(value) {
 }
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// These two prompt-specific interactions are core content, so keep them visible
+// even when a browser reports reduced motion. Larger continuous/parallax effects
+// still use prefersReducedMotion below.
+const promptMotionEnabled = true;
 
 /* ---------- Renderers ---------- */
 /* NOTE: the sellable price grid + search/filter has been removed from the landing
@@ -518,7 +522,7 @@ function buildWorldMap() {
 
     const path = svgEl("path", {
       d, fill: "none",
-      stroke: prefersReducedMotion ? ACCENT : "url(#worldRouteGrad)",
+      stroke: promptMotionEnabled ? "url(#worldRouteGrad)" : ACCENT,
       "stroke-width": "1.4", "stroke-opacity": "0.9", "stroke-linecap": "round"
     });
     svg.appendChild(path);
@@ -526,7 +530,7 @@ function buildWorldMap() {
     const len = path.getTotalLength();
     // travelling glow dot — created up front, ridden along the path by JS
     let dot = null;
-    if (!prefersReducedMotion) {
+    if (promptMotionEnabled) {
       path.style.strokeDasharray = `${len}`;
       path.style.strokeDashoffset = `${len}`;   // start fully undrawn
       dot = svgEl("circle", { r: "3.2", fill: ACCENT_SOFT, filter: "url(#worldGlow)", opacity: "0" });
@@ -539,7 +543,7 @@ function buildWorldMap() {
   function addPoint(p, name, isHub, secondary) {
     // pulse (expanding fading ring) — JS-driven so it plays on scroll-in
     let pulse = null;
-    if (!prefersReducedMotion) {
+    if (promptMotionEnabled) {
       pulse = svgEl("circle", {
         cx: p.x, cy: p.y, r: "2.6", fill: "none",
         stroke: ACCENT_SOFT, "stroke-width": "1.2", opacity: "0"
@@ -549,7 +553,7 @@ function buildWorldMap() {
     // solid point
     svg.appendChild(svgEl("circle", {
       cx: p.x, cy: p.y, r: isHub ? "3.6" : "2.8", fill: ACCENT,
-      filter: prefersReducedMotion ? null : "url(#worldGlow)"
+      filter: promptMotionEnabled ? "url(#worldGlow)" : null
     }));
     // label
     const lbl = svgEl("text", {
@@ -571,7 +575,7 @@ function buildWorldMap() {
 
   stage.appendChild(svg);
 
-  if (prefersReducedMotion) return; // static finished arcs + points, no JS loop
+  if (!promptMotionEnabled) return; // static finished arcs + points, no JS loop
 
   // ----- JS-driven animation (rAF). Each route draws on (dashoffset → 0) over
   //       DRAW_MS with a staggered start; a glow dot rides the arc as it draws;
@@ -996,8 +1000,8 @@ function initStatsScramble() {
   const targets = Array.from(strip.querySelectorAll(".stat > strong, .stat > span"));
   if (!targets.length) return;
 
-  // Reduced motion or no IntersectionObserver: leave the final text as-is.
-  if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
+  // No IntersectionObserver: leave the final text as-is.
+  if (!("IntersectionObserver" in window)) return;
 
   const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789–+/#%@&*<>";
 
