@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1100" viewBox="0 0 1100 1100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Woven fabric swatch">
+  <defs>
+    <linearGradient id="gcollage1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e1d4ba"/>
+      <stop offset="52%" stop-color="#cabb9f"/>
+      <stop offset="100%" stop-color="#a4977c"/>
+    </linearGradient>
+    <radialGradient id="scollage1" cx="26%" cy="18%" r="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vcollage1" cx="50%" cy="50%" r="75%">
+      <stop offset="60%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.34"/>
+    </radialGradient>
+    <pattern id="wcollage1" width="9" height="9" patternUnits="userSpaceOnUse">
+      <rect width="9" height="9" fill="none"/>
+      <line x1="0" y1="0" x2="0" y2="9" stroke="#988a70" stroke-width="1" opacity="0.5"/>
+      <line x1="0" y1="0" x2="9" y2="0" stroke="#bbac8f" stroke-width="1" opacity="0.42"/>
+      <line x1="4.5" y1="0" x2="4.5" y2="9" stroke="#ffffff" stroke-width="0.5" opacity="0.10"/>
+    </pattern>
+    <filter id="ncollage1" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="t"/>
+      <feColorMatrix in="t" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0"/>
+    </filter>
+  </defs>
+  <rect width="1100" height="1100" fill="#cabb9f"/>
+  <rect width="1100" height="1100" fill="url(#gcollage1)"/>
+  <rect width="1100" height="1100" fill="url(#wcollage1)"/>
+  <rect width="1100" height="1100" fill="url(#scollage1)"/>
+  <rect width="1100" height="1100" filter="url(#ncollage1)"/>
+  <rect width="1100" height="1100" fill="url(#vcollage1)"/>
+</svg>

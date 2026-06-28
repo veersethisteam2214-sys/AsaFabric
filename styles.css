@@ -261,17 +261,28 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); }
 /* ---------- Logo wordmark (swappable image variants) ----------
    Two stacked <img> in the nav (light over hero, dark when scrolled);
-   single <img> in footer / mobile menu. Rendered larger (~36px nav, ~52px
+   single <img> in footer / mobile menu. Rendered large (~48px nav, ~78px
    footer) so the full "ASA / FABRICS" wordmark — including the lower
-   "FABRICS" line — is clearly legible. Aspect ratio preserved (width:auto). */
-.brand-logo { position: relative; display: inline-flex; align-items: center; height: 36px; }
+   "FABRICS" line — is clearly legible. Source PNGs are 817×445 and trimmed
+   tight to the wordmark, so scaling down stays crisp. Aspect ratio preserved
+   (width:auto). The light variant sits over the busy hero photo, so it gets a
+   soft drop-shadow for contrast / legibility. */
+.brand-logo { position: relative; display: inline-flex; align-items: center; height: 48px; }
 .brand-logo-img {
-  display: block; height: 36px; width: auto; user-select: none;
+  display: block; height: 48px; width: auto; user-select: none;
   image-rendering: -webkit-optimize-contrast;
 }
 /* nav: stack the two variants and cross-fade on .scrolled */
 .glass-nav .brand-logo { width: auto; }
 .glass-nav .brand-logo-img { transition: opacity 0.4s ease; }
+/* Light wordmark over the hero photo — soft dark halo so thin serif strokes
+   (esp. the lower "FABRICS" line) stay readable on any frame of the slideshow. */
+.glass-nav .brand-logo-img.light {
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.75))
+          drop-shadow(0 0 3px rgba(0,0,0,0.6))
+          drop-shadow(0 0 8px rgba(0,0,0,0.4));
+}
+.glass-nav.scrolled .brand-logo-img.light { filter: none; }
 .glass-nav .brand-logo-img.dark { position: absolute; top: 0; left: 0; opacity: 0; }
 .glass-nav .brand-logo-img.light { opacity: 1; }
 .glass-nav.scrolled .brand-logo-img.light { opacity: 0; }
@@ -360,7 +371,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .mobile-menu a:last-child { border-bottom: none; }
 .mobile-cta { color: var(--ink); }
 .mobile-menu .mobile-brand { padding: 4px 4px 14px; border-bottom: 1px solid var(--hairline); }
-.mobile-menu .mobile-brand .brand-logo-img { height: 34px; }
+.mobile-menu .mobile-brand .brand-logo { height: 44px; }
+.mobile-menu .mobile-brand .brand-logo-img { height: 44px; }
 
 /* ---------- Hero ---------- */
 .hero {
@@ -715,19 +727,21 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   background: linear-gradient(to top, rgba(0,0,0,0.16), rgba(255,255,255,0.16) 70%);
 }
 .collage-a { width: 58%; height: 72%; top: 0; left: 0; z-index: 2; }
+/* Stock collage tiles use LOCAL fabric swatches (assets/fabrics/) so nothing
+   depends on expiring remote URLs. Swap these files for client photos later. */
 .collage-a::before {
   background-image: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)),
-    url("https://lh3.googleusercontent.com/aida-public/AB6AXuA-LYmah0qxMDWkusl_mWHmxGx1VgMil9pUJ4zMyg73g_80LlL7b_JwvvIItlGnf7u8bD2J5HvMM67I45I1y-Dgmm_JxhHl1UHKyeoJ_0BWx8wo-OK9KuGPCEi2nDIsRW4WGxT7yRGULvMASfApnFNUND4cxnrbhom4BxhWhvOO2b-yom70Zdd8sEUMR58h0UJ53eEvDQhe8OIMzBFlgHleYZd0x_MWGL-dPONu3Hbk5OKNR3Ls1-ZnedkNih9mxf9ArBAcGDnKCVy-");
+    url("assets/fabrics/collage-1.svg");
 }
 .collage-b { width: 46%; height: 52%; right: 0; top: 14%; z-index: 3; }
 .collage-b::before {
   background-image: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)),
-    url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbvdngpXSNtB1nvFqZCpIBluAJKRDC6iQoLoZ51js-DFo0FEPWfpICn52zz12PdEKwNGCKhMeP4E_eRW-mHTnry34XgKUhkNcwXw8c4gEEOUXKp3SrAsb5MHIqjW6UXV9md4Oo1O0Yqc8DAdb39arWbesyxwO-gGhXRXShjwl998sn8t_IlNT_zqrxgdyNwExq_UQJd0gYfq4BIisRLxnifAZtqi9D3zRpm5C_Z125wsRDeu1VFfs07lwxzgw1cqlDZU_CgyPz6ST5");
+    url("assets/fabrics/collage-2.svg");
 }
 .collage-c { width: 44%; height: 40%; right: 8%; bottom: 0; z-index: 4; }
 .collage-c::before {
   background-image: linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18)),
-    url("https://lh3.googleusercontent.com/aida-public/AB6AXuBlVeETFTkn2Z1TvnKzeFQ6MlAN5PJ-ZTGBtVPnaBIbMzCC7JfXXUWA-qy9lGbvVJV7_bT92y83lImVAZFxbZhBFsEb-LtXysXVuY70za2fAjmyTo1CiWYXuB7JeHvPJE19ydp4EV0e3nYPSecrtZs5Weu-4Xcor65k9pV7FtBJn_JOlNZe2uxxQba2Ri6Fh0Ox9nODXGbMT1ZgNuqsehHm2cijt2S-30CUOkNa3r4KS_sB1zpeNO2h-b9bcTvsZbHJjYtMiVv6c-45");
+    url("assets/fabrics/collage-3.svg");
 }
 .collage-badge {
   position: absolute; left: 6%; bottom: 6%; z-index: 5;
@@ -903,8 +917,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* ---------- Footer ---------- */
 .site-footer { border-top: 1px solid var(--hairline); padding: 80px var(--margin) 40px; max-width: var(--container); margin: 0 auto; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
-.footer-brand .brand-logo { height: 52px; }
-.footer-brand .brand-logo-img { height: 52px; }
+.footer-brand .brand-logo { height: 78px; }
+.footer-brand .brand-logo-img { height: 78px; }
 .footer-tagline { color: var(--muted); font-size: 14px; max-width: 260px; margin: 18px 0 0; }
 .footer-col h4 {
   font-family: var(--sans); font-size: 11px; font-weight: 600;
