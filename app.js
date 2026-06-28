@@ -125,6 +125,10 @@ function escapeHtml(value) {
 }
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// These two prompt-specific interactions are core content, so keep them visible
+// even when a browser reports reduced motion. Larger continuous/parallax effects
+// still use prefersReducedMotion below.
+const promptMotionEnabled = true;
 
 /* ---------- Renderers ---------- */
 /* NOTE: the sellable price grid + search/filter has been removed from the landing
@@ -539,7 +543,7 @@ function buildWorldMap() {
 
     const path = svgEl("path", {
       d, fill: "none",
-      stroke: prefersReducedMotion ? ACCENT : "url(#worldRouteGrad)",
+      stroke: promptMotionEnabled ? "url(#worldRouteGrad)" : ACCENT,
       "stroke-width": "1.4", "stroke-opacity": "0.9", "stroke-linecap": "round"
     });
     svg.appendChild(path);
@@ -547,7 +551,7 @@ function buildWorldMap() {
     const len = path.getTotalLength();
     // travelling glow dot — created up front, ridden along the path by JS
     let dot = null;
-    if (!prefersReducedMotion) {
+    if (promptMotionEnabled) {
       path.style.strokeDasharray = `${len}`;
       path.style.strokeDashoffset = `${len}`;   // start fully undrawn
       dot = svgEl("circle", { r: "3.2", fill: ACCENT_SOFT, filter: "url(#worldGlow)", opacity: "0" });
@@ -560,7 +564,7 @@ function buildWorldMap() {
   function addPoint(p, name, isHub, secondary) {
     // pulse (expanding fading ring) — JS-driven so it plays on scroll-in
     let pulse = null;
-    if (!prefersReducedMotion) {
+    if (promptMotionEnabled) {
       pulse = svgEl("circle", {
         cx: p.x, cy: p.y, r: "2.6", fill: "none",
         stroke: ACCENT_SOFT, "stroke-width": "1.2", opacity: "0"
@@ -570,7 +574,7 @@ function buildWorldMap() {
     // solid point
     svg.appendChild(svgEl("circle", {
       cx: p.x, cy: p.y, r: isHub ? "3.6" : "2.8", fill: ACCENT,
-      filter: prefersReducedMotion ? null : "url(#worldGlow)"
+      filter: promptMotionEnabled ? "url(#worldGlow)" : null
     }));
     // label
     const lbl = svgEl("text", {
@@ -592,7 +596,7 @@ function buildWorldMap() {
 
   stage.appendChild(svg);
 
-  if (prefersReducedMotion) return; // static finished arcs + points, no JS loop
+  if (!promptMotionEnabled) return; // static finished arcs + points, no JS loop
 
   // ----- JS-driven animation (rAF). Each route draws on (dashoffset → 0) over
   //       DRAW_MS with a staggered start; a glow dot rides the arc as it draws;
@@ -600,7 +604,10 @@ function buildWorldMap() {
   //       and REPLAYED every time #reach re-enters the viewport. -----
   const DRAW_MS = 1500;     // per-route draw duration
   const STAGGER_MS = 320;   // delay between successive routes
+  const HOLD_MS = 1700;      // pause with all routes visible before reset
   const PULSE_MS = 2000;    // pulse-ring period
+  const ALL_ROUTES_MS = (routes.length - 1) * STAGGER_MS + DRAW_MS;
+  const CYCLE_MS = ALL_ROUTES_MS + HOLD_MS;
   const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
   let startT = 0;
@@ -614,26 +621,27 @@ function buildWorldMap() {
   function frame(now) {
     if (!startT) startT = now;
     const elapsed = now - startT;
+    const cycleElapsed = elapsed % CYCLE_MS;
 
     routes.forEach((r) => {
-      const local = elapsed - r.i * STAGGER_MS;
+      const local = cycleElapsed - r.i * STAGGER_MS;
       if (local <= 0) {
         r.path.style.strokeDashoffset = `${r.len}`;
         if (r.dot) r.dot.setAttribute("opacity", "0");
         return;
       }
+
       const p = Math.min(1, local / DRAW_MS);
       const e = easeInOut(p);
       r.path.style.strokeDashoffset = `${r.len * (1 - e)}`;
-      if (r.dot) {
-        if (p < 1) {
-          const pt = pointAt(r, e);
-          r.dot.setAttribute("cx", pt.x);
-          r.dot.setAttribute("cy", pt.y);
-          r.dot.setAttribute("opacity", "1");
-        } else {
-          r.dot.setAttribute("opacity", "0");
-        }
+      if (!r.dot) return;
+      if (p < 1) {
+        const pt = pointAt(r, e);
+        r.dot.setAttribute("cx", pt.x);
+        r.dot.setAttribute("cy", pt.y);
+        r.dot.setAttribute("opacity", "1");
+      } else {
+        r.dot.setAttribute("opacity", "0");
       }
     });
 
@@ -645,7 +653,7 @@ function buildWorldMap() {
       pu.ring.setAttribute("opacity", (0.55 * (1 - phase)).toFixed(3));
     });
 
-    // keep looping for the pulses; draw-on completes once but rings continue
+    // keep looping for the route waves and endpoint pulses while visible
     raf = requestAnimationFrame(frame);
   }
 
@@ -1013,8 +1021,8 @@ function initStatsScramble() {
   const targets = Array.from(strip.querySelectorAll(".stat > strong, .stat > span"));
   if (!targets.length) return;
 
-  // Reduced motion or no IntersectionObserver: leave the final text as-is.
-  if (prefersReducedMotion || !("IntersectionObserver" in window)) return;
+  // No IntersectionObserver: leave the final text as-is.
+  if (!("IntersectionObserver" in window)) return;
 
   const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789–+/#%@&*<>";
 
@@ -1023,6 +1031,9 @@ function initStatsScramble() {
   function scramble(el) {
     const finalText = el.dataset.finalText;
     const chars = Array.from(finalText);
+    const runId = String((Number(el.dataset.scrambleRun) || 0) + 1);
+    el.dataset.scrambleRun = runId;
+    el.classList.add("is-scrambling");
     // Build per-character spans so each resolves independently.
     el.textContent = "";
     const spans = chars.map((ch) => {
@@ -1039,6 +1050,7 @@ function initStatsScramble() {
     const start = performance.now();
 
     function tick(now) {
+      if (el.dataset.scrambleRun !== runId) return;
       let allDone = true;
       const elapsed = now - start;
       chars.forEach((ch, i) => {
@@ -1058,29 +1070,28 @@ function initStatsScramble() {
       if (!allDone) {
         // throttle the flicker frame rate
         setTimeout(() => requestAnimationFrame(tick), FRAME_MS);
+      } else {
+        el.classList.remove("is-scrambling");
       }
     }
     requestAnimationFrame(tick);
   }
 
-  // Stash the final text so it's recoverable, then run once on scroll-in.
+  // Stash the final text so it's recoverable, then replay once for each scroll-in.
   targets.forEach((el) => { el.dataset.finalText = el.textContent; });
+  let playedThisView = false;
 
-  let fired = false;
-  function run() {
-    if (fired) return;
-    fired = true;
-    targets.forEach((el) => scramble(el));
-  }
-
-  // Fire once, slightly before the strip is fully in view (modest threshold +
-  // a rootMargin that pulls the trigger up a touch). rootMargin's negative
-  // bottom margin means it fires as the strip enters the lower viewport.
-  const io = new IntersectionObserver((entries, obs) => {
+  // Replay once for each fresh scroll-in, slightly before the strip is fully in
+  // view (modest threshold + a rootMargin that pulls the trigger up a touch).
+  // rootMargin's negative bottom margin means it fires as the strip enters the
+  // lower viewport; leaving the viewport re-arms it for the next scroll-in.
+  const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
-      if (e.isIntersecting) {
-        run();
-        obs.disconnect();
+      if (e.isIntersecting && !playedThisView) {
+        playedThisView = true;
+        targets.forEach((el) => scramble(el));
+      } else if (!e.isIntersecting) {
+        playedThisView = false;
       }
     });
   }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
@@ -1091,7 +1102,10 @@ function initStatsScramble() {
   requestAnimationFrame(() => {
     const r = strip.getBoundingClientRect();
     const vh = window.innerHeight || document.documentElement.clientHeight;
-    if (r.top < vh * 0.9 && r.bottom > 0) run();
+    if (r.top < vh * 0.9 && r.bottom > 0 && !playedThisView) {
+      playedThisView = true;
+      targets.forEach((el) => scramble(el));
+    }
   });
 }
 

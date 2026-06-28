@@ -287,6 +287,13 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .glass-nav .brand-logo-img.light { opacity: 1; }
 .glass-nav.scrolled .brand-logo-img.light { opacity: 0; }
 .glass-nav.scrolled .brand-logo-img.dark { opacity: 1; }
+/* Header uses the same dark-ink wordmark as the footer for clearer contrast
+   against the cream glass nav. */
+.glass-nav .brand-logo-img.dark {
+  position: static;
+  opacity: 1;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,0.45));
+}
 .nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-links a {
   position: relative;
@@ -471,12 +478,17 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 /* ---------- Stats: scramble / decode reveal on scroll ----------
    When the strip scrolls into view, each value's (and label's) characters
    start as random glyphs then resolve char-by-char to the exact final text.
-   Driven by JS (initStatsScramble) via IntersectionObserver, fired once.
+   Driven by JS (initStatsScramble) via IntersectionObserver, replayed once
+   for each fresh scroll-in.
    While scrambling, .is-scrambling adds a faint settle; the unscrambled
    characters carry a dimmed tone via the .scramble-char helper class.
    Reduced-motion + no-JS: final text shows immediately (JS skips scramble). */
 .stats-strip .stat strong .scramble-char {
   color: var(--muted-2); opacity: 0.85;
+}
+.stats-strip .is-scrambling {
+  color: var(--accent-blue);
+  text-shadow: 0 0 18px rgba(14,165,233,0.18);
 }
 .stats-strip .stat strong .scramble-char.resolved,
 .stats-strip .stat span .scramble-char.resolved {
@@ -941,12 +953,27 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   gap: 16px; border-top: 1px solid var(--hairline); padding-top: 28px;
 }
 .footer-legal { font-family: var(--sans); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.footer-social { display: flex; gap: 24px; }
+.footer-social { display: flex; align-items: center; gap: 14px; }
 .footer-social a {
-  font-family: var(--sans); font-size: 11px; font-weight: 600;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); transition: color 0.3s ease;
+  display: inline-grid; place-items: center;
+  width: 38px; height: 38px;
+  color: var(--muted);
+  border: 1px solid rgba(26,26,26,0.18);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.28);
+  transition: color 0.3s ease, border-color 0.3s ease, transform 0.2s var(--glass-ease), background-color 0.3s ease;
 }
-.footer-social a:hover { color: var(--ink); }
+.footer-social svg {
+  display: block;
+  width: 18px; height: 18px;
+  fill: currentColor;
+}
+.footer-social a:hover {
+  color: var(--accent-blue);
+  border-color: rgba(14,165,233,0.48);
+  background: rgba(14,165,233,0.08);
+  transform: translateY(-2px);
+}
 
 /* ---------- Reveal animation ---------- */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
@@ -1025,7 +1052,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   /* liquid-glass buttons: keep the glass styling, but no lift/scale/sheen motion */
   .btn, .btn:hover, .btn:active,
   .btn-link, .btn-link:hover, .btn-link:active,
-  .nav-cta, .nav-cta:hover, .nav-cta:active { transform: none !important; }
+  .nav-cta, .nav-cta:hover, .nav-cta:active,
+  .footer-social a, .footer-social a:hover { transform: none !important; }
   .btn:hover span, .btn-link:hover span { transform: none !important; }
   .btn::before, .nav-cta::before { transform: translateX(-120%) !important; }
   /* TASK 2: nav dock magnification disabled under reduced motion */

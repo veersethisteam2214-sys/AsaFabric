@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- EB Garamond (serif), Montserrat (sans), Material Symbols (icons) -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260627-5">
+  <link rel="stylesheet" href="styles.css?v=20260627-6">
 
   <!-- GSAP (self-hosted) for the Featured Fabrics fan-carousel; app.js feature-detects window.gsap -->
   <script src="assets/gsap.min.js?v=20260627-1"></script>
@@ -38,7 +38,6 @@
          ============================================================ -->
     <a class="brand" href="#top" aria-label="Asa Fabric — home">
       <span class="brand-logo" aria-hidden="true">
-        <img class="brand-logo-img light" src="assets/logo-light.png" alt="">
         <img class="brand-logo-img dark" src="assets/logo-dark.png" alt="">
       </span>
     </a>
@@ -47,7 +46,6 @@
       <a href="#uses">Shirtings</a>
       <a href="#uses">Suitings</a>
       <a href="#uses">Trousers</a>
-      <a href="#catalog">Catalog</a>
       <a href="#contact">Contact</a>
     </nav>
 
@@ -69,7 +67,6 @@
     <a href="#uses">Shirtings</a>
     <a href="#uses">Suitings</a>
     <a href="#uses">Trousers</a>
-    <a href="#catalog">Catalog</a>
     <a href="#contact">Contact</a>
     <a class="mobile-cta" href="#catalog">View Catalog</a>
   </div>
@@ -339,13 +336,25 @@
     <div class="footer-bottom">
       <small class="footer-legal">© <span id="year"></span> Asa Fabric. All rights reserved.</small>
       <div class="footer-social" aria-label="Social">
-        <a href="#top" aria-label="Instagram">Instagram</a>
-        <a href="#top" aria-label="LinkedIn">LinkedIn</a>
-        <a href="#top" aria-label="Email">Email</a>
+        <a href="#top" aria-label="Instagram">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.4a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2Zm0 2a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2Zm5.1-2.55a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/>
+          </svg>
+        </a>
+        <a href="#top" aria-label="LinkedIn">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M5.2 8.9h3.15V20H5.2V8.9ZM6.78 4a1.83 1.83 0 1 1 0 3.66 1.83 1.83 0 0 1 0-3.66Zm4.02 4.9h3.02v1.52h.04c.42-.8 1.45-1.72 3.04-1.72 3.25 0 3.85 2.14 3.85 4.92V20H17.6v-5.65c0-1.35-.03-3.08-1.88-3.08-1.88 0-2.17 1.47-2.17 2.98V20H10.8V8.9Z"/>
+          </svg>
+        </a>
+        <a href="#contact" aria-label="Email">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M4.5 5h15A2.5 2.5 0 0 1 22 7.5v9A2.5 2.5 0 0 1 19.5 19h-15A2.5 2.5 0 0 1 2 16.5v-9A2.5 2.5 0 0 1 4.5 5Zm0 2a.5.5 0 0 0-.5.5v.36l8 5.14 8-5.14V7.5a.5.5 0 0 0-.5-.5h-15ZM20 10.24l-7.46 4.8a1 1 0 0 1-1.08 0L4 10.24v6.26a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5v-6.26Z"/>
+          </svg>
+        </a>
       </div>
     </div>
   </footer>
 
-  <script src="app.js?v=20260627-5"></script>
+  <script src="app.js?v=20260627-6"></script>
 </body>
 </html>
