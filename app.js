@@ -710,8 +710,10 @@ function initFabricRotator() {
 
 /* ---------- Hero slideshow — automatic crossfade (no manual controls) ----------
    4 slides, ~5s each, smooth opacity crossfade (CSS handles the fade), looping
-   forever. Pauses while the tab is hidden and while the hero is hovered, then
-   resumes. Reduced motion: no auto-advance — the first slide stays static.
+   forever. It KEEPS auto-advancing regardless of cursor position over the hero
+   (the hero fills the viewport, so a hover-pause would leave it looking frozen).
+   Pauses only while the tab is hidden, then resumes. Reduced motion: no
+   auto-advance — the first slide stays static.
    The <noscript> first-slide-visible fallback is in markup (slide.is-active). */
 function initSlideshow() {
   const root = document.querySelector("#slideshow");
@@ -738,10 +740,9 @@ function initSlideshow() {
     if (timer) { window.clearInterval(timer); timer = null; }
   }
 
-  // Pause on hover over the hero, resume after.
-  const hero = root.closest(".hero") || root;
-  hero.addEventListener("mouseenter", stop);
-  hero.addEventListener("mouseleave", start);
+  // Intentionally NO hover pause: the hero fills the viewport, so pausing on
+  // hover would make the slideshow look frozen. It keeps auto-advancing
+  // regardless of cursor position.
   // Pause while the tab is hidden, resume when visible.
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stop(); else start();
