@@ -430,7 +430,7 @@ const WORLD_DESTINATIONS = [
   { name: "Tokyo",     lat: 35.6762, lng: 139.6503 },
   { name: "Mumbai",    lat: 19.0760, lng: 72.8777  },
   { name: "Sydney",    lat: -33.8688, lng: 151.2093 },
-  { name: "Lagos",     lat: 6.5244,  lng: 3.3792   }
+  { name: "Nigeria",   lat: 9.08,    lng: 8.68     }
 ];
 
 const SVGNS = "http://www.w3.org/2000/svg";
