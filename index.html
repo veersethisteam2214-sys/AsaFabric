@@ -225,16 +225,10 @@
     <section class="catalog-slot" id="catalog" aria-hidden="true"></section>
 
     <!-- ============================================================
-         B2B GLOBAL SUPPLY — animated dotted world map
-         Ported from a framer-motion + dotted-map "WorldMap" React
-         component to vanilla SVG. The dotted background lives in
-         assets/world-dots.svg (generated build-time with the
-         `dotted-map` npm package — see app.js header for regen notes).
-         The routes / travelling dots / pulses / labels are drawn by
-         buildWorldMap() in app.js as plain SVG, in light blue (#0ea5e9 /
-         #38bdf8) per the accent system. The draw-on is JS-driven (rAF
-         stroke-dashoffset) and (re)plays each time the section scrolls in.
-         Reduced-motion renders everything statically (no loop / dot / pulse).
+         B2B GLOBAL SUPPLY — animated canvas globe
+         The globe, destination labels, blue route beams, pulses, and rotation
+         are rendered by buildWorldMap() in app.js as vanilla canvas/HTML.
+         It replays the blue beam sequence each time the section scrolls in.
          ============================================================ -->
     <section class="world-map" id="reach" aria-label="Global fabric supply">
       <div class="world-inner">
@@ -245,9 +239,7 @@
           <a class="btn btn-solid" href="#contact">Enquire about wholesale <span aria-hidden="true">→</span></a>
         </div>
 
-        <!-- Map figure. The SVG markup (dotted background + routes) is
-             injected by app.js into #worldMapStage. A static fallback
-             dot-pattern map renders if the generated SVG is missing. -->
+        <!-- Globe figure. The canvas/label markup is injected by app.js. -->
         <figure class="world-figure reveal" aria-hidden="true">
           <div class="world-map-stage" id="worldMapStage"></div>
         </figure>
@@ -396,6 +388,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=20260629-10"></script>
+  <script src="app.js?v=20260629-11"></script>
 </body>
 </html>

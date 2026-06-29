@@ -762,6 +762,397 @@ function buildWorldMap() {
 }
 
 /* ============================================================
+   B2B Global Supply — vanilla canvas globe redo
+   Dependency-free port of the 21st.dev cobe-globe direction. The function
+   name intentionally matches the older flat-map implementation above; this
+   later declaration is the one used by the init call at the bottom of the file.
+   ============================================================ */
+const GLOBE_DEG = Math.PI / 180;
+
+function globeVec(lat, lng) {
+  const phi = lat * GLOBE_DEG;
+  const lambda = lng * GLOBE_DEG;
+  const cosPhi = Math.cos(phi);
+  return {
+    x: cosPhi * Math.sin(lambda),
+    y: Math.sin(phi),
+    z: cosPhi * Math.cos(lambda)
+  };
+}
+
+function globeNormalize(v) {
+  const len = Math.hypot(v.x, v.y, v.z) || 1;
+  return { x: v.x / len, y: v.y / len, z: v.z / len };
+}
+
+function globeSlerp(a, b, t) {
+  const dot = Math.max(-1, Math.min(1, a.x * b.x + a.y * b.y + a.z * b.z));
+  const omega = Math.acos(dot);
+  if (omega < 0.0001) return a;
+  const sinOmega = Math.sin(omega);
+  const s1 = Math.sin((1 - t) * omega) / sinOmega;
+  const s2 = Math.sin(t * omega) / sinOmega;
+  return globeNormalize({
+    x: a.x * s1 + b.x * s2,
+    y: a.y * s1 + b.y * s2,
+    z: a.z * s1 + b.z * s2
+  });
+}
+
+function globeLandMask(lat, lng) {
+  const ellipses = [
+    [-103, 46, 54, 24], [-82, 21, 28, 16], [-60, -16, 18, 33],
+    [18, 3, 24, 36], [16, 49, 25, 12], [72, 46, 70, 27],
+    [103, 18, 38, 21], [137, -25, 21, 12], [47, -20, 14, 16]
+  ];
+  return ellipses.some(([cx, cy, rx, ry]) => {
+    const dx = Math.abs(lng - cx) / rx;
+    const dy = Math.abs(lat - cy) / ry;
+    return dx * dx + dy * dy <= 1;
+  });
+}
+
+function buildGlobeDots() {
+  const dots = [];
+  for (let lat = -58; lat <= 72; lat += 3.6) {
+    for (let lng = -178; lng <= 180; lng += 3.6) {
+      if (!globeLandMask(lat, lng)) continue;
+      const seed = Math.sin((lat * 12.9898 + lng * 78.233) * GLOBE_DEG) * 43758.5453;
+      const jitter = seed - Math.floor(seed);
+      dots.push({
+        v: globeVec(lat + (jitter - 0.5) * 1.3, lng + (jitter - 0.5) * 1.8),
+        r: 0.75 + jitter * 0.7
+      });
+    }
+  }
+  return dots;
+}
+
+function buildWorldMap() {
+  const stage = document.querySelector("#worldMapStage");
+  if (!stage) return;
+
+  const ACCENT = "#0ea5e9";
+  const ACCENT_SOFT = "#38bdf8";
+  const motionOK = promptMotionEnabled && !prefersReducedMotion;
+
+  stage.innerHTML = "";
+  stage.classList.add("globe-ready");
+
+  const canvas = document.createElement("canvas");
+  canvas.className = "world-globe-canvas";
+  canvas.setAttribute("aria-hidden", "true");
+
+  const labels = document.createElement("div");
+  labels.className = "world-globe-labels";
+  labels.setAttribute("aria-hidden", "true");
+
+  stage.appendChild(canvas);
+  stage.appendChild(labels);
+
+  const ctx = canvas.getContext("2d", { alpha: true });
+  if (!ctx) return;
+
+  const markers = [WORLD_HUB, ...WORLD_DESTINATIONS].map((item, i) => {
+    const label = document.createElement("div");
+    label.className = "world-globe-label" + (i === 0 ? " hub" : "") + (i > 4 ? " secondary" : "");
+    const value = i === 0 ? 100 : 54 + ((i * 13) % 42);
+    label.innerHTML = `
+      <span>${escapeHtml(item.name)}</span>
+      <i style="--value:${value}%"></i>
+      <strong>${value}%</strong>
+    `;
+    labels.appendChild(label);
+    return { ...item, label, value, v: globeVec(item.lat, item.lng) };
+  });
+
+  const hub = markers[0];
+  const routes = WORLD_DESTINATIONS.map((dest, i) => {
+    const end = globeVec(dest.lat, dest.lng);
+    const points = [];
+    for (let step = 0; step <= 72; step += 1) points.push(globeSlerp(hub.v, end, step / 72));
+    return { points, dest, i };
+  });
+
+  const globeDots = buildGlobeDots();
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+  let radius = 0;
+  let cx = 0;
+  let cy = 0;
+  let raf = null;
+  let visible = false;
+  let startedAt = 0;
+  let lastT = 0;
+  let centerLng = 92;
+  let targetCenterLng = 92;
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartLng = 0;
+
+  const tilt = -8 * GLOBE_DEG;
+  const ROTATE_SPEED = 0.00016;
+  const DRAW_MS = 1050;
+  const STAGGER_MS = 230;
+  const HOLD_MS = 1400;
+  const CYCLE_MS = (routes.length - 1) * STAGGER_MS + DRAW_MS + HOLD_MS;
+  const easeOut = (t) => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
+
+  function resize() {
+    const rect = stage.getBoundingClientRect();
+    width = Math.max(280, Math.round(rect.width));
+    height = Math.max(280, Math.round(rect.height || rect.width));
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cx = width / 2;
+    cy = height / 2;
+    radius = Math.min(width, height) * 0.43;
+  }
+
+  function project(v, lift) {
+    const c = Math.cos(centerLng * GLOBE_DEG);
+    const s = Math.sin(centerLng * GLOBE_DEG);
+    const x = v.x * c - v.z * s;
+    const z = v.x * s + v.z * c;
+    const ct = Math.cos(tilt);
+    const st = Math.sin(tilt);
+    const y2 = v.y * ct - z * st;
+    const z2 = v.y * st + z * ct;
+    const depth = Math.max(0, Math.min(1, (z2 + 0.12) / 1.12));
+    return {
+      x: cx + x * radius * 0.98,
+      y: cy - y2 * radius * 0.98 - (lift || 0) * depth,
+      z: z2,
+      visible: z2 > -0.02,
+      depth
+    };
+  }
+
+  function drawLatitude(lat) {
+    ctx.beginPath();
+    let open = false;
+    for (let lng = -180; lng <= 180; lng += 4) {
+      const p = project(globeVec(lat, lng));
+      if (!p.visible) { open = false; continue; }
+      if (!open) { ctx.moveTo(p.x, p.y); open = true; }
+      else ctx.lineTo(p.x, p.y);
+    }
+    ctx.stroke();
+  }
+
+  function drawLongitude(lng) {
+    ctx.beginPath();
+    let open = false;
+    for (let lat = -80; lat <= 80; lat += 4) {
+      const p = project(globeVec(lat, lng));
+      if (!p.visible) { open = false; continue; }
+      if (!open) { ctx.moveTo(p.x, p.y); open = true; }
+      else ctx.lineTo(p.x, p.y);
+    }
+    ctx.stroke();
+  }
+
+  function drawSphere() {
+    const bg = ctx.createRadialGradient(cx - radius * 0.38, cy - radius * 0.45, radius * 0.15, cx, cy, radius * 1.08);
+    bg.addColorStop(0, "rgba(255,255,255,0.98)");
+    bg.addColorStop(0.56, "rgba(248,250,249,0.93)");
+    bg.addColorStop(1, "rgba(226,232,232,0.82)");
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = bg;
+    ctx.shadowColor = "rgba(14, 165, 233, 0.18)";
+    ctx.shadowBlur = 34;
+    ctx.fill();
+    ctx.clip();
+
+    ctx.lineWidth = 0.7;
+    ctx.strokeStyle = "rgba(26, 26, 26, 0.055)";
+    for (let lat = -60; lat <= 60; lat += 20) drawLatitude(lat);
+    for (let lng = -180; lng < 180; lng += 30) drawLongitude(lng);
+
+    globeDots.forEach((dot) => {
+      const p = project(dot.v);
+      if (!p.visible) return;
+      ctx.beginPath();
+      ctx.globalAlpha = 0.17 + p.depth * 0.42;
+      ctx.fillStyle = "#1a1a1a";
+      ctx.arc(p.x, p.y, dot.r * (0.75 + p.depth * 0.65), 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(14, 165, 233, 0.28)";
+    ctx.stroke();
+  }
+
+  function drawRoute(route, progress, now) {
+    const count = Math.max(2, Math.floor(route.points.length * progress));
+    const glow = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy);
+    glow.addColorStop(0, "rgba(14,165,233,0)");
+    glow.addColorStop(0.5, "rgba(56,189,248,0.95)");
+    glow.addColorStop(1, "rgba(14,165,233,0)");
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.clip();
+
+    for (let pass = 0; pass < 2; pass += 1) {
+      ctx.beginPath();
+      let open = false;
+      for (let idx = 0; idx < count; idx += 1) {
+        const p = project(route.points[idx], 13);
+        if (!p.visible) { open = false; continue; }
+        if (!open) { ctx.moveTo(p.x, p.y); open = true; }
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = pass === 0 ? "rgba(56,189,248,0.32)" : glow;
+      ctx.lineWidth = pass === 0 ? 7 : 2.4;
+      ctx.shadowColor = "rgba(56,189,248,0.45)";
+      ctx.shadowBlur = pass === 0 ? 16 : 9;
+      ctx.stroke();
+    }
+
+    const lead = project(route.points[Math.max(0, count - 1)], 13);
+    if (lead.visible && progress < 1) {
+      ctx.beginPath();
+      ctx.globalAlpha = 0.75 + Math.sin(now / 90) * 0.15;
+      ctx.fillStyle = "#e0f5ff";
+      ctx.shadowColor = ACCENT_SOFT;
+      ctx.shadowBlur = 18;
+      ctx.arc(lead.x, lead.y, 4.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawMarkers(now) {
+    markers.forEach((marker, i) => {
+      const p = project(marker.v, 15);
+      const pulse = i === 0 ? 10 + Math.sin(now / 240) * 2.5 : 7 + Math.sin((now + i * 160) / 260) * 1.8;
+      if (p.visible) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.beginPath();
+        ctx.globalAlpha = 0.16 + p.depth * 0.26;
+        ctx.strokeStyle = ACCENT_SOFT;
+        ctx.lineWidth = 1.4;
+        ctx.arc(p.x, p.y, pulse, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.globalAlpha = 0.95;
+        ctx.fillStyle = i === 0 ? "#e0f5ff" : ACCENT_SOFT;
+        ctx.shadowColor = ACCENT_SOFT;
+        ctx.shadowBlur = i === 0 ? 18 : 12;
+        ctx.arc(p.x, p.y, i === 0 ? 4.8 : 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      const hideSecondary = stage.clientWidth < 520 && marker.label.classList.contains("secondary");
+      marker.label.style.opacity = p.visible && !hideSecondary ? String(Math.min(1, 0.2 + p.depth)) : "0";
+      marker.label.style.transform = `translate3d(${p.x}px, ${p.y - 48}px, 0) translate(-50%, -100%)`;
+      marker.label.style.filter = `blur(${p.visible ? (1 - p.depth) * 2.5 : 6}px)`;
+    });
+  }
+
+  function render(now) {
+    if (!lastT) lastT = now;
+    const dt = Math.min(40, now - lastT);
+    lastT = now;
+
+    if (motionOK && !dragging) targetCenterLng += ROTATE_SPEED * dt / GLOBE_DEG;
+    centerLng += (targetCenterLng - centerLng) * 0.08;
+
+    ctx.clearRect(0, 0, width, height);
+    drawSphere();
+
+    const elapsed = motionOK ? ((now - startedAt) % CYCLE_MS) : CYCLE_MS;
+    routes.forEach((route) => {
+      const local = elapsed - route.i * STAGGER_MS;
+      const progress = motionOK ? easeOut(local / DRAW_MS) : 1;
+      if (progress > 0) drawRoute(route, progress, now);
+    });
+    drawMarkers(now);
+
+    if (visible && motionOK) raf = requestAnimationFrame(render);
+  }
+
+  function play() {
+    stop();
+    visible = true;
+    startedAt = performance.now();
+    lastT = 0;
+    raf = requestAnimationFrame(render);
+  }
+
+  function stop() {
+    visible = false;
+    if (raf !== null) {
+      cancelAnimationFrame(raf);
+      raf = null;
+    }
+  }
+
+  function onPointerDown(e) {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartLng = targetCenterLng;
+    stage.classList.add("dragging");
+    stage.setPointerCapture?.(e.pointerId);
+  }
+
+  function onPointerMove(e) {
+    if (!dragging) return;
+    targetCenterLng = dragStartLng - (e.clientX - dragStartX) * 0.32;
+    if (!visible || !motionOK) render(performance.now());
+  }
+
+  function onPointerUp(e) {
+    dragging = false;
+    stage.classList.remove("dragging");
+    stage.releasePointerCapture?.(e.pointerId);
+  }
+
+  resize();
+  render(performance.now());
+  window.addEventListener("resize", () => { resize(); render(performance.now()); }, { passive: true });
+  stage.addEventListener("pointerdown", onPointerDown);
+  stage.addEventListener("pointermove", onPointerMove);
+  stage.addEventListener("pointerup", onPointerUp);
+  stage.addEventListener("pointercancel", onPointerUp);
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) play();
+        else stop();
+      });
+    }, { threshold: 0.25 });
+    io.observe(stage);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); });
+  } else {
+    play();
+  }
+}
+
+/* ============================================================
    Fabric-type continuous rolling marquee
    A seamlessly-looping horizontal auto-scroll of fabric names. The track
    holds TWO identical sequences and translates by -50% via CSS @keyframes
