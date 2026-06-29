@@ -254,6 +254,47 @@
       </div>
     </section>
 
+    <!-- ============================================================
+         CLIENT REVIEWS / TESTIMONIALS — auto-advancing carousel
+         A 21st.dev-style testimonial row re-created in vanilla JS (no
+         React / motion / npm). Cards (quote + initials avatar + stars +
+         name + role) are rendered by initTestimonials() in app.js from the
+         TESTIMONIALS placeholder array there. The track auto-advances
+         (~5s/step, pauses on hover + hidden tab) and has real <button>
+         left/right arrows + position dots for manual nav. Motion gating
+         mirrors the site (promptMotionEnabled forces auto-advance). The
+         markup below is a static, content-present fallback for no-JS /
+         reduced-motion so the reviews are always readable.
+         Placed AFTER the world map (#reach) and BEFORE the enquiry
+         (#contact) as a social-proof lead-in to the enquiry.
+         ============================================================ -->
+    <section class="testimonials" id="reviews" aria-label="Client reviews">
+      <div class="section-heading center reveal">
+        <p class="eyebrow">Client Reviews</p>
+        <h2>Trusted by makers and mills.</h2>
+        <p>What buyers, ateliers and production teams say about working with Asa Fabric.</p>
+      </div>
+
+      <!-- Carousel. app.js injects the cards + arrows + dots into #testimonialsTrack
+           and its sibling controls. The static cards below are the no-JS fallback. -->
+      <div class="testimonials-carousel" id="testimonialsCarousel">
+        <div class="testimonials-viewport" id="testimonialsViewport">
+          <div class="testimonials-track" id="testimonialsTrack">
+            <!-- Static fallback row (no-JS / reduced-motion). Replaced by app.js. -->
+            <noscript>
+              <article class="testimonial-card">
+                <p class="testimonial-quote">The cottons arrive exactly to shade and weight, every order. Roll-to-cut accuracy we can plan a season around.</p>
+                <div class="testimonial-person">
+                  <span class="testimonial-avatar" aria-hidden="true">HM</span>
+                  <span class="testimonial-meta"><span class="testimonial-name">Hana Mori</span><span class="testimonial-role">Head of Production, Atelier Mori</span></span>
+                </div>
+              </article>
+            </noscript>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ Enquiry ============ -->
     <section class="contact-section" id="contact">
       <div class="contact-copy reveal">
