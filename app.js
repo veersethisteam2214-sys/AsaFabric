@@ -286,6 +286,15 @@ function initFanCarousel() {
     entered = true;
     const mult = responsiveMultiplier();
     const half = Math.floor(VISIBLE / 2);
+    root.classList.add("fan-assembling");
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.out" },
+      onComplete: () => {
+        root.classList.remove("fan-assembling");
+        applyLayout(false);
+      }
+    });
+
     els.forEach((el, i) => {
       let offset = i - center;
       const n = cards.length;
@@ -296,12 +305,35 @@ function initFanCarousel() {
       const pos = FAN_POSITIONS[String(offset)] || FAN_POSITIONS["0"];
       const x = pos.x * mult * 16;
       const y = pos.y * 16;
-      gsap.fromTo(el,
-        { autoAlpha: 0, x: 0, y: 80, scale: 0.6, rotation: 0 },
-        { autoAlpha: 1, x, y, scale: pos.scale, rotation: pos.rot,
-          duration: 1.1, ease: "elastic.out(1, 0.7)", delay: Math.abs(offset) * 0.08,
-          zIndex: 100 - Math.abs(offset) }
-      );
+      const startX = ((offset * 9) + (i % 2 ? -18 : 18)) * mult;
+      const startY = 118 + Math.abs(offset) * 18;
+      const startRotation = (offset * -4) + (i % 2 ? 9 : -9);
+      const delay = 0.08 + Math.abs(offset) * 0.09;
+
+      gsap.set(el, {
+        autoAlpha: 0,
+        x: startX,
+        y: startY,
+        scale: 0.62,
+        rotation: startRotation,
+        zIndex: 80 + i,
+        pointerEvents: "none"
+      });
+      tl.to(el, {
+        autoAlpha: 1,
+        duration: 0.22,
+        ease: "power2.out"
+      }, delay);
+      tl.to(el, {
+        x,
+        y,
+        scale: pos.scale,
+        rotation: pos.rot,
+        zIndex: 100 - Math.abs(offset),
+        pointerEvents: "auto",
+        duration: 1.05,
+        ease: "expo.out"
+      }, delay + 0.04);
     });
   }
 

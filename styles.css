@@ -585,6 +585,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 }
 /* hover-position-driven carousel: subtle cursor affordance over the active fan */
 .fan-layout:not(.static) { cursor: ew-resize; }
+.fan.fan-assembling .fan-layout { cursor: default; }
+.fan.fan-assembling .fan-card { pointer-events: none; }
 
 /* ============================================================
    Fabrics by use — Editorial Index (the chosen, permanent layout)
