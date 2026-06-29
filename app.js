@@ -429,7 +429,8 @@ const WORLD_DESTINATIONS = [
   { name: "Singapore", lat: 1.3521,  lng: 103.8198 },
   { name: "Tokyo",     lat: 35.6762, lng: 139.6503 },
   { name: "Mumbai",    lat: 19.0760, lng: 72.8777  },
-  { name: "Sydney",    lat: -33.8688, lng: 151.2093 }
+  { name: "Sydney",    lat: -33.8688, lng: 151.2093 },
+  { name: "Lagos",     lat: 6.5244,  lng: 3.3792   }
 ];
 
 const SVGNS = "http://www.w3.org/2000/svg";
@@ -502,8 +503,9 @@ function buildWorldMap() {
   const filter = svgEl("filter", {
     id: "worldGlow", x: "-50%", y: "-50%", width: "200%", height: "200%"
   });
-  filter.appendChild(svgEl("feGaussianBlur", { stdDeviation: "2.2", result: "blur" }));
+  filter.appendChild(svgEl("feGaussianBlur", { stdDeviation: "3", result: "blur" }));
   const merge = svgEl("feMerge", {});
+  merge.appendChild(svgEl("feMergeNode", { in: "blur" }));
   merge.appendChild(svgEl("feMergeNode", { in: "blur" }));
   merge.appendChild(svgEl("feMergeNode", { in: "SourceGraphic" }));
   filter.appendChild(merge);
@@ -515,9 +517,9 @@ function buildWorldMap() {
     id: "worldRouteGrad", x1: "0%", y1: "0%", x2: "100%", y2: "0%"
   });
   grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": ACCENT, "stop-opacity": "0" }));
-  grad.appendChild(svgEl("stop", { offset: "12%", "stop-color": ACCENT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "10%", "stop-color": ACCENT, "stop-opacity": "1" }));
   grad.appendChild(svgEl("stop", { offset: "50%", "stop-color": ACCENT_SOFT, "stop-opacity": "1" }));
-  grad.appendChild(svgEl("stop", { offset: "88%", "stop-color": ACCENT, "stop-opacity": "1" }));
+  grad.appendChild(svgEl("stop", { offset: "90%", "stop-color": ACCENT, "stop-opacity": "1" }));
   grad.appendChild(svgEl("stop", { offset: "100%", "stop-color": ACCENT, "stop-opacity": "0" }));
   defs.appendChild(grad);
   svg.appendChild(defs);
@@ -541,23 +543,42 @@ function buildWorldMap() {
     const midY = Math.min(hub.y, end.y) - 50;
     const d = `M ${hub.x} ${hub.y} Q ${midX} ${midY} ${end.x} ${end.y}`;
 
+    // soft underglow halo (wider, blurred, low-opacity) so the route lifts
+    // clearly off the dotted background; only when animation is on.
+    let halo = null;
+    if (promptMotionEnabled) {
+      halo = svgEl("path", {
+        d, fill: "none", stroke: ACCENT_SOFT,
+        "stroke-width": "5", "stroke-opacity": "0.35",
+        "stroke-linecap": "round", filter: "url(#worldGlow)"
+      });
+      svg.appendChild(halo);
+    }
+
+    // crisp light-blue core stroke — thicker + fully opaque so it reads sharply.
     const path = svgEl("path", {
       d, fill: "none",
       stroke: promptMotionEnabled ? "url(#worldRouteGrad)" : ACCENT,
-      "stroke-width": "1.4", "stroke-opacity": "0.9", "stroke-linecap": "round"
+      "stroke-width": "2.2", "stroke-opacity": "1", "stroke-linecap": "round"
     });
     svg.appendChild(path);
 
     const len = path.getTotalLength();
-    // travelling glow dot — created up front, ridden along the path by JS
+    // travelling glow dot — created up front, ridden along the path by JS.
+    // A short comet-like trail (second, dimmer/larger dot lagging behind) sells
+    // the "beam shooting" read.
     let dot = null;
+    let trail = null;
     if (promptMotionEnabled) {
       path.style.strokeDasharray = `${len}`;
       path.style.strokeDashoffset = `${len}`;   // start fully undrawn
-      dot = svgEl("circle", { r: "3.2", fill: ACCENT_SOFT, filter: "url(#worldGlow)", opacity: "0" });
+      if (halo) { halo.style.strokeDasharray = `${len}`; halo.style.strokeDashoffset = `${len}`; }
+      trail = svgEl("circle", { r: "5.5", fill: ACCENT_SOFT, filter: "url(#worldGlow)", opacity: "0" });
+      dot = svgEl("circle", { r: "4.4", fill: "#e0f5ff", filter: "url(#worldGlow)", opacity: "0" });
+      svg.appendChild(trail);
       svg.appendChild(dot);
     }
-    return { path, len, d, end, dot, dest, i };
+    return { path, halo, len, d, end, dot, trail, dest, i };
   });
 
   // points (origin + destinations) with pulse + label
@@ -567,14 +588,17 @@ function buildWorldMap() {
     if (promptMotionEnabled) {
       pulse = svgEl("circle", {
         cx: p.x, cy: p.y, r: "2.6", fill: "none",
-        stroke: ACCENT_SOFT, "stroke-width": "1.2", opacity: "0"
+        stroke: ACCENT_SOFT, "stroke-width": "1.6", opacity: "0"
       });
       svg.appendChild(pulse);
     }
-    // solid point
+    // solid point — brighter, slightly larger, with a light core for clarity
     svg.appendChild(svgEl("circle", {
-      cx: p.x, cy: p.y, r: isHub ? "3.6" : "2.8", fill: ACCENT,
+      cx: p.x, cy: p.y, r: isHub ? "4.4" : "3.4", fill: ACCENT_SOFT,
       filter: promptMotionEnabled ? "url(#worldGlow)" : null
+    }));
+    svg.appendChild(svgEl("circle", {
+      cx: p.x, cy: p.y, r: isHub ? "2.2" : "1.6", fill: "#e0f5ff"
     }));
     // label
     const lbl = svgEl("text", {
@@ -602,8 +626,8 @@ function buildWorldMap() {
   //       DRAW_MS with a staggered start; a glow dot rides the arc as it draws;
   //       endpoint rings pulse continuously. Triggered by IntersectionObserver
   //       and REPLAYED every time #reach re-enters the viewport. -----
-  const DRAW_MS = 1500;     // per-route draw duration
-  const STAGGER_MS = 320;   // delay between successive routes
+  const DRAW_MS = 950;      // per-route draw duration (faster beam travel)
+  const STAGGER_MS = 280;   // delay between successive routes
   const HOLD_MS = 1700;      // pause with all routes visible before reset
   const PULSE_MS = 2000;    // pulse-ring period
   const ALL_ROUTES_MS = (routes.length - 1) * STAGGER_MS + DRAW_MS;
@@ -627,21 +651,33 @@ function buildWorldMap() {
       const local = cycleElapsed - r.i * STAGGER_MS;
       if (local <= 0) {
         r.path.style.strokeDashoffset = `${r.len}`;
+        if (r.halo) r.halo.style.strokeDashoffset = `${r.len}`;
         if (r.dot) r.dot.setAttribute("opacity", "0");
+        if (r.trail) r.trail.setAttribute("opacity", "0");
         return;
       }
 
       const p = Math.min(1, local / DRAW_MS);
       const e = easeInOut(p);
       r.path.style.strokeDashoffset = `${r.len * (1 - e)}`;
+      if (r.halo) r.halo.style.strokeDashoffset = `${r.len * (1 - e)}`;
       if (!r.dot) return;
       if (p < 1) {
         const pt = pointAt(r, e);
         r.dot.setAttribute("cx", pt.x);
         r.dot.setAttribute("cy", pt.y);
         r.dot.setAttribute("opacity", "1");
+        // comet trail: a dimmer dot lagging slightly behind the lead beam.
+        if (r.trail) {
+          const tu = Math.max(0, e - 0.06);
+          const tp = pointAt(r, tu);
+          r.trail.setAttribute("cx", tp.x);
+          r.trail.setAttribute("cy", tp.y);
+          r.trail.setAttribute("opacity", "0.5");
+        }
       } else {
         r.dot.setAttribute("opacity", "0");
+        if (r.trail) r.trail.setAttribute("opacity", "0");
       }
     });
 
@@ -649,8 +685,8 @@ function buildWorldMap() {
     pulses.forEach((pu, idx) => {
       if (!pu.ring) return;
       const phase = ((elapsed + idx * 240) % PULSE_MS) / PULSE_MS;
-      pu.ring.setAttribute("r", (2.6 + phase * 9).toFixed(2));
-      pu.ring.setAttribute("opacity", (0.55 * (1 - phase)).toFixed(3));
+      pu.ring.setAttribute("r", (2.6 + phase * 10).toFixed(2));
+      pu.ring.setAttribute("opacity", (0.75 * (1 - phase)).toFixed(3));
     });
 
     // keep looping for the route waves and endpoint pulses while visible
@@ -660,7 +696,9 @@ function buildWorldMap() {
   function reset() {
     routes.forEach((r) => {
       r.path.style.strokeDashoffset = `${r.len}`;
+      if (r.halo) r.halo.style.strokeDashoffset = `${r.len}`;
       if (r.dot) r.dot.setAttribute("opacity", "0");
+      if (r.trail) r.trail.setAttribute("opacity", "0");
     });
     pulses.forEach((pu) => { if (pu.ring) pu.ring.setAttribute("opacity", "0"); });
   }
