@@ -1026,8 +1026,26 @@ function initStatsScramble() {
 
   const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789–+/#%@&*<>";
 
-  // Per-character animated scramble for one element. Spaces and the en-dash
-  // stay fixed; every other character scrambles until its resolve time passes.
+  // prefers-reduced-motion: render the final text immediately, crisp, with no
+  // glyph cycling. (promptMotionEnabled keeps the full animation on by default;
+  // this branch only applies when the user truly asks for reduced motion.)
+  function setFinal(el) {
+    const chars = Array.from(el.dataset.finalText);
+    el.classList.remove("is-scrambling");
+    el.textContent = "";
+    chars.forEach((ch) => {
+      const span = document.createElement("span");
+      span.className = "scramble-char resolved";
+      span.textContent = ch;
+      el.appendChild(span);
+    });
+  }
+
+  // Per-character animated scramble for one element. Every character cycles
+  // random glyphs for a brief shared HOLD phase, then resolves LEFT-TO-RIGHT
+  // with a gentle per-character stagger. Spaces stay fixed. Each char gets a
+  // CSS settle (fade + tiny translateY + blur->sharp) as it locks in, so the
+  // value "assembles" gracefully. Total ~1.0-1.3s per value.
   function scramble(el) {
     const finalText = el.dataset.finalText;
     const chars = Array.from(finalText);
@@ -1044,9 +1062,10 @@ function initStatsScramble() {
       return span;
     });
 
-    const FRAME_MS = 45;          // glyph flicker cadence
-    const PER_CHAR_MS = 70;       // stagger between characters resolving
-    const HOLD_MS = 1000;         // all chars cycle random glyphs for ~1s first
+    const FRAME_MS = 50;          // glyph flicker cadence (calm, not frantic)
+    const PER_CHAR_MS = 55;       // stagger between characters resolving (L->R)
+    const HOLD_MS = 360;          // brief shared scramble phase before resolving
+    // Total ~= HOLD_MS + (chars-1)*PER_CHAR_MS + 0.32s CSS settle tail.
     const start = performance.now();
 
     function tick(now) {
@@ -1056,10 +1075,11 @@ function initStatsScramble() {
       chars.forEach((ch, i) => {
         const span = spans[i];
         if (span.dataset.done) return;
-        // Hold the full scramble visible for HOLD_MS, then resolve char-by-char.
+        // Hold the scramble briefly, then resolve char-by-char, left to right.
         const resolveAt = HOLD_MS + i * PER_CHAR_MS;
         if (ch === " " || elapsed >= resolveAt) {
           span.textContent = ch === " " ? " " : ch;
+          // .resolved triggers the CSS settle transition (fade/lift/sharpen).
           span.classList.add("resolved");
           span.dataset.done = "1";
         } else {
@@ -1071,11 +1091,17 @@ function initStatsScramble() {
         // throttle the flicker frame rate
         setTimeout(() => requestAnimationFrame(tick), FRAME_MS);
       } else {
-        el.classList.remove("is-scrambling");
+        // Let the last char's CSS settle finish, then drop the accent glow.
+        setTimeout(() => {
+          if (el.dataset.scrambleRun === runId) el.classList.remove("is-scrambling");
+        }, 340);
       }
     }
     requestAnimationFrame(tick);
   }
+
+  // Under genuine reduced motion, skip the animation and show final text.
+  const animate = prefersReducedMotion ? setFinal : scramble;
 
   // Stash the final text so it's recoverable, then replay once for each scroll-in.
   targets.forEach((el) => { el.dataset.finalText = el.textContent; });
@@ -1089,7 +1115,7 @@ function initStatsScramble() {
     entries.forEach((e) => {
       if (e.isIntersecting && !playedThisView) {
         playedThisView = true;
-        targets.forEach((el) => scramble(el));
+        targets.forEach((el) => animate(el));
       } else if (!e.isIntersecting) {
         playedThisView = false;
       }
@@ -1104,7 +1130,7 @@ function initStatsScramble() {
     const vh = window.innerHeight || document.documentElement.clientHeight;
     if (r.top < vh * 0.9 && r.bottom > 0 && !playedThisView) {
       playedThisView = true;
-      targets.forEach((el) => scramble(el));
+      targets.forEach((el) => animate(el));
     }
   });
 }

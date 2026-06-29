@@ -419,7 +419,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .fabric-rotator {
   border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline);
   background: var(--canvas); text-align: center;
-  padding: 56px var(--margin) 60px;
+  padding: 46px var(--margin) 50px;
 }
 .fabric-rotator-overline {
   font-family: var(--sans); font-size: 11px; font-weight: 600;
@@ -446,7 +446,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .fabric-rotator-item {
   flex: none; margin: 0;
   font-family: var(--serif); font-weight: 400; font-style: italic;
-  font-size: clamp(30px, 5.4vw, 58px); line-height: 1.1; letter-spacing: -0.01em;
+  font-size: clamp(24px, 4.3vw, 46px); line-height: 1.1; letter-spacing: -0.01em;
   color: var(--ink); white-space: nowrap;
 }
 /* tracked dot separator between names */
@@ -472,7 +472,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .stat { text-align: center; }
 .stat strong {
   display: block; font-family: var(--serif); font-weight: 400;
-  font-size: clamp(32px, 4vw, 44px); line-height: 1; margin-bottom: 12px;
+  font-size: clamp(38px, 4.8vw, 52px); line-height: 1; margin-bottom: 14px;
+  white-space: nowrap;
 }
 
 /* ---------- Stats: scramble / decode reveal on scroll ----------
@@ -483,20 +484,34 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
    While scrambling, .is-scrambling adds a faint settle; the unscrambled
    characters carry a dimmed tone via the .scramble-char helper class.
    Reduced-motion + no-JS: final text shows immediately (JS skips scramble). */
-.stats-strip .stat strong .scramble-char {
-  color: var(--muted-2); opacity: 0.85;
+/* Each character starts dimmed + slightly lifted + softly blurred while it is
+   still cycling glyphs; when it locks in (.resolved) it gently settles down to
+   full clarity. The transition gives the per-char "assemble" feel rather than a
+   hard snap. */
+.stats-strip .scramble-char {
+  display: inline-block;
+  font: inherit; letter-spacing: inherit;
+  color: var(--muted-2); opacity: 0.55;
+  transform: translateY(-0.06em);
+  filter: blur(0.4px);
+  transition:
+    opacity 0.32s ease,
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.32s ease,
+    color 0.32s ease;
 }
+.stats-strip .stat span .scramble-char { opacity: 0.45; }
 .stats-strip .is-scrambling {
   color: var(--accent-blue);
-  text-shadow: 0 0 18px rgba(14,165,233,0.18);
+  text-shadow: 0 0 16px rgba(14,165,233,0.22);
 }
-.stats-strip .stat strong .scramble-char.resolved,
-.stats-strip .stat span .scramble-char.resolved {
+.stats-strip .scramble-char.resolved {
   color: inherit; opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
 }
-.stats-strip .stat span .scramble-char { opacity: 0.7; }
 .stat span {
-  font-family: var(--sans); font-size: 11px; font-weight: 600;
+  font-family: var(--sans); font-size: clamp(12px, 1.4vw, 13px); font-weight: 600;
   letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
 }
 
@@ -1047,6 +1062,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   .stats-strip .stat strong {
     filter: none !important; letter-spacing: 0 !important;
     transform: none !important; opacity: 1 !important; animation: none !important;
+  }
+  .stats-strip .scramble-char {
+    filter: none !important; transform: none !important;
+    opacity: 1 !important; transition: none !important; color: inherit !important;
   }
   /* fabric rotator already static under reduced motion (handled in JS) */
   /* liquid-glass buttons: keep the glass styling, but no lift/scale/sheen motion */
