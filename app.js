@@ -1216,6 +1216,216 @@ function initYear() {
    (e.g. a GSAP-path error in the fan carousel) can NEVER halt the inits
    that follow it and blank the rest of the page. Any failure is logged
    with the feature name and the others still run. */
+/* ============================================================
+   CLIENT REVIEWS / TESTIMONIALS — auto-advancing carousel
+   21st.dev-style testimonial row, re-created in vanilla JS (no React /
+   motion / npm). Renders cards (quote + initials avatar + 5 stars + name
+   + role) from the TESTIMONIALS array into #testimonialsTrack, then runs
+   a paged horizontal carousel:
+     • shows 3 / 2 / 1 cards by reading the CSS var --cards-visible
+       (set responsively in styles.css), pages by that many cards
+     • auto-advances ~5s/step, loops infinitely, pauses on hover and on
+       a hidden tab (visibilitychange); manual prev/next <button> arrows
+       + position dots; clicking any control resets the auto timer
+     • motion gating mirrors the site: auto-advance runs unless the
+       browser reports reduced motion AND promptMotionEnabled is false.
+       Under genuine reduced-motion-without-force, no auto-advance but the
+       arrows/dots still work and every review stays reachable.
+   ------------------------------------------------------------------ */
+/* PLACEHOLDER testimonials — clearly fake but realistic B2B textile copy.
+   Edit freely: { quote, name, role, initials }. No real brands. */
+const TESTIMONIALS = [
+  {
+    quote: "The cottons arrive exactly to shade and weight, every order. It's roll-to-cut accuracy we can plan a whole season around.",
+    name: "Hana Mori",
+    role: "Head of Production, Atelier Mori",
+    initials: "HM"
+  },
+  {
+    quote: "Cut lengths come trimmed clean and measured true. We've stopped re-checking metreage on delivery — it's simply right.",
+    name: "Tomas Reyes",
+    role: "Founder, Northbound Tailoring",
+    initials: "TR"
+  },
+  {
+    quote: "Sourcing used to mean chasing five suppliers. Now one enquiry returns matching lots, weights and prices the same day.",
+    name: "Priya Anand",
+    role: "Procurement Lead, Veil & Co",
+    initials: "PA"
+  },
+  {
+    quote: "Swatches turned up fast and the bulk roll matched them perfectly. Reliable cloth makes the rest of our line easier.",
+    name: "Greta Lindqvist",
+    role: "Design Director, Studio Linde",
+    initials: "GL"
+  },
+  {
+    quote: "Dispatch is quick and the paperwork is clean. For a small mill, that dependable cadence is worth more than a discount.",
+    name: "Marcus Bell",
+    role: "Owner, Bell & Loom Mill",
+    initials: "MB"
+  },
+  {
+    quote: "Honest grading and consistent hand-feel. When they say a linen is shirt-weight, it behaves exactly that way on the table.",
+    name: "Yuki Sato",
+    role: "Buyer, Form & Fold",
+    initials: "YS"
+  }
+];
+
+function initTestimonials() {
+  const track = document.getElementById("testimonialsTrack");
+  const viewport = document.getElementById("testimonialsViewport");
+  const carousel = document.getElementById("testimonialsCarousel");
+  if (!track || !viewport || !carousel || !TESTIMONIALS.length) return;
+
+  // 5-pointed star + chevron arrow as inline SVG (no icon font dependency).
+  const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 5.88 6.5.95-4.7 4.58 1.11 6.47L12 17.9l-5.81 3.06 1.11-6.47L2.6 9.91l6.5-.95L12 2.5z"/></svg>';
+  const stars = Array.from({ length: 5 }, () => STAR).join("");
+
+  // Build the real cards (replaces the <noscript> fallback).
+  track.innerHTML = TESTIMONIALS.map(function (t) {
+    return (
+      '<article class="testimonial-card">' +
+        '<div class="testimonial-stars" aria-label="Rated 5 out of 5">' + stars + "</div>" +
+        '<p class="testimonial-quote"><span>' + escapeHtml(t.quote) + "</span></p>" +
+        '<div class="testimonial-person">' +
+          '<span class="testimonial-avatar" aria-hidden="true">' + escapeHtml(t.initials) + "</span>" +
+          '<span class="testimonial-meta">' +
+            '<span class="testimonial-name">' + escapeHtml(t.name) + "</span>" +
+            '<span class="testimonial-role">' + escapeHtml(t.role) + "</span>" +
+          "</span>" +
+        "</div>" +
+      "</article>"
+    );
+  }).join("");
+
+  const cards = Array.from(track.children);
+  const total = cards.length;
+
+  // Build controls (arrows + dots). Pages are computed after measuring.
+  const controls = document.createElement("div");
+  controls.className = "testimonials-controls";
+  const prevBtn = document.createElement("button");
+  prevBtn.type = "button";
+  prevBtn.className = "testimonials-arrow";
+  prevBtn.setAttribute("aria-label", "Previous reviews");
+  prevBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 6 9 12 15 18"></polyline></svg>';
+  const nextBtn = document.createElement("button");
+  nextBtn.type = "button";
+  nextBtn.className = "testimonials-arrow";
+  nextBtn.setAttribute("aria-label", "Next reviews");
+  nextBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg>';
+  const dotsWrap = document.createElement("div");
+  dotsWrap.className = "testimonials-dots";
+  controls.appendChild(prevBtn);
+  controls.appendChild(dotsWrap);
+  controls.appendChild(nextBtn);
+  carousel.appendChild(controls);
+
+  const STEP_MS = 5000;
+  // auto-advance allowed unless genuine reduced motion (force overrides it)
+  const autoAllowed = promptMotionEnabled || !prefersReducedMotion;
+
+  let page = 0;
+  let pageCount = 1;
+  let perView = 3;
+  let timer = null;
+
+  function cardsVisible() {
+    const v = parseInt(getComputedStyle(track).getPropertyValue("--cards-visible"), 10);
+    return v > 0 ? v : 1;
+  }
+
+  function buildDots() {
+    dotsWrap.innerHTML = "";
+    for (let i = 0; i < pageCount; i++) {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "testimonials-dot";
+      dot.setAttribute("aria-label", "Go to review page " + (i + 1));
+      dot.addEventListener("click", function () {
+        goTo(i);
+        restartTimer();
+      });
+      dotsWrap.appendChild(dot);
+    }
+  }
+
+  function syncDots() {
+    Array.from(dotsWrap.children).forEach(function (d, i) {
+      const active = i === page;
+      d.classList.toggle("is-active", active);
+      if (active) d.setAttribute("aria-current", "true");
+      else d.removeAttribute("aria-current");
+    });
+  }
+
+  function applyTransform() {
+    if (!cards.length) return;
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    const cardW = cards[0].getBoundingClientRect().width;
+    const startIndex = Math.min(page * perView, Math.max(0, total - perView));
+    const offset = startIndex * (cardW + gap);
+    track.style.transform = "translateX(" + (-offset) + "px)";
+  }
+
+  function goTo(p) {
+    page = ((p % pageCount) + pageCount) % pageCount;
+    applyTransform();
+    syncDots();
+  }
+
+  function next() { goTo(page + 1); }
+  function prev() { goTo(page - 1); }
+
+  function measure() {
+    perView = cardsVisible();
+    pageCount = Math.max(1, Math.ceil(total / perView));
+    if (page > pageCount - 1) page = pageCount - 1;
+    buildDots();
+    applyTransform();
+    syncDots();
+    // hide controls entirely if everything fits on one page
+    controls.style.display = pageCount > 1 ? "" : "none";
+  }
+
+  function startTimer() {
+    if (!autoAllowed || pageCount <= 1) return;
+    if (timer !== null) return;
+    timer = window.setInterval(next, STEP_MS);
+  }
+  function stopTimer() {
+    if (timer !== null) { window.clearInterval(timer); timer = null; }
+  }
+  function restartTimer() { stopTimer(); startTimer(); }
+
+  prevBtn.addEventListener("click", function () { prev(); restartTimer(); });
+  nextBtn.addEventListener("click", function () { next(); restartTimer(); });
+
+  // pause on hover / focus within, resume on leave
+  carousel.addEventListener("mouseenter", stopTimer);
+  carousel.addEventListener("mouseleave", startTimer);
+  carousel.addEventListener("focusin", stopTimer);
+  carousel.addEventListener("focusout", startTimer);
+
+  // pause when the tab is hidden
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) stopTimer();
+    else startTimer();
+  });
+
+  // re-measure on resize (responsive 3/2/1) — debounced
+  let rT = null;
+  window.addEventListener("resize", function () {
+    if (rT) window.clearTimeout(rT);
+    rT = window.setTimeout(measure, 150);
+  });
+
+  measure();
+  startTimer();
+}
+
 function safe(fn, name) {
   try {
     fn();
@@ -1225,6 +1435,7 @@ function safe(fn, name) {
 }
 
 safe(buildWorldMap, "buildWorldMap");
+safe(initTestimonials, "initTestimonials");
 safe(initFanCarousel, "initFanCarousel");
 safe(initFabricRotator, "initFabricRotator");
 safe(initSlideshow, "initSlideshow");
