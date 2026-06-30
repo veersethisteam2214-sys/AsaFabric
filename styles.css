@@ -1168,6 +1168,256 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 }
 
 /* ============================================================
+   Consultation / Sample request — floating action + modal dialog
+   Re-uses the site tokens (canvas/ink/accent-blue, EB Garamond + Montserrat,
+   liquid-glass buttons, hairline borders, 8px spacing). The modal forms carry
+   BOTH `.lead-form` (to inherit the bespoke field styling) and `.consult-form`
+   (layout + the chip/radio/address extensions below). All motion is gated by
+   the global prefers-reduced-motion block further down.
+   ============================================================ */
+:root {
+  --error: #b3261e;
+  --error-soft: rgba(179,38,30,0.08);
+  --consult-radius: 18px;
+}
+
+/* ---- CTA row in the enquiry section ---- */
+.contact-cta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 18px 24px;
+  margin-top: 36px;
+}
+.contact-cta .btn { margin: 0; }
+
+/* ---- Floating action button (revealed by JS) ---- */
+.fab-consult {
+  position: fixed; right: clamp(16px, 3vw, 32px); bottom: clamp(16px, 3vw, 32px);
+  z-index: 90; display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px; border-radius: 999px;
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: #fff;
+  background: var(--ink); border: 1px solid var(--ink);
+  box-shadow: 0 10px 30px rgba(20,18,15,0.28), inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: transform 0.25s var(--glass-ease), box-shadow 0.25s var(--glass-ease),
+              background-color 0.25s var(--glass-ease);
+}
+.fab-consult:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(20,18,15,0.34), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.fab-consult:active { transform: translateY(0) scale(0.99); }
+.fab-consult:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 3px; }
+.fab-consult .fab-consult-icon { font-size: 18px; color: var(--accent-blue-soft); }
+/* `hidden` must win over the explicit display (used for no-JS + progressive
+   enhancement; the FAB is revealed by initConsultation). */
+.fab-consult[hidden] { display: none; }
+
+/* ---- Overlay + backdrop ---- */
+.consult-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: clamp(16px, 5vh, 64px) clamp(12px, 4vw, 40px);
+  overflow-y: auto;
+}
+/* `hidden` must override the flex display, or the (invisible) overlay would
+   still capture pointer events across the whole page. */
+.consult-overlay[hidden] { display: none; }
+.consult-backdrop {
+  position: fixed; inset: 0; background: rgba(20,18,15,0.55);
+  -webkit-backdrop-filter: blur(8px) saturate(120%); backdrop-filter: blur(8px) saturate(120%);
+  opacity: 0; transition: opacity 0.3s var(--glass-ease);
+}
+.consult-overlay.is-open .consult-backdrop { opacity: 1; }
+body.consult-open { overflow: hidden; }
+
+/* ---- Dialog card ---- */
+.consult-dialog {
+  position: relative; width: 100%; max-width: 720px; margin: auto;
+  background: var(--canvas); border: 1px solid var(--hairline);
+  border-radius: var(--consult-radius);
+  box-shadow: 0 30px 80px rgba(20,18,15,0.30);
+  padding: clamp(28px, 4vw, 48px);
+  opacity: 0; transform: translateY(16px) scale(0.985);
+  transition: opacity 0.35s var(--glass-ease), transform 0.35s var(--glass-ease);
+}
+.consult-overlay.is-open .consult-dialog { opacity: 1; transform: none; }
+
+.consult-close {
+  position: absolute; top: 16px; right: 16px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 999px;
+  background: transparent; border: 1px solid transparent; color: var(--muted);
+  transition: background-color 0.2s var(--glass-ease), color 0.2s var(--glass-ease),
+              border-color 0.2s var(--glass-ease);
+}
+.consult-close:hover { background: var(--tonal); color: var(--ink); border-color: var(--hairline); }
+.consult-close:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+.consult-close .material-symbols-outlined { font-size: 22px; }
+
+/* ---- Header ---- */
+.consult-head { margin: 0 0 24px; padding-right: 36px; }
+.consult-head h2 { font-size: clamp(24px, 4vw, 34px); margin: 0 0 12px; }
+.consult-intro { color: var(--muted); font-size: 15px; line-height: 1.6; margin: 0; max-width: 56ch; }
+
+/* ---- Tabs ---- */
+.consult-tabs {
+  display: flex; gap: 4px; margin: 0 0 28px;
+  border-bottom: 1px solid var(--hairline);
+}
+.consult-tabs[hidden] { display: none; }
+.consult-tab {
+  position: relative; background: transparent; border: none;
+  padding: 12px 16px 14px; color: var(--muted-2);
+  font-family: var(--sans); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  transition: color 0.2s var(--glass-ease);
+}
+.consult-tab::after {
+  content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px;
+  background: var(--accent-blue); transform: scaleX(0); transform-origin: left center;
+  transition: transform 0.3s var(--glass-ease);
+}
+.consult-tab:hover { color: var(--ink); }
+.consult-tab.is-active { color: var(--ink); }
+.consult-tab.is-active::after { transform: scaleX(1); }
+.consult-tab:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; border-radius: 6px; }
+
+/* ---- Form layout (overrides .lead-form flex) ---- */
+.consult-form { display: flex; flex-direction: column; gap: 22px; }
+.consult-form[hidden] { display: none; }
+.consult-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
+.consult-span { grid-column: 1 / -1; }
+.consult-form .optional { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); opacity: 0.7; }
+.consult-subhead {
+  font-family: var(--sans); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-2);
+  margin: 0 0 16px;
+}
+.consult-hint { font-family: var(--sans); font-size: 11px; color: var(--muted-2); margin-top: 6px; letter-spacing: 0.02em; }
+
+/* date input: keep it consistent with the serif fields, show the native picker */
+.consult-form input[type="date"] { font-family: var(--serif); }
+.consult-form input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; }
+
+/* ---- Fieldsets / legends ---- */
+.consult-fieldset { border: none; margin: 0; padding: 0; min-width: 0; }
+.consult-fieldset legend {
+  padding: 0; margin: 0 0 14px;
+  font-family: var(--sans); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted-2);
+}
+
+/* ---- Reset checkbox/radio inputs (they'd otherwise inherit .lead-form input) ---- */
+.consult-form input[type="checkbox"],
+.consult-form input[type="radio"] {
+  width: auto; border: none; border-bottom: none; padding: 0; margin: 0;
+  position: absolute; opacity: 0; pointer-events: none;
+}
+
+/* ---- Fabric chips ---- */
+.chip-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 0;
+  padding: 10px 18px; border-radius: 999px;
+  border: 1px solid var(--hairline); background: var(--tonal);
+  cursor: pointer; transition: border-color 0.2s var(--glass-ease),
+              background-color 0.2s var(--glass-ease), color 0.2s var(--glass-ease),
+              transform 0.15s var(--glass-ease);
+}
+.chip span {
+  font-family: var(--sans); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.04em; color: var(--muted); text-transform: none;
+}
+.chip:hover { border-color: var(--ink); transform: translateY(-1px); }
+.chip:has(input:checked) { background: var(--ink); border-color: var(--ink); }
+.chip:has(input:checked) span { color: #fff; }
+.chip:has(input:focus-visible) { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+
+/* ---- Delivery-method radio cards ---- */
+.radio-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.radio-card {
+  display: block; padding: 18px 20px; border-radius: 12px;
+  border: 1px solid var(--hairline); background: var(--tonal); cursor: pointer;
+  transition: border-color 0.2s var(--glass-ease), background-color 0.2s var(--glass-ease),
+              box-shadow 0.2s var(--glass-ease);
+}
+.radio-card-body { display: flex; flex-direction: column; gap: 5px; }
+.radio-card strong {
+  font-family: var(--serif); font-size: 16px; font-weight: 500; color: var(--ink);
+  text-transform: none; letter-spacing: 0;
+}
+.radio-card small { font-family: var(--sans); font-size: 12px; color: var(--muted); line-height: 1.5; text-transform: none; letter-spacing: 0.01em; }
+.radio-card:hover { border-color: var(--ink); }
+.radio-card:has(input:checked) {
+  border-color: var(--accent-blue);
+  box-shadow: inset 0 0 0 1px var(--accent-blue);
+  background: var(--canvas);
+}
+.radio-card:has(input:focus-visible) { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+
+/* ---- Conditional address block reveal ---- */
+.consult-address {
+  display: grid; grid-template-rows: 1fr; opacity: 1;
+  border-top: 1px solid var(--hairline); padding-top: 22px;
+  transition: opacity 0.3s var(--glass-ease);
+}
+.consult-address[hidden] { display: none; }
+
+/* ---- Validation errors ---- */
+.field-error {
+  display: block; margin-top: 8px;
+  font-family: var(--sans); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.01em; text-transform: none; color: var(--error);
+}
+.field-error:empty { display: none; }
+.consult-form [aria-invalid="true"] { border-bottom-color: var(--error); }
+.chip-group[aria-invalid="true"], .radio-cards[aria-invalid="true"] { /* group-level marker, optional */ }
+
+/* ---- Actions / submit / spinner ---- */
+.consult-actions { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+.consult-submit { position: relative; align-self: flex-start; }
+.consult-submit .consult-spinner { display: none; }
+.consult-submit[aria-busy="true"] { pointer-events: none; opacity: 0.8; }
+.consult-submit[aria-busy="true"] .consult-submit-label { visibility: hidden; }
+.consult-submit[aria-busy="true"] .consult-spinner {
+  display: block; position: absolute; inset: 0; margin: auto;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid rgba(20,20,20,0.25); border-top-color: var(--ink);
+  animation: consult-spin 0.7s linear infinite;
+}
+@keyframes consult-spin { to { transform: rotate(360deg); } }
+.consult-form-error {
+  margin: 0; font-family: var(--sans); font-size: 13px; font-weight: 500;
+  color: var(--error); background: var(--error-soft);
+  border: 1px solid rgba(179,38,30,0.2); border-radius: 10px; padding: 12px 16px;
+}
+.consult-form-error[hidden] { display: none; }
+
+/* ---- Success state ---- */
+.consult-success { text-align: center; padding: 24px 8px 8px; }
+.consult-success[hidden] { display: none; }
+.consult-success-mark { font-size: 56px; color: var(--accent-blue); }
+.consult-success h3 { font-size: clamp(22px, 3.5vw, 30px); margin: 14px 0 10px; }
+.consult-success p { color: var(--muted); font-size: 15px; line-height: 1.6; margin: 0 auto 28px; max-width: 46ch; }
+
+/* ---- Visually-hidden honeypot ---- */
+.consult-hp {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 720px) {
+  .consult-grid { grid-template-columns: 1fr; }
+  .radio-cards { grid-template-columns: 1fr; }
+  .consult-dialog { padding: 26px 20px; border-radius: 14px; }
+  .consult-overlay { padding: 0; align-items: stretch; }
+  .consult-dialog { max-width: none; min-height: 100%; border-radius: 0; border: none; }
+  .fab-consult .fab-consult-label { display: none; }
+  .fab-consult { padding: 14px; }
+  .fab-consult .fab-consult-icon { font-size: 22px; }
+}
+
+/* ============================================================
    Reduced motion — gate ALL motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -1202,4 +1452,10 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   .btn::before, .nav-cta::before { transform: translateX(-120%) !important; }
   /* TASK 2: nav dock magnification disabled under reduced motion */
   .nav-links.dock a { transform: none !important; }
+  /* consultation modal: appears instantly (no slide/scale); the submit
+     "spinner" can't animate, so hide it and let the busy label read instead */
+  .consult-dialog, .consult-backdrop { transition: none !important; opacity: 1 !important; transform: none !important; }
+  .fab-consult:hover, .fab-consult:active { transform: none !important; }
+  .consult-submit[aria-busy="true"] .consult-spinner { display: none !important; }
+  .consult-submit[aria-busy="true"] .consult-submit-label { visibility: visible !important; }
 }
