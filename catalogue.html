@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Asa Fabric catalogue — browse cottons, linens, twills and wool blends by type and use. Request a sample, request a quote, or book an in-person viewing.">
+  <meta name="theme-color" content="#FAF9F6">
+  <title>Asa Fabric — Catalogue</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Same type system as the landing page -->
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260629-10">
+  <link rel="stylesheet" href="catalogue.css?v=4">
+</head>
+<body id="top" class="catalogue-page">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ============ Glass-pill nav (shared design; links adapted for the catalogue) ============ -->
+  <header class="glass-nav" id="glassNav">
+    <a class="brand" href="index.html" aria-label="Asa Fabric — home">
+      <span class="brand-logo" aria-hidden="true">
+        <img class="brand-logo-img dark" src="assets/logo-dark.png" alt="">
+      </span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#catalogue" data-type-link="all">All Fabrics</a>
+      <a href="#catalogue" data-type-link="Shirting">Shirtings</a>
+      <a href="#catalogue" data-type-link="Suiting">Suitings</a>
+      <a href="#catalogue" data-type-link="Trousering">Trousers</a>
+      <a href="#enquiry">Contact</a>
+    </nav>
+    <a class="nav-cta" href="#enquiry">Contact</a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a class="brand mobile-brand" href="index.html" aria-label="Asa Fabric — home">
+      <span class="brand-logo" aria-hidden="true"><img class="brand-logo-img" src="assets/logo-dark.png" alt=""></span>
+    </a>
+    <a href="#catalogue" data-type-link="all">All Fabrics</a>
+    <a href="#catalogue" data-type-link="Shirting">Shirtings</a>
+    <a href="#catalogue" data-type-link="Suiting">Suitings</a>
+    <a href="#catalogue" data-type-link="Trousering">Trousers</a>
+    <a href="#enquiry">Contact</a>
+    <a class="mobile-cta" href="#enquiry">Contact</a>
+  </div>
+
+  <main>
+    <!-- ============ Hero band (mirrors the home hero) ============ -->
+    <section class="hero cat-hero" aria-label="Asa Fabric catalogue">
+      <div class="slideshow" aria-hidden="true">
+        <!-- Same hero treatment as home: remote photo with a guaranteed LOCAL fallback
+             (assets/fabrics/hero-1.svg) so the band never blanks offline / if a URL expires. -->
+        <div class="slide is-active"><img class="slide-img" alt="" loading="eager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-LYmah0qxMDWkusl_mWHmxGx1VgMil9pUJ4zMyg73g_80LlL7b_JwvvIItlGnf7u8bD2J5HvMM67I45I1y-Dgmm_JxhHl1UHKyeoJ_0BWx8wo-OK9KuGPCEi2nDIsRW4WGxT7yRGULvMASfApnFNUND4cxnrbhom4BxhWhvOO2b-yom70Zdd8sEUMR58h0UJ53eEvDQhe8OIMzBFlgHleYZd0x_MWGL-dPONu3Hbk5OKNR3Ls1-ZnedkNih9mxf9ArBAcGDnKCVy-" onerror="this.onerror=null;this.src='assets/fabrics/hero-1.svg'"></div>
+        <div class="slide-scrim"></div>
+      </div>
+      <div class="hero-inner">
+        <p class="eyebrow light reveal">The Catalogue</p>
+        <h1 class="hero-title reveal">Browse the cloth,<br>by the roll or the cut.</h1>
+        <p class="hero-lede reveal">Cottons, linens, twills and wool blends, organised by use and weight. Open any fabric to request a sample, a quote, or an in-person viewing.</p>
+        <div class="hero-actions reveal">
+          <a class="btn btn-solid-light" href="#catalogue">Browse fabrics</a>
+          <a class="btn-link light" href="#enquiry">Make an enquiry <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="hero-meta reveal" aria-hidden="true">
+          <span>Preview build</span>
+          <span class="sep">·</span>
+          <span>Swatch images are placeholders</span>
+          <span class="sep">·</span>
+          <span>Quote on request</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Toolbar (browse anchor) ============ -->
+    <div class="cat-toolbar" id="catalogue">
+      <div class="toolbar-top">
+        <div class="search-field">
+          <input id="fabricSearch" type="search" autocomplete="off" placeholder="Search the catalogue…" aria-label="Search fabrics">
+          <button id="searchClear" class="search-clear" type="button" aria-label="Clear search" hidden>&times;</button>
+        </div>
+        <div class="toolbar-actions">
+          <button id="exportPdf" class="toolbar-link" type="button">Download catalogue <span aria-hidden="true">→</span></button>
+          <button id="openRequest" class="request-btn" type="button" aria-haspopup="dialog">Request list <span class="request-count" id="requestCount" aria-label="items in request list">0</span></button>
+        </div>
+      </div>
+      <div class="filter-group" aria-label="Filter by fabric type">
+        <span class="filter-legend">Type</span>
+        <div class="tab-row" id="typeFilters"></div>
+      </div>
+      <div class="filter-group" aria-label="Filter by use">
+        <span class="filter-legend">Use</span>
+        <div class="tab-row" id="useFilters"></div>
+      </div>
+    </div>
+
+    <!-- ============ Results ============ -->
+    <section class="cat-results" aria-label="Fabric results">
+      <div class="results-meta">
+        <p class="results-count" id="resultsCount" aria-live="polite">30 fabrics</p>
+        <button id="clearFilters" class="link-reset" type="button" hidden>Reset filters</button>
+      </div>
+      <div class="cat-grid" id="catalogGrid"></div>
+      <p class="empty-state" id="emptyState" hidden>No fabrics match that search yet — try a different term or reset the filters.</p>
+    </section>
+
+    <!-- ============ Enquiry + viewing ============ -->
+    <section class="contact-section cat-enquiry" id="enquiry">
+      <div class="contact-copy reveal">
+        <p class="eyebrow">Enquiry</p>
+        <h2>Request samples, a quote, or a viewing.</h2>
+        <p>Add the fabrics you're interested in, then send them through here. We'll confirm matching cloth, pricing and samples — or arrange an in-person viewing.</p>
+        <ul class="contact-points">
+          <li>Samples sent on request</li>
+          <li>By the roll or cut to length</li>
+          <li>In-person viewing by appointment</li>
+        </ul>
+        <div class="selected-summary" id="selectedSummary" aria-live="polite">
+          <p class="selected-summary-label">Your request list</p>
+          <div class="selected-chips" id="selectedChips"></div>
+        </div>
+      </div>
+
+      <form class="lead-form reveal" id="leadForm" novalidate>
+        <label>Full Name
+          <span class="field"><input type="text" name="name" placeholder="Your name" required></span>
+        </label>
+        <label>Email
+          <span class="field"><input type="email" name="email" placeholder="you@email.com" required></span>
+        </label>
+        <label>I'd like to
+          <span class="field"><select name="intent" id="intentSelect">
+            <option value="sample">Request samples</option>
+            <option value="quote">Request a quote</option>
+            <option value="viewing">Book an in-person viewing</option>
+            <option value="general">General enquiry</option>
+          </select></span>
+        </label>
+
+        <div class="viewing-block" id="viewingBlock" hidden>
+          <div class="cal-card" aria-label="Pick a viewing slot (placeholder)">
+            <div class="cal-head">
+              <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">&lsaquo;</button>
+              <strong class="cal-month" id="calMonth">Month</strong>
+              <button type="button" class="cal-nav" id="calNext" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div class="cal-slots" id="calSlots"><p class="cal-hint">Select a day to see available times.</p></div>
+            <p class="cal-disclaimer">Sample scheduler — slots are illustrative. We'll confirm the exact time by email.</p>
+          </div>
+        </div>
+
+        <label>Message
+          <span class="field"><textarea name="message" id="enquiryMessage" placeholder="Fabric, colour, quantity, roll or cut length…"></textarea></span>
+        </label>
+        <button class="btn btn-solid" type="submit">Send Enquiry <span aria-hidden="true">→</span></button>
+        <p class="form-note" id="formNote" hidden>Thanks — your enquiry is noted (this is a preview, so nothing was actually sent). The team will follow up shortly.</p>
+      </form>
+    </section>
+  </main>
+
+  <!-- ============ Footer (shared) ============ -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <a class="brand footer-brand" href="index.html" aria-label="Asa Fabric — home">
+          <span class="brand-logo" aria-hidden="true"><img class="brand-logo-img" src="assets/logo-dark.png" alt=""></span>
+        </a>
+        <p class="footer-tagline">Quality fabrics, by the roll or the cut.</p>
+      </div>
+      <nav class="footer-col" aria-label="Catalogue">
+        <h4>Catalogue</h4>
+        <a href="#catalogue" data-type-link="Shirting">Shirtings</a>
+        <a href="#catalogue" data-type-link="Suiting">Suitings</a>
+        <a href="#catalogue" data-type-link="Trousering">Trousers</a>
+        <a href="#catalogue" data-type-link="all">All fabrics</a>
+      </nav>
+      <nav class="footer-col" aria-label="Site">
+        <h4>Site</h4>
+        <a href="index.html#why">Why Asa</a>
+        <a href="index.html#featured">Featured</a>
+        <a href="#enquiry">Enquiry</a>
+      </nav>
+      <nav class="footer-col" aria-label="Legal">
+        <h4>Legal</h4>
+        <a href="index.html">Terms</a>
+        <a href="index.html">Privacy</a>
+        <a href="https://github.com/veersethisteam2214-sys/AsaFabric" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <small class="footer-legal">© <span id="year"></span> Asa Fabric. All rights reserved.</small>
+      <div class="footer-social" aria-label="Social">
+        <a href="#top" aria-label="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.4a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2Zm0 2a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2Zm5.1-2.55a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/></svg></a>
+        <a href="#enquiry" aria-label="Email"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4.5 5h15A2.5 2.5 0 0 1 22 7.5v9A2.5 2.5 0 0 1 19.5 19h-15A2.5 2.5 0 0 1 2 16.5v-9A2.5 2.5 0 0 1 4.5 5Zm0 2a.5.5 0 0 0-.5.5v.36l8 5.14 8-5.14V7.5a.5.5 0 0 0-.5-.5h-15ZM20 10.24l-7.46 4.8a1 1 0 0 1-1.08 0L4 10.24v6.26a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5v-6.26Z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ Fabric detail modal ============ -->
+  <dialog id="fabricModal" class="fabric-modal" aria-label="Fabric detail"></dialog>
+
+  <!-- ============ Request list drawer ============ -->
+  <aside class="request-drawer" id="requestDrawer" aria-label="Request list" aria-hidden="true">
+    <div class="drawer-head">
+      <h3>Request list <span class="drawer-count" id="drawerCount">0</span></h3>
+      <button class="drawer-close" id="drawerClose" type="button" aria-label="Close request list">&times;</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-foot">
+      <button class="btn btn-ghost drawer-clear" id="drawerClear" type="button">Clear all</button>
+      <button class="btn btn-solid drawer-send" id="drawerSend" type="button">Request these <span aria-hidden="true">→</span></button>
+    </div>
+  </aside>
+  <div class="drawer-scrim" id="drawerScrim" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+  <script src="catalogue.js?v=4"></script>
+</body>
+</html>
