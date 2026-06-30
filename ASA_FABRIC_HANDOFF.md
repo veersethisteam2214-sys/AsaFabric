@@ -87,6 +87,7 @@ All animations honor `prefers-reduced-motion`.
 | Available Fabric Lots `#stock-teaser` | `initStockAssemble` | Teaser + 3-image collage with a scroll "assemble" animation (`.pre-assemble` → `.assembled`). **No selling here** — the CTA links to `#catalog`. |
 | B2B world map `#reach` → `#worldMapStage` | `buildWorldMap` | Dotted background `assets/world-dots.svg` (+ inline dot-grid fallback) and light-blue routes that draw on scroll and **replay on re-enter** via IntersectionObserver. |
 | Enquiry form `#contact` (`#leadForm`) | `initForm` | Bespoke styled `<select>`; submit is intercepted and shows `#formNote`. |
+| Consultation / sample modal (`#consultModal`) + FAB (`#fabConsult`) | `initConsultation` | Two-tab dialog (request info & sample / book a consultation). POSTs to `/api/consultation`. Enforces the today+2 booking rule. See `CONSULTATION_FEATURE.md`. |
 | Footer `.site-footer` | `initYear` (footer year) | Static otherwise. |
 
 Other inits: `initScrollProgress`, `initReveal`, `initSmoothScroll`,
@@ -191,6 +192,10 @@ are made up. Replace with real content. **Never use the word "deadstock".**
 - **Key website files:** `index.html`, `styles.css`, `app.js`, `vercel.json`,
   and `assets/` (`gsap.min.js`, `logo-light.png`, `logo-dark.png`,
   `world-dots.svg`, `fabrics/*.svg`).
+- **Serverless backend:** `api/consultation.js` + `api/_lib/` (validation +
+  provider-agnostic email). Zero-config Vercel Node functions, **no deps, no
+  `package.json`** — they don't change the static-site constraints. Config via
+  env vars (`.env.example`). See `CONSULTATION_FEATURE.md`.
 - **References / docs:** `ASA_FABRIC_UPGRADE_PROMPT.md`, `README.md`,
   `animated-dock.reference.tsx`, `world-map.reference.tsx` (and some loose
   prompt `.md` notes at the root).
