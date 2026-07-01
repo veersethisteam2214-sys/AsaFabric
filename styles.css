@@ -236,7 +236,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   gap: 40px; width: min(calc(100% - 32px), 920px);
   padding: 12px 28px; border-radius: 9999px;
   /* genuinely translucent over the hero */
-  background: rgba(250,249,246,0.42);
+  background: rgba(250,249,246,0.78);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   backdrop-filter: blur(18px) saturate(180%);
   border: 1px solid rgba(255,255,255,0.45);
@@ -267,9 +267,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
    tight to the wordmark, so scaling down stays crisp. Aspect ratio preserved
    (width:auto). The light variant sits over the busy hero photo, so it gets a
    soft drop-shadow for contrast / legibility. */
-.brand-logo { position: relative; display: inline-flex; align-items: center; height: 48px; }
+.brand-logo { position: relative; display: inline-flex; align-items: center; height: 60px; }
 .brand-logo-img {
-  display: block; height: 48px; width: auto; user-select: none;
+  display: block; height: 60px; width: auto; user-select: none;
   image-rendering: -webkit-optimize-contrast;
 }
 /* nav: stack the two variants and cross-fade on .scrolled */
@@ -292,7 +292,9 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .glass-nav .brand-logo-img.dark {
   position: static;
   opacity: 1;
-  filter: drop-shadow(0 1px 0 rgba(255,255,255,0.45));
+  height: 60px;
+  filter: contrast(1.12) drop-shadow(0 1px 0 rgba(255,255,255,0.8))
+          drop-shadow(0 0 1px rgba(26,26,26,0.24));
 }
 .nav-links { display: flex; align-items: center; gap: 28px; }
 .nav-links a {
@@ -440,9 +442,8 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
 .fabric-rotator-track {
   display: flex; flex: none; align-items: center; width: max-content;
   will-change: transform;
-  animation: fabricMarquee 42s linear infinite;
+  animation: fabricMarquee 34s linear infinite;
 }
-.fabric-rotator-stage:hover .fabric-rotator-track { animation-play-state: paused; }
 .fabric-rotator-item {
   flex: none; margin: 0;
   font-family: var(--serif); font-weight: 400; font-style: italic;
@@ -1262,8 +1263,7 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  /* marquee: no scrolling under reduced motion (names show statically) */
-  .fabric-rotator-track { animation: none !important; transform: none !important; }
+  /* requested marquee stays live; JS supplies a filled looping track */
   .slide-img { transition: none; transform: none !important; }
   .reveal { opacity: 1; transform: none; }
   /* parallax elements: JS skips transforms under reduced motion; reset just in case */
@@ -1287,4 +1287,12 @@ h1, h2, h3, h4 { font-family: var(--serif); font-weight: 400; margin: 0; }
   .btn::before, .nav-cta::before { transform: translateX(-120%) !important; }
   /* TASK 2: nav dock magnification disabled under reduced motion */
   .nav-links.dock a { transform: none !important; }
+}
+
+/* Client-requested fabric loop must keep moving even if the browser reports
+   reduced motion; keep this after the global reduced-motion gate. */
+@media (prefers-reduced-motion: reduce) {
+  .fabric-rotator-track {
+    animation: fabricMarquee 34s linear infinite !important;
+  }
 }

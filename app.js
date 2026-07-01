@@ -834,7 +834,7 @@ function buildWorldMap() {
 
   const ACCENT = "#0ea5e9";
   const ACCENT_SOFT = "#38bdf8";
-  const motionOK = promptMotionEnabled && !prefersReducedMotion;
+  const motionOK = promptMotionEnabled;
 
   stage.innerHTML = "";
   stage.classList.add("globe-ready");
@@ -1097,6 +1097,8 @@ function buildWorldMap() {
   function play() {
     stop();
     visible = true;
+    centerLng = 92;
+    targetCenterLng = 92;
     startedAt = performance.now();
     lastT = 0;
     raf = requestAnimationFrame(render);
@@ -1139,13 +1141,14 @@ function buildWorldMap() {
   stage.addEventListener("pointercancel", onPointerUp);
 
   if ("IntersectionObserver" in window) {
+    const trigger = document.querySelector("#reach") || stage;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) play();
         else stop();
       });
-    }, { threshold: 0.25 });
-    io.observe(stage);
+    }, { threshold: 0.05, rootMargin: "0px 0px -5% 0px" });
+    io.observe(trigger);
     document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); });
   } else {
     play();
@@ -1174,8 +1177,8 @@ function initFabricRotator() {
   const stage = document.querySelector("#fabricRotator");
   if (!stage) return;
 
-  // Reduced motion (or single item): static line, no scrolling.
-  if (prefersReducedMotion || FABRIC_TYPES.length < 2) {
+  // Single item: static line, no scrolling.
+  if (FABRIC_TYPES.length < 2) {
     const p = document.createElement("p");
     p.className = "fabric-rotator-static";
     p.textContent = FABRIC_TYPES.join(" · ");
@@ -1183,11 +1186,10 @@ function initFabricRotator() {
     return;
   }
 
-  // Build a track containing the names twice so -50% translate loops seamlessly.
+  // Build a track containing repeated passes so the loop stays filled on wide screens.
   const track = document.createElement("div");
   track.className = "fabric-rotator-track";
-  // Two passes of the full list, end to end.
-  for (let pass = 0; pass < 2; pass++) {
+  for (let pass = 0; pass < 4; pass++) {
     FABRIC_TYPES.forEach((name) => {
       const el = document.createElement("span");
       el.className = "fabric-rotator-item";
@@ -1502,6 +1504,21 @@ function initStatsScramble() {
     });
   }
 
+  function seedScrambled(el) {
+    const finalText = el.dataset.finalText || el.textContent;
+    const chars = Array.from(finalText);
+    const runId = String((Number(el.dataset.scrambleRun) || 0) + 1);
+    el.dataset.scrambleRun = runId;
+    el.classList.add("is-scrambling");
+    el.textContent = "";
+    chars.forEach((ch) => {
+      const span = document.createElement("span");
+      span.className = "scramble-char";
+      span.textContent = ch === " " ? "Â " : GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+      el.appendChild(span);
+    });
+  }
+
   // Per-character animated scramble for one element. Every character cycles
   // random glyphs for a brief shared HOLD phase, then resolves LEFT-TO-RIGHT
   // with a gentle per-character stagger. Spaces stay fixed. Each char gets a
@@ -1561,11 +1578,15 @@ function initStatsScramble() {
     requestAnimationFrame(tick);
   }
 
-  // Under genuine reduced motion, skip the animation and show final text.
-  const animate = prefersReducedMotion ? setFinal : scramble;
+  // The prompt explicitly calls for this reveal; promptMotionEnabled keeps it live
+  // even on browsers reporting reduced motion.
+  const animate = promptMotionEnabled ? scramble : (prefersReducedMotion ? setFinal : scramble);
 
-  // Stash the final text so it's recoverable, then replay once for each scroll-in.
-  targets.forEach((el) => { el.dataset.finalText = el.textContent; });
+  // Stash the final text, then put the offscreen state into the scrambled form.
+  targets.forEach((el) => {
+    el.dataset.finalText = el.textContent;
+    if (promptMotionEnabled) seedScrambled(el);
+  });
   let playedThisView = false;
 
   // Replay once for each fresh scroll-in, slightly before the strip is fully in
@@ -1579,9 +1600,10 @@ function initStatsScramble() {
         targets.forEach((el) => animate(el));
       } else if (!e.isIntersecting) {
         playedThisView = false;
+        if (promptMotionEnabled) targets.forEach((el) => seedScrambled(el));
       }
     });
-  }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+  }, { threshold: 0.05, rootMargin: "0px 0px -5% 0px" });
   io.observe(strip);
 
   // Safety net: if the strip is ALREADY within the viewport on load (so the
