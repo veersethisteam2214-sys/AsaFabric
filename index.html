@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- EB Garamond (serif), Montserrat (sans), Material Symbols (icons) -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260701-1">
+  <link rel="stylesheet" href="styles.css?v=20260703-1">
 
   <!-- GSAP (self-hosted) for the Featured Fabrics fan-carousel; app.js feature-detects window.gsap -->
   <script src="assets/gsap.min.js?v=20260627-1"></script>
@@ -298,6 +298,16 @@
           <li>Swatches on request</li>
           <li>Bulk &amp; clearance bundles</li>
         </ul>
+        <!-- Open the consultation / sample modal (initConsultation in app.js).
+             The quick form below stays as the no-JS / lightweight path. -->
+        <div class="contact-cta reveal">
+          <button class="btn btn-solid" type="button" data-consult-open="sample">
+            Request a sample <span aria-hidden="true">→</span>
+          </button>
+          <button class="btn-link" type="button" data-consult-open="consultation">
+            Book a consultation <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
       <form class="lead-form reveal" id="leadForm" novalidate>
         <label>
@@ -388,6 +398,208 @@
     </div>
   </footer>
 
-  <script src="app.js?v=20260701-1"></script>
+  <!-- ============================================================
+       CONSULTATION / SAMPLE REQUEST
+       A floating action button + accessible two-tab modal dialog.
+       All behavior (open/close, focus trap, tab switching, conditional
+       address fields, the date+2 rule, validation, submission) is wired
+       by initConsultation() in app.js. The dialog markup is inert until
+       JS upgrades it; the quick enquiry form (#leadForm) above remains the
+       no-JS fallback. Submits to the /api/consultation serverless function.
+       ============================================================ -->
+  <button class="fab-consult" id="fabConsult" type="button"
+          aria-haspopup="dialog" aria-controls="consultModal"
+          data-consult-open="sample" hidden>
+    <span class="fab-consult-icon material-symbols-outlined" aria-hidden="true">draft</span>
+    <span class="fab-consult-label">Request a Sample</span>
+  </button>
+
+  <div class="consult-overlay" id="consultModal" hidden>
+    <div class="consult-backdrop" data-consult-close aria-hidden="true"></div>
+
+    <div class="consult-dialog" role="dialog" aria-modal="true"
+         aria-labelledby="consultTitle" aria-describedby="consultIntro">
+      <button class="consult-close" type="button" data-consult-close aria-label="Close dialog">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+
+      <header class="consult-head">
+        <p class="eyebrow">Get started</p>
+        <h2 id="consultTitle">Request information or book a visit</h2>
+        <p class="consult-intro" id="consultIntro">Tell us what you're making and how you'd like to proceed — we'll match you to today's lots, post a sample, or schedule an in-person look at the cloth.</p>
+      </header>
+
+      <div class="consult-tabs" role="tablist" aria-label="Choose an option">
+        <button class="consult-tab is-active" type="button" role="tab"
+                id="consultTabSample" aria-selected="true" aria-controls="consultPanelSample">
+          Request Info &amp; Sample
+        </button>
+        <button class="consult-tab" type="button" role="tab" tabindex="-1"
+                id="consultTabBook" aria-selected="false" aria-controls="consultPanelBook">
+          Book a Consultation
+        </button>
+      </div>
+
+      <!-- ===== Panel 1 — Request information & sample ===== -->
+      <form class="lead-form consult-form" id="consultPanelSample" role="tabpanel"
+            aria-labelledby="consultTabSample" data-type="sample" novalidate>
+        <!-- honeypot (hidden from users; bots fill it) -->
+        <div class="consult-hp" aria-hidden="true">
+          <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <div class="consult-grid">
+          <label>Full Name
+            <span class="field"><input type="text" name="fullName" autocomplete="name" placeholder="Your name" required></span>
+            <span class="field-error" data-error-for="fullName" aria-live="polite"></span>
+          </label>
+          <label>Company <span class="optional">(optional)</span>
+            <span class="field"><input type="text" name="company" autocomplete="organization" placeholder="Company name"></span>
+          </label>
+          <label>Email
+            <span class="field"><input type="email" name="email" autocomplete="email" placeholder="you@email.com" required></span>
+            <span class="field-error" data-error-for="email" aria-live="polite"></span>
+          </label>
+          <label>Phone Number
+            <span class="field"><input type="tel" name="phone" autocomplete="tel" placeholder="+44 …" required></span>
+            <span class="field-error" data-error-for="phone" aria-live="polite"></span>
+          </label>
+        </div>
+
+        <fieldset class="consult-fieldset consult-span">
+          <legend>Fabrics of interest</legend>
+          <div class="chip-group" role="group" aria-label="Fabrics of interest">
+            <label class="chip"><input type="checkbox" name="products" value="Shirtings"><span>Shirtings</span></label>
+            <label class="chip"><input type="checkbox" name="products" value="Suitings"><span>Suitings</span></label>
+            <label class="chip"><input type="checkbox" name="products" value="Trousers"><span>Trousers</span></label>
+            <label class="chip"><input type="checkbox" name="products" value="Workwear"><span>Workwear</span></label>
+            <label class="chip"><input type="checkbox" name="products" value="Linens"><span>Linens</span></label>
+            <label class="chip"><input type="checkbox" name="products" value="Cottons"><span>Cottons</span></label>
+            <label class="chip"><input type="checkbox" name="products" value="Bulk / clearance"><span>Bulk / clearance</span></label>
+            <label class="chip"><input type="checkbox" name="products" value="Other"><span>Other</span></label>
+          </div>
+          <span class="field-error" data-error-for="products" aria-live="polite"></span>
+        </fieldset>
+
+        <label class="consult-span">Project details &amp; requirements
+          <span class="field"><textarea name="projectDetails" placeholder="Fabric type, colour, quantity, roll or cut length, timelines…"></textarea></span>
+        </label>
+
+        <fieldset class="consult-fieldset consult-span">
+          <legend>How would you like to receive information?</legend>
+          <div class="radio-cards" role="radiogroup" aria-label="Preferred response">
+            <label class="radio-card">
+              <input type="radio" name="deliveryMethod" value="email" checked>
+              <span class="radio-card-body">
+                <strong>Email me more information</strong>
+                <small>We'll send details, pricing and swatch photos by email.</small>
+              </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="deliveryMethod" value="post">
+              <span class="radio-card-body">
+                <strong>Send me a physical sample by post</strong>
+                <small>We'll mail a cut swatch to your delivery address.</small>
+              </span>
+            </label>
+          </div>
+          <span class="field-error" data-error-for="deliveryMethod" aria-live="polite"></span>
+        </fieldset>
+
+        <!-- Conditional postal address — revealed only for "by post" -->
+        <div class="consult-address consult-span" data-address hidden>
+          <p class="consult-subhead">Where should we post your sample?</p>
+          <div class="consult-grid">
+            <label class="consult-span">Delivery Address
+              <span class="field"><input type="text" name="addressLine1" autocomplete="address-line1" placeholder="Street and number"></span>
+              <span class="field-error" data-error-for="addressLine1" aria-live="polite"></span>
+            </label>
+            <label>City
+              <span class="field"><input type="text" name="city" autocomplete="address-level2" placeholder="City"></span>
+              <span class="field-error" data-error-for="city" aria-live="polite"></span>
+            </label>
+            <label>Postal Code
+              <span class="field"><input type="text" name="postalCode" autocomplete="postal-code" placeholder="Postal / ZIP"></span>
+              <span class="field-error" data-error-for="postalCode" aria-live="polite"></span>
+            </label>
+            <label class="consult-span">Country
+              <span class="field"><input type="text" name="country" autocomplete="country-name" placeholder="Country"></span>
+              <span class="field-error" data-error-for="country" aria-live="polite"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="consult-actions consult-span">
+          <button class="btn btn-solid consult-submit" type="submit">
+            <span class="consult-submit-label">Send Request <span aria-hidden="true">→</span></span>
+            <span class="consult-spinner" aria-hidden="true"></span>
+          </button>
+          <p class="consult-form-error" data-form-error role="alert" hidden></p>
+        </div>
+      </form>
+
+      <!-- ===== Panel 2 — Book an in-person consultation ===== -->
+      <form class="lead-form consult-form" id="consultPanelBook" role="tabpanel"
+            aria-labelledby="consultTabBook" data-type="consultation" novalidate hidden>
+        <div class="consult-hp" aria-hidden="true">
+          <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <div class="consult-grid">
+          <label>Full Name
+            <span class="field"><input type="text" name="fullName" autocomplete="name" placeholder="Your name" required></span>
+            <span class="field-error" data-error-for="fullName" aria-live="polite"></span>
+          </label>
+          <label>Company <span class="optional">(optional)</span>
+            <span class="field"><input type="text" name="company" autocomplete="organization" placeholder="Company name"></span>
+          </label>
+          <label>Email
+            <span class="field"><input type="email" name="email" autocomplete="email" placeholder="you@email.com" required></span>
+            <span class="field-error" data-error-for="email" aria-live="polite"></span>
+          </label>
+          <label>Phone Number
+            <span class="field"><input type="tel" name="phone" autocomplete="tel" placeholder="+44 …" required></span>
+            <span class="field-error" data-error-for="phone" aria-live="polite"></span>
+          </label>
+          <label>Preferred Date
+            <span class="field"><input type="date" name="preferredDate" required></span>
+            <span class="consult-hint" data-earliest-hint></span>
+            <span class="field-error" data-error-for="preferredDate" aria-live="polite"></span>
+          </label>
+          <label>Preferred Time
+            <span class="field"><select name="timeSlot" required>
+              <option value="" disabled selected>Select a time slot</option>
+              <option value="Morning (9:00–12:00)">Morning (9:00–12:00)</option>
+              <option value="Midday (12:00–15:00)">Midday (12:00–15:00)</option>
+              <option value="Afternoon (15:00–18:00)">Afternoon (15:00–18:00)</option>
+            </select></span>
+            <span class="field-error" data-error-for="timeSlot" aria-live="polite"></span>
+          </label>
+        </div>
+
+        <label class="consult-span">Project requirements
+          <span class="field"><textarea name="projectDetails" placeholder="What you'd like to see — fabrics, quantities, the project you're sourcing for…"></textarea></span>
+        </label>
+
+        <div class="consult-actions consult-span">
+          <button class="btn btn-solid consult-submit" type="submit">
+            <span class="consult-submit-label">Book Consultation <span aria-hidden="true">→</span></span>
+            <span class="consult-spinner" aria-hidden="true"></span>
+          </button>
+          <p class="consult-form-error" data-form-error role="alert" hidden></p>
+        </div>
+      </form>
+
+      <!-- ===== Shared success state (shown after a successful submit) ===== -->
+      <div class="consult-success" data-success hidden>
+        <span class="consult-success-mark material-symbols-outlined" aria-hidden="true">check_circle</span>
+        <h3 data-success-title>Thank you — your request is in.</h3>
+        <p data-success-body>The team will follow up shortly. A confirmation has been sent to your email.</p>
+        <button class="btn btn-solid" type="button" data-consult-close>Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=20260703-1"></script>
 </body>
 </html>

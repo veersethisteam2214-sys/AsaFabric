@@ -1839,6 +1839,346 @@ function initTestimonials() {
   startTimer();
 }
 
+/* ---------- Consultation / sample-request modal ----------
+   An accessible two-tab dialog (Request Info & Sample / Book a Consultation),
+   opened by the floating action button and the enquiry-section CTAs. Mirrors
+   the server-side rules in api/_lib/validation.js for instant feedback, then
+   POSTs to /api/consultation. Honors prefers-reduced-motion (via CSS) and
+   degrades to the quick #leadForm when JS is unavailable (the dialog is inert
+   until this runs). */
+const CONSULT_ENDPOINT = "/api/consultation";
+const CONSULT_LEAD_DAYS = 2;
+
+function consultEarliestDate(leadDays) {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + leadDays);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function consultFormatDate(iso) {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return iso;
+  return `${Number(m[3])} ${months[Number(m[2]) - 1]} ${m[1]}`;
+}
+
+function consultValidEmail(v) {
+  return typeof v === "string" && v.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+}
+function consultValidPhone(v) {
+  const s = (v || "").trim();
+  const digits = s.replace(/\D/g, "");
+  return digits.length >= 7 && digits.length <= 20 && /^[+0-9 ()\-]+$/.test(s);
+}
+
+function initConsultation() {
+  const overlay = document.getElementById("consultModal");
+  const dialog = overlay && overlay.querySelector(".consult-dialog");
+  if (!overlay || !dialog) return;
+
+  const fab = document.getElementById("fabConsult");
+  const tabs = Array.from(overlay.querySelectorAll(".consult-tab"));
+  const sampleForm = document.getElementById("consultPanelSample");
+  const bookForm = document.getElementById("consultPanelBook");
+  const forms = { sample: sampleForm, consultation: bookForm };
+  const successEl = overlay.querySelector("[data-success]");
+  const closers = Array.from(overlay.querySelectorAll("[data-consult-close]"));
+  const openers = Array.from(document.querySelectorAll("[data-consult-open]"));
+  if (!sampleForm || !bookForm) return;
+
+  let lastFocused = null;
+
+  // Progressive enhancement: only reveal the floating action once JS is live.
+  if (fab) fab.hidden = false;
+
+  /* ----- date+2 rule on the consultation date field ----- */
+  const dateInput = bookForm.querySelector('input[name="preferredDate"]');
+  const earliest = consultEarliestDate(CONSULT_LEAD_DAYS);
+  if (dateInput) {
+    dateInput.min = earliest;
+    const hint = bookForm.querySelector("[data-earliest-hint]");
+    if (hint) hint.textContent = "Earliest available date: " + consultFormatDate(earliest);
+  }
+
+  /* ----- tab switching (click + roving arrow keys) ----- */
+  function typeOfTab(tab) {
+    return tab.id === "consultTabBook" ? "consultation" : "sample";
+  }
+  function selectTab(type, focusTab) {
+    tabs.forEach((tab) => {
+      const isActive = typeOfTab(tab) === type;
+      tab.classList.toggle("is-active", isActive);
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
+      tab.tabIndex = isActive ? 0 : -1;
+      if (isActive && focusTab) tab.focus();
+    });
+    if (successEl) successEl.hidden = true;
+    Object.keys(forms).forEach((key) => { forms[key].hidden = key !== type; });
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => selectTab(typeOfTab(tab)));
+    tab.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      const dir = event.key === "ArrowRight" ? 1 : -1;
+      const next = tabs[(index + dir + tabs.length) % tabs.length];
+      selectTab(typeOfTab(next), true);
+    });
+  });
+
+  /* ----- conditional postal-address block (sample form) ----- */
+  const addressBlock = sampleForm.querySelector("[data-address]");
+  const addressInputs = addressBlock
+    ? Array.from(addressBlock.querySelectorAll("input"))
+    : [];
+  function syncAddress() {
+    const method = sampleForm.querySelector('input[name="deliveryMethod"]:checked');
+    const post = method && method.value === "post";
+    if (addressBlock) addressBlock.hidden = !post;
+    addressInputs.forEach((inp) => {
+      if (post) inp.setAttribute("required", "");
+      else { inp.removeAttribute("required"); clearError(inp.name); }
+    });
+  }
+  sampleForm
+    .querySelectorAll('input[name="deliveryMethod"]')
+    .forEach((radio) => radio.addEventListener("change", syncAddress));
+
+  /* ----- error helpers ----- */
+  function errorSlot(form, name) {
+    return form.querySelector('[data-error-for="' + name + '"]');
+  }
+  function setError(form, name, message) {
+    const slot = errorSlot(form, name);
+    if (slot) slot.textContent = message || "";
+    const field = form.querySelector('[name="' + name + '"]');
+    if (field && message) {
+      field.setAttribute("aria-invalid", "true");
+      if (slot && slot.id === "") {
+        slot.id = "err-" + name + "-" + Math.random().toString(36).slice(2, 7);
+      }
+      if (slot) field.setAttribute("aria-describedby", slot.id);
+    }
+  }
+  function clearError(name) {
+    [sampleForm, bookForm].forEach((form) => {
+      const slot = errorSlot(form, name);
+      if (slot) slot.textContent = "";
+      const field = form.querySelector('[name="' + name + '"]');
+      if (field) field.removeAttribute("aria-invalid");
+    });
+  }
+  function clearAllErrors(form) {
+    form.querySelectorAll("[data-error-for]").forEach((s) => (s.textContent = ""));
+    form.querySelectorAll('[aria-invalid="true"]').forEach((f) => f.removeAttribute("aria-invalid"));
+    const formError = form.querySelector("[data-form-error]");
+    if (formError) { formError.hidden = true; formError.textContent = ""; }
+  }
+
+  /* ----- client-side validation (mirrors the server) ----- */
+  function readForm(form) {
+    const fd = new FormData(form);
+    const data = {
+      type: form.dataset.type,
+      website: (fd.get("website") || "").toString(),
+      fullName: (fd.get("fullName") || "").toString().trim(),
+      company: (fd.get("company") || "").toString().trim(),
+      email: (fd.get("email") || "").toString().trim(),
+      phone: (fd.get("phone") || "").toString().trim(),
+      projectDetails: (fd.get("projectDetails") || "").toString().trim(),
+    };
+    if (form.dataset.type === "sample") {
+      data.products = fd.getAll("products").map((p) => p.toString());
+      data.deliveryMethod = (fd.get("deliveryMethod") || "").toString();
+      data.addressLine1 = (fd.get("addressLine1") || "").toString().trim();
+      data.city = (fd.get("city") || "").toString().trim();
+      data.postalCode = (fd.get("postalCode") || "").toString().trim();
+      data.country = (fd.get("country") || "").toString().trim();
+    } else {
+      data.preferredDate = (fd.get("preferredDate") || "").toString();
+      data.timeSlot = (fd.get("timeSlot") || "").toString();
+    }
+    return data;
+  }
+  function validate(data) {
+    const errors = {};
+    if (!data.fullName) errors.fullName = "Please enter your full name.";
+    if (!consultValidEmail(data.email)) errors.email = "Enter a valid email address.";
+    if (!consultValidPhone(data.phone)) errors.phone = "Enter a valid phone number.";
+
+    if (data.type === "sample") {
+      if (!data.products || !data.products.length) errors.products = "Select at least one fabric of interest.";
+      if (data.deliveryMethod !== "email" && data.deliveryMethod !== "post") {
+        errors.deliveryMethod = "Choose how you'd like to receive information.";
+      }
+      if (data.deliveryMethod === "post") {
+        if (!data.addressLine1) errors.addressLine1 = "Enter a delivery address.";
+        if (!data.city) errors.city = "Enter a city.";
+        if (!data.postalCode) errors.postalCode = "Enter a postal code.";
+        if (!data.country) errors.country = "Enter a country.";
+      }
+    } else {
+      if (!data.preferredDate) errors.preferredDate = "Choose a valid date.";
+      else if (data.preferredDate < earliest) errors.preferredDate = "Earliest available date is " + consultFormatDate(earliest) + ".";
+      if (!data.timeSlot) errors.timeSlot = "Choose a preferred time slot.";
+    }
+    return errors;
+  }
+
+  function showErrors(form, errors) {
+    clearAllErrors(form);
+    const names = Object.keys(errors);
+    names.forEach((name) => setError(form, name, errors[name]));
+    if (names.length) {
+      const first = form.querySelector('[name="' + names[0] + '"]');
+      if (first && typeof first.focus === "function") first.focus();
+    }
+  }
+
+  /* ----- submission ----- */
+  async function handleSubmit(event, form) {
+    event.preventDefault();
+    const type = form.dataset.type;
+    const data = readForm(form);
+    const errors = validate(data);
+    if (Object.keys(errors).length) { showErrors(form, errors); return; }
+    clearAllErrors(form);
+
+    const submit = form.querySelector(".consult-submit");
+    const label = submit && submit.querySelector(".consult-submit-label");
+    const originalLabel = label ? label.innerHTML : "";
+    if (submit) submit.setAttribute("aria-busy", "true");
+    if (label) label.textContent = "Sending…";
+
+    const formError = form.querySelector("[data-form-error]");
+
+    try {
+      const res = await fetch(CONSULT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        showSuccess(type, data);
+        form.reset();
+        syncAddress();
+        return;
+      }
+
+      if (res.status === 422) {
+        const payload = await res.json().catch(() => ({}));
+        showErrors(form, payload.errors || {});
+        return;
+      }
+
+      throw new Error("Unexpected status " + res.status);
+    } catch (err) {
+      console.error("[consultation] submit failed:", err);
+      if (formError) {
+        formError.hidden = false;
+        formError.textContent =
+          "Something went wrong sending your request. Please try again, or email us directly.";
+      }
+    } finally {
+      if (submit) submit.removeAttribute("aria-busy");
+      if (label) label.innerHTML = originalLabel;
+    }
+  }
+  sampleForm.addEventListener("submit", (e) => handleSubmit(e, sampleForm));
+  bookForm.addEventListener("submit", (e) => handleSubmit(e, bookForm));
+
+  /* ----- success state ----- */
+  function showSuccess(type, data) {
+    tabs.forEach((t) => (t.closest(".consult-tabs").hidden = true));
+    sampleForm.hidden = true;
+    bookForm.hidden = true;
+    if (!successEl) return;
+    const title = successEl.querySelector("[data-success-title]");
+    const body = successEl.querySelector("[data-success-body]");
+    if (type === "consultation") {
+      if (title) title.textContent = "Your consultation request is in.";
+      if (body) body.textContent =
+        "We'll confirm your appointment for " + consultFormatDate(data.preferredDate) +
+        " (" + data.timeSlot + ") by email shortly.";
+    } else if (data.deliveryMethod === "post") {
+      if (title) title.textContent = "Your sample request is in.";
+      if (body) body.textContent =
+        "We'll post your fabric sample and follow up by email. A confirmation has been sent to " + data.email + ".";
+    } else {
+      if (title) title.textContent = "Thank you — your enquiry is in.";
+      if (body) body.textContent =
+        "We'll email the information you asked for shortly. A confirmation has been sent to " + data.email + ".";
+    }
+    successEl.hidden = false;
+    const done = successEl.querySelector("[data-consult-close]");
+    if (done && typeof done.focus === "function") done.focus();
+  }
+
+  /* ----- open / close + focus management ----- */
+  function focusable() {
+    return Array.from(
+      dialog.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+  }
+  function resetForNewOpen() {
+    const tablist = overlay.querySelector(".consult-tabs");
+    if (tablist) tablist.hidden = false;
+    if (successEl) successEl.hidden = true;
+    clearAllErrors(sampleForm);
+    clearAllErrors(bookForm);
+  }
+  function openModal(type) {
+    lastFocused = document.activeElement;
+    resetForNewOpen();
+    selectTab(type === "consultation" ? "consultation" : "sample");
+    syncAddress();
+    overlay.hidden = false;
+    document.body.classList.add("consult-open");
+    // next frame so the entrance transition runs
+    requestAnimationFrame(() => overlay.classList.add("is-open"));
+    const first = (forms[type] || sampleForm).querySelector("input, select, textarea, button");
+    if (first && typeof first.focus === "function") {
+      window.setTimeout(() => first.focus(), 40);
+    }
+  }
+  function closeModal() {
+    overlay.classList.remove("is-open");
+    document.body.classList.remove("consult-open");
+    const done = () => { overlay.hidden = true; };
+    if (prefersReducedMotion) done();
+    else window.setTimeout(done, 320);
+    if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+  }
+  openers.forEach((btn) =>
+    btn.addEventListener("click", () => openModal(btn.dataset.consultOpen || "sample"))
+  );
+  closers.forEach((btn) => btn.addEventListener("click", closeModal));
+
+  overlay.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); closeModal(); return; }
+    if (event.key !== "Tab") return;
+    const items = focusable();
+    if (!items.length) return;
+    const firstEl = items[0];
+    const lastEl = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === firstEl) {
+      event.preventDefault(); lastEl.focus();
+    } else if (!event.shiftKey && document.activeElement === lastEl) {
+      event.preventDefault(); firstEl.focus();
+    }
+  });
+
+  // initial address state
+  syncAddress();
+}
+
 function safe(fn, name) {
   try {
     fn();
@@ -1861,4 +2201,5 @@ safe(initForm, "initForm");
 safe(initParallax, "initParallax");
 safe(initStockAssemble, "initStockAssemble");
 safe(initStatsScramble, "initStatsScramble");
+safe(initConsultation, "initConsultation");
 safe(initYear, "initYear");
