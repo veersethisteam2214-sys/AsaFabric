@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Same type system as the landing page -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260629-10">
-  <link rel="stylesheet" href="catalogue.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=20260721-1">
+  <link rel="stylesheet" href="catalogue.css?v=5">
 </head>
 <body id="top" class="catalogue-page">
   <div class="grain" aria-hidden="true"></div>
@@ -22,7 +22,7 @@
   <header class="glass-nav" id="glassNav">
     <a class="brand" href="index.html" aria-label="Asa Fabric — home">
       <span class="brand-logo" aria-hidden="true">
-        <img class="brand-logo-img dark" src="assets/logo-dark.png" alt="">
+        <img class="brand-logo-img dark" src="assets/logo-dark.png" width="294" height="160" alt="">
       </span>
     </a>
     <nav class="nav-links" aria-label="Primary">
@@ -40,7 +40,7 @@
 
   <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <a class="brand mobile-brand" href="index.html" aria-label="Asa Fabric — home">
-      <span class="brand-logo" aria-hidden="true"><img class="brand-logo-img" src="assets/logo-dark.png" alt=""></span>
+      <span class="brand-logo" aria-hidden="true"><img class="brand-logo-img" src="assets/logo-dark.png" width="294" height="160" alt=""></span>
     </a>
     <a href="#catalogue" data-type-link="all">All Fabrics</a>
     <a href="#catalogue" data-type-link="Shirting">Shirtings</a>
@@ -169,7 +169,7 @@
     <div class="footer-grid">
       <div class="footer-brand-col">
         <a class="brand footer-brand" href="index.html" aria-label="Asa Fabric — home">
-          <span class="brand-logo" aria-hidden="true"><img class="brand-logo-img" src="assets/logo-dark.png" alt=""></span>
+          <span class="brand-logo" aria-hidden="true"><img class="brand-logo-img" src="assets/logo-dark.png" width="294" height="160" alt=""></span>
         </a>
         <p class="footer-tagline">Quality fabrics, by the roll or the cut.</p>
       </div>
@@ -219,7 +219,8 @@
   </aside>
   <div class="drawer-scrim" id="drawerScrim" hidden></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
-  <script src="catalogue.js?v=4"></script>
+  <!-- Fuse.js (self-hosted; no CDN) for catalogue search -->
+  <script src="assets/fuse.min.js?v=20260721-1"></script>
+  <script src="catalogue.js?v=5"></script>
 </body>
 </html>
