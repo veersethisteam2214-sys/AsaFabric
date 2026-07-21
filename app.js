@@ -220,7 +220,7 @@ function initFanCarousel() {
     el.className = "fan-card";
     el.dataset.index = String(i);
     el.innerHTML = `
-      <img alt="" loading="lazy" src="${card.img}" data-fallback="${card.fallback}" onerror="this.onerror=null;this.src=this.dataset.fallback">
+      <img alt="" width="600" height="800" loading="lazy" src="${card.img}" data-fallback="${card.fallback}" onerror="this.onerror=null;this.src=this.dataset.fallback">
       <div class="fan-cap"><small>${escapeHtml(card.tag)}</small><strong>${escapeHtml(card.title)}</strong></div>
     `;
     layout.appendChild(el);
@@ -429,22 +429,7 @@ function initFanCarousel() {
 }
 
 /* ============================================================
-   B2B Global Supply — animated dotted world map
-   Ported from a framer-motion + `dotted-map` "WorldMap" React
-   component to vanilla SVG + JS.
-
-   Dotted background: assets/world-dots.svg, generated build-time with
-   the `dotted-map` npm package. To regenerate (no runtime dependency):
-     npm install dotted-map
-     node -e "import('dotted-map').then(({default:D})=>{ \
-       const m=new D({height:100,grid:'diagonal'}); \
-       process.stdout.write(m.getSVG({radius:0.22,color:'#1A1A1A40', \
-         shape:'circle',backgroundColor:'transparent'})); })" > assets/world-dots.svg
-
-   Projection (equirectangular, 800x400 viewBox), matching the original:
-     x = (lng + 180) * (800 / 360)
-     y = (90  - lat) * (400 / 180)
-   Quadratic-bezier control point: midX = (x1+x2)/2, midY = min(y1,y2) - 50.
+   B2B Global Supply — animated canvas globe (see buildWorldMap below).
    ============================================================ */
 
 /* ---------- Supply routes data — EDIT HERE -----------------
@@ -464,302 +449,6 @@ const WORLD_DESTINATIONS = [
   { name: "Sydney",    lat: -33.8688, lng: 151.2093 },
   { name: "Nigeria",   lat: 9.08,    lng: 8.68     }
 ];
-
-const SVGNS = "http://www.w3.org/2000/svg";
-const WORLD_W = 800;
-const WORLD_H = 400;
-
-function worldProject(lat, lng) {
-  return {
-    x: (lng + 180) * (WORLD_W / 360),
-    y: (90 - lat) * (WORLD_H / 180)
-  };
-}
-
-function svgEl(name, attrs) {
-  const el = document.createElementNS(SVGNS, name);
-  for (const k in attrs) el.setAttribute(k, attrs[k]);
-  return el;
-}
-
-function buildWorldMap() {
-  const stage = document.querySelector("#worldMapStage");
-  if (!stage) return;
-
-  // TASK 7 + 9: routes / points / glow are light blue (#0ea5e9, #38bdf8 highlights).
-  const ACCENT = "#0ea5e9";       // light blue (replaces the earlier brown)
-  const ACCENT_SOFT = "#38bdf8";  // brighter highlight for gradient + glow dot
-
-  // --- 1. Dotted-map background (static, baked-in asset). Guarded:
-  //     if the generated SVG is unavailable, a CSS dot-pattern fallback
-  //     <svg> is used so the section still reads as a dotted map. ---
-  const dots = new Image();
-  dots.className = "world-dots";
-  dots.alt = "";
-  dots.setAttribute("aria-hidden", "true");
-  dots.src = "assets/world-dots.svg";
-  dots.addEventListener("error", () => {
-    // Fallback: replace the failed <img> with an inline dot-grid SVG so
-    // the backdrop still resembles a dotted map (approximate, on-brand).
-    if (!dots.parentNode) return;
-    const fb = svgEl("svg", {
-      class: "world-dots",
-      viewBox: `0 0 ${WORLD_W} ${WORLD_H}`,
-      preserveAspectRatio: "xMidYMid meet"
-    });
-    const defs = svgEl("defs", {});
-    const pat = svgEl("pattern", {
-      id: "worldDotFallback", x: "0", y: "0",
-      width: "10", height: "10", patternUnits: "userSpaceOnUse"
-    });
-    pat.appendChild(svgEl("circle", { cx: "2", cy: "2", r: "1", fill: "#1A1A1A40" }));
-    defs.appendChild(pat);
-    fb.appendChild(defs);
-    fb.appendChild(svgEl("rect", {
-      x: "0", y: "0", width: WORLD_W, height: WORLD_H, fill: "url(#worldDotFallback)"
-    }));
-    dots.parentNode.replaceChild(fb, dots);
-  });
-  stage.appendChild(dots);
-
-  // --- 2. Routes / points / labels layer (vanilla SVG, on top) ---
-  const svg = svgEl("svg", {
-    class: "world-routes",
-    viewBox: `0 0 ${WORLD_W} ${WORLD_H}`,
-    preserveAspectRatio: "xMidYMid meet"
-  });
-
-  const defs = svgEl("defs", {});
-
-  // soft glow filter for the travelling dots + endpoints
-  const filter = svgEl("filter", {
-    id: "worldGlow", x: "-50%", y: "-50%", width: "200%", height: "200%"
-  });
-  filter.appendChild(svgEl("feGaussianBlur", { stdDeviation: "3", result: "blur" }));
-  const merge = svgEl("feMerge", {});
-  merge.appendChild(svgEl("feMergeNode", { in: "blur" }));
-  merge.appendChild(svgEl("feMergeNode", { in: "blur" }));
-  merge.appendChild(svgEl("feMergeNode", { in: "SourceGraphic" }));
-  filter.appendChild(merge);
-  defs.appendChild(filter);
-
-  // animated gradient stroke for the arcs — fades at both ends, bright in the
-  // middle, so each route reads as a luminous light-blue thread.
-  const grad = svgEl("linearGradient", {
-    id: "worldRouteGrad", x1: "0%", y1: "0%", x2: "100%", y2: "0%"
-  });
-  grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": ACCENT, "stop-opacity": "0" }));
-  grad.appendChild(svgEl("stop", { offset: "10%", "stop-color": ACCENT, "stop-opacity": "1" }));
-  grad.appendChild(svgEl("stop", { offset: "50%", "stop-color": ACCENT_SOFT, "stop-opacity": "1" }));
-  grad.appendChild(svgEl("stop", { offset: "90%", "stop-color": ACCENT, "stop-opacity": "1" }));
-  grad.appendChild(svgEl("stop", { offset: "100%", "stop-color": ACCENT, "stop-opacity": "0" }));
-  defs.appendChild(grad);
-  svg.appendChild(defs);
-
-  const hub = worldProject(WORLD_HUB.lat, WORLD_HUB.lng);
-
-  // Small flag so very-small viewports can hide secondary labels
-  function syncCompact() {
-    stage.classList.toggle("compact", stage.clientWidth < 520);
-  }
-  syncCompact();
-  window.addEventListener("resize", syncCompact, { passive: true });
-
-  // ----- Build the routes. Each route owns its path (the visible arc), a
-  //       length, a travelling glow dot, and an endpoint pulse ring. The
-  //       actual draw-on is JS-driven (stroke-dashoffset via rAF) so it
-  //       ALWAYS animates (SMIL rendered static here previously). -----
-  const routes = WORLD_DESTINATIONS.map((dest, i) => {
-    const end = worldProject(dest.lat, dest.lng);
-    const midX = (hub.x + end.x) / 2;
-    const midY = Math.min(hub.y, end.y) - 50;
-    const d = `M ${hub.x} ${hub.y} Q ${midX} ${midY} ${end.x} ${end.y}`;
-
-    // soft underglow halo (wider, blurred, low-opacity) so the route lifts
-    // clearly off the dotted background; only when animation is on.
-    let halo = null;
-    if (promptMotionEnabled) {
-      halo = svgEl("path", {
-        d, fill: "none", stroke: ACCENT_SOFT,
-        "stroke-width": "5", "stroke-opacity": "0.35",
-        "stroke-linecap": "round", filter: "url(#worldGlow)"
-      });
-      svg.appendChild(halo);
-    }
-
-    // crisp light-blue core stroke — thicker + fully opaque so it reads sharply.
-    const path = svgEl("path", {
-      d, fill: "none",
-      stroke: promptMotionEnabled ? "url(#worldRouteGrad)" : ACCENT,
-      "stroke-width": "2.2", "stroke-opacity": "1", "stroke-linecap": "round"
-    });
-    svg.appendChild(path);
-
-    const len = path.getTotalLength();
-    // travelling glow dot — created up front, ridden along the path by JS.
-    // A short comet-like trail (second, dimmer/larger dot lagging behind) sells
-    // the "beam shooting" read.
-    let dot = null;
-    let trail = null;
-    if (promptMotionEnabled) {
-      path.style.strokeDasharray = `${len}`;
-      path.style.strokeDashoffset = `${len}`;   // start fully undrawn
-      if (halo) { halo.style.strokeDasharray = `${len}`; halo.style.strokeDashoffset = `${len}`; }
-      trail = svgEl("circle", { r: "5.5", fill: ACCENT_SOFT, filter: "url(#worldGlow)", opacity: "0" });
-      dot = svgEl("circle", { r: "4.4", fill: "#e0f5ff", filter: "url(#worldGlow)", opacity: "0" });
-      svg.appendChild(trail);
-      svg.appendChild(dot);
-    }
-    return { path, halo, len, d, end, dot, trail, dest, i };
-  });
-
-  // points (origin + destinations) with pulse + label
-  function addPoint(p, name, isHub, secondary) {
-    // pulse (expanding fading ring) — JS-driven so it plays on scroll-in
-    let pulse = null;
-    if (promptMotionEnabled) {
-      pulse = svgEl("circle", {
-        cx: p.x, cy: p.y, r: "2.6", fill: "none",
-        stroke: ACCENT_SOFT, "stroke-width": "1.6", opacity: "0"
-      });
-      svg.appendChild(pulse);
-    }
-    // solid point — brighter, slightly larger, with a light core for clarity
-    svg.appendChild(svgEl("circle", {
-      cx: p.x, cy: p.y, r: isHub ? "4.4" : "3.4", fill: ACCENT_SOFT,
-      filter: promptMotionEnabled ? "url(#worldGlow)" : null
-    }));
-    svg.appendChild(svgEl("circle", {
-      cx: p.x, cy: p.y, r: isHub ? "2.2" : "1.6", fill: "#e0f5ff"
-    }));
-    // label
-    const lbl = svgEl("text", {
-      x: p.x, y: p.y - 8, "text-anchor": "middle",
-      class: "world-route-label" + (secondary ? " secondary" : "")
-    });
-    lbl.textContent = name;
-    svg.appendChild(lbl);
-    return pulse;
-  }
-
-  const pulses = [];
-  pulses.push({ ring: addPoint(hub, WORLD_HUB.name, true, false), x: hub.x, y: hub.y });
-  WORLD_DESTINATIONS.forEach((dest, i) => {
-    const p = worldProject(dest.lat, dest.lng);
-    // mark some as secondary so they can be hidden on tiny screens
-    pulses.push({ ring: addPoint(p, dest.name, false, i >= 3), x: p.x, y: p.y });
-  });
-
-  stage.appendChild(svg);
-
-  if (!promptMotionEnabled) return; // static finished arcs + points, no JS loop
-
-  // ----- JS-driven animation (rAF). Each route draws on (dashoffset → 0) over
-  //       DRAW_MS with a staggered start; a glow dot rides the arc as it draws;
-  //       endpoint rings pulse continuously. Triggered by IntersectionObserver
-  //       and REPLAYED every time #reach re-enters the viewport. -----
-  const DRAW_MS = 950;      // per-route draw duration (faster beam travel)
-  const STAGGER_MS = 280;   // delay between successive routes
-  const HOLD_MS = 1700;      // pause with all routes visible before reset
-  const PULSE_MS = 2000;    // pulse-ring period
-  const ALL_ROUTES_MS = (routes.length - 1) * STAGGER_MS + DRAW_MS;
-  const CYCLE_MS = ALL_ROUTES_MS + HOLD_MS;
-  const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
-
-  let startT = 0;
-  let raf = null;
-
-  // sample a quadratic-bezier point at parameter u (0..1) for the dot position
-  function pointAt(r, u) {
-    return r.path.getPointAtLength(r.len * u);
-  }
-
-  function frame(now) {
-    if (!startT) startT = now;
-    const elapsed = now - startT;
-    const cycleElapsed = elapsed % CYCLE_MS;
-
-    routes.forEach((r) => {
-      const local = cycleElapsed - r.i * STAGGER_MS;
-      if (local <= 0) {
-        r.path.style.strokeDashoffset = `${r.len}`;
-        if (r.halo) r.halo.style.strokeDashoffset = `${r.len}`;
-        if (r.dot) r.dot.setAttribute("opacity", "0");
-        if (r.trail) r.trail.setAttribute("opacity", "0");
-        return;
-      }
-
-      const p = Math.min(1, local / DRAW_MS);
-      const e = easeInOut(p);
-      r.path.style.strokeDashoffset = `${r.len * (1 - e)}`;
-      if (r.halo) r.halo.style.strokeDashoffset = `${r.len * (1 - e)}`;
-      if (!r.dot) return;
-      if (p < 1) {
-        const pt = pointAt(r, e);
-        r.dot.setAttribute("cx", pt.x);
-        r.dot.setAttribute("cy", pt.y);
-        r.dot.setAttribute("opacity", "1");
-        // comet trail: a dimmer dot lagging slightly behind the lead beam.
-        if (r.trail) {
-          const tu = Math.max(0, e - 0.06);
-          const tp = pointAt(r, tu);
-          r.trail.setAttribute("cx", tp.x);
-          r.trail.setAttribute("cy", tp.y);
-          r.trail.setAttribute("opacity", "0.5");
-        }
-      } else {
-        r.dot.setAttribute("opacity", "0");
-        if (r.trail) r.trail.setAttribute("opacity", "0");
-      }
-    });
-
-    // continuous endpoint pulses
-    pulses.forEach((pu, idx) => {
-      if (!pu.ring) return;
-      const phase = ((elapsed + idx * 240) % PULSE_MS) / PULSE_MS;
-      pu.ring.setAttribute("r", (2.6 + phase * 10).toFixed(2));
-      pu.ring.setAttribute("opacity", (0.75 * (1 - phase)).toFixed(3));
-    });
-
-    // keep looping for the route waves and endpoint pulses while visible
-    raf = requestAnimationFrame(frame);
-  }
-
-  function reset() {
-    routes.forEach((r) => {
-      r.path.style.strokeDashoffset = `${r.len}`;
-      if (r.halo) r.halo.style.strokeDashoffset = `${r.len}`;
-      if (r.dot) r.dot.setAttribute("opacity", "0");
-      if (r.trail) r.trail.setAttribute("opacity", "0");
-    });
-    pulses.forEach((pu) => { if (pu.ring) pu.ring.setAttribute("opacity", "0"); });
-  }
-
-  function play() {
-    stop();
-    reset();
-    startT = 0;
-    raf = requestAnimationFrame(frame);
-  }
-  function stop() {
-    if (raf !== null) { cancelAnimationFrame(raf); raf = null; }
-  }
-
-  // --- 3. Trigger on scroll-in; REPLAY each time #reach re-enters. ---
-  if ("IntersectionObserver" in window) {
-    reset();
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) play();
-        else stop();
-      });
-    }, { threshold: 0.25 });
-    io.observe(stage);
-    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); });
-  } else {
-    play();
-  }
-}
 
 /* ============================================================
    B2B Global Supply — vanilla canvas globe redo
@@ -885,6 +574,7 @@ function buildWorldMap() {
   let visible = false;
   let startedAt = 0;
   let lastT = 0;
+  let lastDraw = 0;
   let centerLng = 92;
   let targetCenterLng = 92;
   let dragging = false;
@@ -899,6 +589,38 @@ function buildWorldMap() {
   const CYCLE_MS = (routes.length - 1) * STAGGER_MS + DRAW_MS + HOLD_MS;
   const easeOut = (t) => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);
 
+  // Offscreen canvas for the STATIC sphere layers (fill gradient + soft
+  // drop-shadow + outer rim). These don't change with rotation, so we paint
+  // them ONCE per resize and blit the result each frame — keeping the very
+  // expensive shadowBlur off the per-frame render path.
+  const baseCanvas = document.createElement("canvas");
+  const baseCtx = baseCanvas.getContext("2d");
+
+  function renderBase() {
+    if (!baseCtx) return;
+    baseCanvas.width = canvas.width;
+    baseCanvas.height = canvas.height;
+    baseCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    baseCtx.clearRect(0, 0, width, height);
+    const bg = baseCtx.createRadialGradient(cx - radius * 0.38, cy - radius * 0.45, radius * 0.15, cx, cy, radius * 1.08);
+    bg.addColorStop(0, "rgba(255,255,255,0.98)");
+    bg.addColorStop(0.56, "rgba(248,250,249,0.93)");
+    bg.addColorStop(1, "rgba(226,232,232,0.82)");
+    baseCtx.save();
+    baseCtx.beginPath();
+    baseCtx.arc(cx, cy, radius, 0, Math.PI * 2);
+    baseCtx.fillStyle = bg;
+    baseCtx.shadowColor = "rgba(14, 165, 233, 0.18)";
+    baseCtx.shadowBlur = 34;
+    baseCtx.fill();
+    baseCtx.restore();
+    baseCtx.beginPath();
+    baseCtx.arc(cx, cy, radius, 0, Math.PI * 2);
+    baseCtx.lineWidth = 1;
+    baseCtx.strokeStyle = "rgba(14, 165, 233, 0.28)";
+    baseCtx.stroke();
+  }
+
   function resize() {
     const rect = stage.getBoundingClientRect();
     width = Math.max(280, Math.round(rect.width));
@@ -912,6 +634,7 @@ function buildWorldMap() {
     cx = width / 2;
     cy = height / 2;
     radius = Math.min(width, height) * 0.43;
+    renderBase();
   }
 
   function project(v, lift) {
@@ -958,18 +681,15 @@ function buildWorldMap() {
   }
 
   function drawSphere() {
-    const bg = ctx.createRadialGradient(cx - radius * 0.38, cy - radius * 0.45, radius * 0.15, cx, cy, radius * 1.08);
-    bg.addColorStop(0, "rgba(255,255,255,0.98)");
-    bg.addColorStop(0.56, "rgba(248,250,249,0.93)");
-    bg.addColorStop(1, "rgba(226,232,232,0.82)");
+    // static base (gradient fill + drop-shadow + outer rim) blitted from the
+    // offscreen canvas — no per-frame shadowBlur here.
+    ctx.drawImage(baseCanvas, 0, 0, width, height);
 
+    // rotating layers (lat/long grid + land dots) — these DO depend on
+    // rotation, so they're drawn live, but without any expensive shadow.
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-    ctx.fillStyle = bg;
-    ctx.shadowColor = "rgba(14, 165, 233, 0.18)";
-    ctx.shadowBlur = 34;
-    ctx.fill();
     ctx.clip();
 
     ctx.lineWidth = 0.7;
@@ -987,13 +707,7 @@ function buildWorldMap() {
       ctx.fill();
     });
     ctx.restore();
-
     ctx.globalAlpha = 1;
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "rgba(14, 165, 233, 0.28)";
-    ctx.stroke();
   }
 
   function drawRoute(route, progress, now) {
@@ -1021,8 +735,10 @@ function buildWorldMap() {
       ctx.lineJoin = "round";
       ctx.strokeStyle = pass === 0 ? "rgba(56,189,248,0.32)" : glow;
       ctx.lineWidth = pass === 0 ? 7 : 2.4;
-      ctx.shadowColor = "rgba(56,189,248,0.45)";
-      ctx.shadowBlur = pass === 0 ? 16 : 9;
+      // shadowBlur is the single most expensive canvas op; the wide translucent
+      // underpass + bright gradient core already read as a glowing thread, so
+      // drop the per-segment shadow entirely.
+      ctx.shadowBlur = 0;
       ctx.stroke();
     }
 
@@ -1032,7 +748,7 @@ function buildWorldMap() {
       ctx.globalAlpha = 0.75 + Math.sin(now / 90) * 0.15;
       ctx.fillStyle = "#e0f5ff";
       ctx.shadowColor = ACCENT_SOFT;
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = 6;
       ctx.arc(lead.x, lead.y, 4.8, 0, Math.PI * 2);
       ctx.fill();
     }
@@ -1059,7 +775,7 @@ function buildWorldMap() {
         ctx.globalAlpha = 0.95;
         ctx.fillStyle = i === 0 ? "#e0f5ff" : ACCENT_SOFT;
         ctx.shadowColor = ACCENT_SOFT;
-        ctx.shadowBlur = i === 0 ? 18 : 12;
+        ctx.shadowBlur = i === 0 ? 8 : 5;
         ctx.arc(p.x, p.y, i === 0 ? 4.8 : 3.5, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
@@ -1073,9 +789,17 @@ function buildWorldMap() {
   }
 
   function render(now) {
+    // Cap the continuous loop to ~30fps: halves the per-frame canvas cost while
+    // the rotation + route waves still read as smooth. One-off redraws (drag,
+    // resize) bypass this since they run when !visible / !motionOK.
+    if (visible && motionOK && now - lastDraw < 33) {
+      raf = requestAnimationFrame(render);
+      return;
+    }
     if (!lastT) lastT = now;
     const dt = Math.min(40, now - lastT);
     lastT = now;
+    lastDraw = now;
 
     if (motionOK && !dragging) targetCenterLng += ROTATE_SPEED * dt / GLOBE_DEG;
     centerLng += (targetCenterLng - centerLng) * 0.08;
@@ -1198,6 +922,19 @@ function initFabricRotator() {
     });
   }
   stage.appendChild(track);
+
+  // Perf: the marquee is force-enabled (keeps running even under reduced motion),
+  // but there's no reason to keep animating it while it's scrolled off screen.
+  // Pause the CSS animation when offscreen, resume when it re-enters view — the
+  // force-motion behaviour is preserved for when it's actually visible.
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        track.style.animationPlayState = e.isIntersecting ? "running" : "paused";
+      });
+    }, { threshold: 0 });
+    io.observe(stage);
+  }
 }
 
 /* ---------- Hero slideshow — automatic crossfade (no manual controls) ----------
@@ -1218,6 +955,7 @@ function initSlideshow() {
   const INTERVAL = 3500; // 3.5s per slide
   let current = 0;
   let timer = null;
+  let inView = true;
 
   function next() {
     current = (current + 1) % slides.length;
@@ -1225,7 +963,7 @@ function initSlideshow() {
   }
 
   function start() {
-    if (timer) return;
+    if (timer || !inView || document.hidden) return;
     timer = window.setInterval(next, INTERVAL);
   }
   function stop() {
@@ -1239,6 +977,18 @@ function initSlideshow() {
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) stop(); else start();
   });
+
+  // Perf: pause the crossfade timer once the hero has scrolled out of view
+  // (no point re-painting slides nobody can see), resume when it returns.
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        inView = e.isIntersecting;
+        if (inView) start(); else stop();
+      });
+    }, { threshold: 0 });
+    io.observe(root);
+  }
 
   start();
 }
@@ -1396,38 +1146,81 @@ function initForm() {
   });
 }
 
-/* ---------- Parallax (subtle, rAF-driven, reduced-motion gated) ---------- */
+/* ---------- Parallax (subtle, rAF-driven, reduced-motion gated) ----------
+   Perf: does NOT call getBoundingClientRect() per element per scroll frame.
+   Each element's absolute document center is measured ONCE (and only re-measured
+   on a debounced resize); per frame we just read window.scrollY and offset the
+   cached value. An IntersectionObserver gates work so only on-screen elements
+   are transformed. The heavy full-bleed hero slideshow no longer parallaxes at
+   all (its data-parallax was removed) — only the small stock collage remains. */
 function initParallax() {
   if (prefersReducedMotion) return;
   const items = Array.from(document.querySelectorAll("[data-parallax]"));
   if (!items.length) return;
 
+  const state = items.map((el) => ({
+    el,
+    speed: parseFloat(el.dataset.parallax) || 0,
+    absCenter: 0,
+    visible: false
+  }));
+
+  function measure() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    state.forEach((s) => {
+      // measure the true layout position with any parallax transform cleared
+      const prev = s.el.style.transform;
+      s.el.style.transform = "";
+      const rect = s.el.getBoundingClientRect();
+      s.el.style.transform = prev;
+      s.absCenter = rect.top + scrollY + rect.height / 2;
+    });
+  }
+
   let ticking = false;
   function update() {
     ticking = false;
     const vh = window.innerHeight;
-    items.forEach((el) => {
+    const viewportCenter = (window.scrollY || window.pageYOffset) + vh / 2;
+    state.forEach((s) => {
+      if (!s.visible) return;
       // collage images defer their parallax until the assemble intro completes,
       // so the two transforms never fight (assemble owns the transform first).
-      if (el.classList.contains("collage-img") &&
-          el.closest(".stock-collage") &&
-          !el.closest(".stock-collage").classList.contains("assembled")) {
-        return;
+      if (s.el.classList.contains("collage-img")) {
+        const collage = s.el.closest(".stock-collage");
+        if (collage && !collage.classList.contains("assembled")) return;
       }
-      const speed = parseFloat(el.dataset.parallax) || 0;
-      const rect = el.getBoundingClientRect();
-      // distance of element center from viewport center
-      const centerDelta = (rect.top + rect.height / 2) - vh / 2;
-      const shift = -centerDelta * speed;
-      el.style.transform = `translate3d(0, ${shift.toFixed(1)}px, 0)`;
+      const centerDelta = s.absCenter - viewportCenter;
+      const shift = -centerDelta * s.speed;
+      s.el.style.transform = `translate3d(0, ${shift.toFixed(1)}px, 0)`;
     });
   }
   function onScroll() {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const s = state.find((x) => x.el === e.target);
+        if (s) s.visible = e.isIntersecting;
+      });
+      update();
+    }, { rootMargin: "10% 0px 10% 0px" });
+    state.forEach((s) => io.observe(s.el));
+  } else {
+    state.forEach((s) => { s.visible = true; });
+  }
+
+  let rT = null;
+  window.addEventListener("resize", () => {
+    if (rT) window.clearTimeout(rT);
+    rT = window.setTimeout(() => { measure(); update(); }, 150);
+  }, { passive: true });
+
+  measure();
   update();
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll, { passive: true });
 }
 
 /* ---------- Available Fabric Lots — "assemble" intro animation ----------
@@ -1744,6 +1537,7 @@ function initTestimonials() {
   let pageCount = 1;
   let perView = 3;
   let timer = null;
+  let inView = true;
 
   function cardsVisible() {
     const v = parseInt(getComputedStyle(track).getPropertyValue("--cards-visible"), 10);
@@ -1804,7 +1598,7 @@ function initTestimonials() {
   }
 
   function startTimer() {
-    if (!autoAllowed || pageCount <= 1) return;
+    if (!autoAllowed || pageCount <= 1 || !inView || document.hidden) return;
     if (timer !== null) return;
     timer = window.setInterval(next, STEP_MS);
   }
@@ -1834,6 +1628,18 @@ function initTestimonials() {
     if (rT) window.clearTimeout(rT);
     rT = window.setTimeout(measure, 150);
   });
+
+  // Perf: pause auto-advance (and its layout/paint work) while the carousel is
+  // scrolled out of view; resume when it returns.
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        inView = e.isIntersecting;
+        if (inView) startTimer(); else stopTimer();
+      });
+    }, { threshold: 0 });
+    io.observe(carousel);
+  }
 
   measure();
   startTimer();
