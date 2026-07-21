@@ -220,7 +220,7 @@ function initFanCarousel() {
     el.className = "fan-card";
     el.dataset.index = String(i);
     el.innerHTML = `
-      <img alt="" width="600" height="800" loading="lazy" src="${card.img}" data-fallback="${card.fallback}" onerror="this.onerror=null;this.src=this.dataset.fallback">
+      <img alt="${escapeHtml(card.title + " — " + card.tag)}" width="600" height="800" loading="lazy" src="${card.img}" data-fallback="${card.fallback}" onerror="this.onerror=null;this.src=this.dataset.fallback">
       <div class="fan-cap"><small>${escapeHtml(card.tag)}</small><strong>${escapeHtml(card.title)}</strong></div>
     `;
     layout.appendChild(el);
@@ -1263,152 +1263,13 @@ function initStockAssemble() {
   io.observe(collage);
 }
 
-/* ---------- Stats strip — scramble / decode reveal on scroll ----------
-   When the strip scrolls into view (IntersectionObserver, fired ONCE), each
-   value (`.stat > strong`) and label (`.stat > span`) starts with its
-   characters scrambled to random glyphs, then resolves char-by-char to the
-   exact final text. Numbers and symbols (–, +, /, letters) land exactly.
-   Reduced motion / no-IO: final text is left untouched (shown immediately),
-   preserving the <noscript> / no-JS values present in markup. */
+/* ---------- Stats strip — static values ----------
+   The stat values (`.stat > strong`) and labels (`.stat > span`) render as
+   their final static text exactly as authored in the markup. A previous build
+   scrambled/decoded the characters on scroll; that animation was removed, so
+   the numbers and labels now simply show as-is, always. */
 function initStatsScramble() {
-  const strip = document.querySelector(".stats-strip");
-  if (!strip) return;
-
-  const targets = Array.from(strip.querySelectorAll(".stat > strong, .stat > span"));
-  if (!targets.length) return;
-
-  // No IntersectionObserver: leave the final text as-is.
-  if (!("IntersectionObserver" in window)) return;
-
-  const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789–+/#%@&*<>";
-
-  // prefers-reduced-motion: render the final text immediately, crisp, with no
-  // glyph cycling. (promptMotionEnabled keeps the full animation on by default;
-  // this branch only applies when the user truly asks for reduced motion.)
-  function setFinal(el) {
-    const chars = Array.from(el.dataset.finalText);
-    el.classList.remove("is-scrambling");
-    el.textContent = "";
-    chars.forEach((ch) => {
-      const span = document.createElement("span");
-      span.className = "scramble-char resolved";
-      span.textContent = ch;
-      el.appendChild(span);
-    });
-  }
-
-  function seedScrambled(el) {
-    const finalText = el.dataset.finalText || el.textContent;
-    const chars = Array.from(finalText);
-    const runId = String((Number(el.dataset.scrambleRun) || 0) + 1);
-    el.dataset.scrambleRun = runId;
-    el.classList.add("is-scrambling");
-    el.textContent = "";
-    chars.forEach((ch) => {
-      const span = document.createElement("span");
-      span.className = "scramble-char";
-      span.textContent = ch === " " ? "Â " : GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-      el.appendChild(span);
-    });
-  }
-
-  // Per-character animated scramble for one element. Every character cycles
-  // random glyphs for a brief shared HOLD phase, then resolves LEFT-TO-RIGHT
-  // with a gentle per-character stagger. Spaces stay fixed. Each char gets a
-  // CSS settle (fade + tiny translateY + blur->sharp) as it locks in, so the
-  // value "assembles" gracefully. Total ~1.0-1.3s per value.
-  function scramble(el) {
-    const finalText = el.dataset.finalText;
-    const chars = Array.from(finalText);
-    const runId = String((Number(el.dataset.scrambleRun) || 0) + 1);
-    el.dataset.scrambleRun = runId;
-    el.classList.add("is-scrambling");
-    // Build per-character spans so each resolves independently.
-    el.textContent = "";
-    const spans = chars.map((ch) => {
-      const span = document.createElement("span");
-      span.className = "scramble-char";
-      span.textContent = ch === " " ? " " : ch;
-      el.appendChild(span);
-      return span;
-    });
-
-    const FRAME_MS = 50;          // glyph flicker cadence (calm, not frantic)
-    const PER_CHAR_MS = 55;       // stagger between characters resolving (L->R)
-    const HOLD_MS = 360;          // brief shared scramble phase before resolving
-    // Total ~= HOLD_MS + (chars-1)*PER_CHAR_MS + 0.32s CSS settle tail.
-    const start = performance.now();
-
-    function tick(now) {
-      if (el.dataset.scrambleRun !== runId) return;
-      let allDone = true;
-      const elapsed = now - start;
-      chars.forEach((ch, i) => {
-        const span = spans[i];
-        if (span.dataset.done) return;
-        // Hold the scramble briefly, then resolve char-by-char, left to right.
-        const resolveAt = HOLD_MS + i * PER_CHAR_MS;
-        if (ch === " " || elapsed >= resolveAt) {
-          span.textContent = ch === " " ? " " : ch;
-          // .resolved triggers the CSS settle transition (fade/lift/sharpen).
-          span.classList.add("resolved");
-          span.dataset.done = "1";
-        } else {
-          allDone = false;
-          span.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-        }
-      });
-      if (!allDone) {
-        // throttle the flicker frame rate
-        setTimeout(() => requestAnimationFrame(tick), FRAME_MS);
-      } else {
-        // Let the last char's CSS settle finish, then drop the accent glow.
-        setTimeout(() => {
-          if (el.dataset.scrambleRun === runId) el.classList.remove("is-scrambling");
-        }, 340);
-      }
-    }
-    requestAnimationFrame(tick);
-  }
-
-  // The prompt explicitly calls for this reveal; promptMotionEnabled keeps it live
-  // even on browsers reporting reduced motion.
-  const animate = promptMotionEnabled ? scramble : (prefersReducedMotion ? setFinal : scramble);
-
-  // Stash the final text, then put the offscreen state into the scrambled form.
-  targets.forEach((el) => {
-    el.dataset.finalText = el.textContent;
-    if (promptMotionEnabled) seedScrambled(el);
-  });
-  let playedThisView = false;
-
-  // Replay once for each fresh scroll-in, slightly before the strip is fully in
-  // view (modest threshold + a rootMargin that pulls the trigger up a touch).
-  // rootMargin's negative bottom margin means it fires as the strip enters the
-  // lower viewport; leaving the viewport re-arms it for the next scroll-in.
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting && !playedThisView) {
-        playedThisView = true;
-        targets.forEach((el) => animate(el));
-      } else if (!e.isIntersecting) {
-        playedThisView = false;
-        if (promptMotionEnabled) targets.forEach((el) => seedScrambled(el));
-      }
-    });
-  }, { threshold: 0.05, rootMargin: "0px 0px -5% 0px" });
-  io.observe(strip);
-
-  // Safety net: if the strip is ALREADY within the viewport on load (so the
-  // observer might not re-fire), trigger on the next frame.
-  requestAnimationFrame(() => {
-    const r = strip.getBoundingClientRect();
-    const vh = window.innerHeight || document.documentElement.clientHeight;
-    if (r.top < vh * 0.9 && r.bottom > 0 && !playedThisView) {
-      playedThisView = true;
-      targets.forEach((el) => animate(el));
-    }
-  });
+  /* no-op: the markup already carries the final static stat text. */
 }
 
 /* ---------- Footer year ---------- */

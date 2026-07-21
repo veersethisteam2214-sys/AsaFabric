@@ -38,24 +38,17 @@ function slug(name) {
    garments = what it's made into (tags + search)   detail : short factual line
    image = assets/catalogue/<slug>.jpg — generated image mapped to the fabric by name.
    NOTE: Book 2 rows are flagged "Needs Review" in the sheet; names are kept verbatim.
-   Names like "Book 2 swatch page 0N" / "Book 2 packing list page NN" are the sheet's
-   own generic page labels (real design names not yet transcribed from the scan). */
+   Only the eight rows with real design names are listed here — the sheet's generic
+   page labels ("Book 2 swatch page 0N" / "Book 2 packing list page NN") were dropped. */
 const fabrics = [
-  { id: "B2-01", name: "Book 2 swatch page 01", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 34) from the ASA inventory scan — pending detailed transcription." },
-  { id: "B2-02", name: "Book 2 swatch page 02", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 35) from the ASA inventory scan — pending detailed transcription." },
-  { id: "B2-03", name: "Book 2 swatch page 03", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 36) from the ASA inventory scan — pending detailed transcription." },
-  { id: "B2-04", name: "Book 2 swatch page 04", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 37) from the ASA inventory scan — pending detailed transcription." },
-  { id: "B2-05", name: "Book 2 swatch page 05", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 38) from the ASA inventory scan — pending detailed transcription." },
-  { id: "B2-06", name: "Embroidery Lucky Star A", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Embroidered shirting from ASA inventory Book 2 (page 39)." },
-  { id: "B2-07", name: "CVC Opar Embroidery 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC embroidered shirting, 44 inch width — ASA inventory Book 2 (page 40)." },
-  { id: "B2-08", name: "CVC O/R 44 inch pink/off", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC shirting in pink / off shades, 44 inch width — ASA inventory Book 2 (page 41)." },
-  { id: "B2-09", name: "Chambray 60 inch Lucky Stock", type: "Shirting", use: "Shirting", width: '60"', gsm: "—", garments: ["Shirts"], detail: "Chambray shirting, 60 inch width — ASA inventory Book 2 (page 42)." },
-  { id: "B2-10", name: "Linen OPAL 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Linen shirting, 44 inch width — ASA inventory Book 2 (page 43)." },
-  { id: "B2-11", name: "Sin Ram 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Shirting stock, 44 inch width — ASA inventory Book 2 (page 44)." },
-  { id: "B2-12", name: "Book 2 packing list page 12", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 packing-list page (page 45) from the ASA inventory scan — pending detailed transcription." },
-  { id: "B2-13", name: "Book 2 packing list page 13", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 packing-list page (page 46) from the ASA inventory scan — pending detailed transcription." },
-  { id: "B2-14", name: "Embroidered cotton 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Embroidered cotton shirting, 44 inch width — ASA inventory Book 2 (page 47)." },
-  { id: "B2-15", name: "Voile 44 inch / TR polyester rayon", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Voile and TR polyester-rayon shirting, 44 inch width — ASA inventory Book 2 (page 48)." }
+  { id: "B2-01", name: "Embroidery Lucky Star A", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Embroidered shirting from ASA inventory Book 2 (page 39)." },
+  { id: "B2-02", name: "CVC Opar Embroidery 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC embroidered shirting, 44 inch width — ASA inventory Book 2 (page 40)." },
+  { id: "B2-03", name: "CVC O/R 44 inch pink/off", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC shirting in pink / off shades, 44 inch width — ASA inventory Book 2 (page 41)." },
+  { id: "B2-04", name: "Chambray 60 inch Lucky Stock", type: "Shirting", use: "Shirting", width: '60"', gsm: "—", garments: ["Shirts"], detail: "Chambray shirting, 60 inch width — ASA inventory Book 2 (page 42)." },
+  { id: "B2-05", name: "Linen OPAL 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Linen shirting, 44 inch width — ASA inventory Book 2 (page 43)." },
+  { id: "B2-06", name: "Sin Ram 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Shirting stock, 44 inch width — ASA inventory Book 2 (page 44)." },
+  { id: "B2-07", name: "Embroidered cotton 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Embroidered cotton shirting, 44 inch width — ASA inventory Book 2 (page 47)." },
+  { id: "B2-08", name: "Voile 44 inch / TR polyester rayon", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Voile and TR polyester-rayon shirting, 44 inch width — ASA inventory Book 2 (page 48)." }
 ].map((f) => ({ ...f, image: `assets/catalogue/${slug(f.name)}.jpg` }));
 
 /* ---------- State ---------- */
@@ -143,7 +136,7 @@ function cardHtml(f, i) {
   return `<article class="fab-card${hasRendered ? "" : " reveal"}" style="--i:${i % 8}">
     <span class="fab-swatch" data-tone="${escapeHtml(f.type)}" aria-hidden="true">
       <span class="fab-mono">${escapeHtml(monogram(f.name))}</span>
-      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="" loading="lazy" onerror="this.remove()">
+      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="${escapeHtml(f.name + " — " + f.type + " fabric swatch")}" loading="lazy" onerror="this.remove()">
       <span class="fab-swatch-tag">Sample on request</span>
     </span>
     <div class="fab-info">
@@ -184,7 +177,7 @@ function openModal(id) {
     <button class="m-close" type="button" data-close aria-label="Close">&times;</button>
     <div class="m-banner" data-tone="${escapeHtml(f.type)}" aria-hidden="true">
       <span class="m-mono">${escapeHtml(monogram(f.name))}</span>
-      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="" onerror="this.remove()">
+      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="${escapeHtml(f.name + " — " + f.type + " fabric swatch")}" onerror="this.remove()">
       <span class="fab-swatch-tag">Sample on request</span>
     </div>
     <div class="m-body">
