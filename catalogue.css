@@ -135,6 +135,12 @@
   font-family: var(--sans); font-size: 8.5px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--muted-2);
 }
+/* real fabric image — layered over the monogram; removes itself on load error
+   (see onerror="this.remove()") so the monogram shows when no image file exists yet */
+.swatch-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 1; border-radius: inherit; background: var(--swatch);
+}
 .fab-card:hover .fab-swatch { transform: translateY(-4px); box-shadow: 0 24px 44px -30px rgba(20,18,15,0.6); }
 
 .fab-info { padding: 18px 2px 0; }
@@ -254,7 +260,7 @@
 .drawer-body { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 14px; }
 .drawer-item { display: flex; align-items: center; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--hairline); }
 .drawer-item:last-child { border-bottom: none; }
-.drawer-mono { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 6px; display: grid; place-items: center; background: var(--swatch); border: 1px solid var(--hairline); font-family: var(--serif); font-size: 17px; color: rgba(26,26,26,0.4); }
+.drawer-mono { position: relative; overflow: hidden; flex: 0 0 auto; width: 46px; height: 46px; border-radius: 6px; display: grid; place-items: center; background: var(--swatch); border: 1px solid var(--hairline); font-family: var(--serif); font-size: 17px; color: rgba(26,26,26,0.4); }
 .drawer-item-body { flex: 1; min-width: 0; }
 .drawer-item-name { font-family: var(--serif); font-size: 17px; margin: 0 0 2px; }
 .drawer-item-cat { font-family: var(--sans); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-2); margin: 0; }
@@ -315,7 +321,7 @@
   /* single-fabric spec sheet */
   body.printing-spec .cat-header, body.printing-spec .cat-results { display: none !important; }
   body.printing-spec #specSheet { display: block !important; font-family: var(--sans); color: #1A1A1A; }
-  body.printing-spec #specSheet .spec-banner { aspect-ratio: 16/6; background: var(--swatch); display: grid; place-items: center; border: 1px solid #c4c7c7; border-radius: 8px; margin-bottom: 22px; }
+  body.printing-spec #specSheet .spec-banner { position: relative; overflow: hidden; aspect-ratio: 16/6; background: var(--swatch); display: grid; place-items: center; border: 1px solid #c4c7c7; border-radius: 8px; margin-bottom: 22px; }
   body.printing-spec #specSheet .spec-banner span { font-family: var(--serif); font-size: 64px; color: rgba(26,26,26,0.3); }
   body.printing-spec #specSheet .spec-cat { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: #635d56; margin: 0 0 8px; }
   body.printing-spec #specSheet h2 { font-family: var(--serif); font-weight: 400; font-size: 36px; margin: 0 0 10px; }

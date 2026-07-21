@@ -26,43 +26,37 @@ function monogram(name) {
 function gsmLabel(gsm) {
   return /^\d/.test(gsm) ? gsm + " gsm" : gsm;
 }
+/* slug: lowercase hyphenated key used to map a fabric to its image file */
+function slug(name) {
+  return String(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
 
-/* ---------- Catalogue data — product attributes only, no stock ----------
-   name      : the cloth (display, serif)        type : fabric family (eyebrow / Type facet)
-   use       : primary application (Use facet)    width / gsm : product specs (not inventory)
-   garments  : what it's made into (tags + search)  detail : one-line description */
+/* ---------- Catalogue data — Book 2 fabrics from the ASA inventory workbook ----------
+   Source: "Real ASA Fabric Inventory" Google Sheet, Book 2 page tabs (Page 34–48).
+   name  = the page-level Type / Item (verbatim from the sheet)   type = sheet category
+   use   = Category of Use                width / gsm : product specs (— where not recorded)
+   garments = what it's made into (tags + search)   detail : short factual line
+   image = assets/catalogue/<slug>.jpg — generated image mapped to the fabric by name.
+   NOTE: Book 2 rows are flagged "Needs Review" in the sheet; names are kept verbatim.
+   Names like "Book 2 swatch page 0N" / "Book 2 packing list page NN" are the sheet's
+   own generic page labels (real design names not yet transcribed from the scan). */
 const fabrics = [
-  { id: "AF-01", name: "Chambray CVC", type: "Shirting", use: "School uniforms", width: '60"', gsm: "120–145", garments: ["Shirts", "Daily uniforms"], detail: "Crisp CVC chambray with reliable shade continuity — the everyday school-shirt workhorse." },
-  { id: "AF-02", name: "Cotton Dobby", type: "Shirting", use: "School uniforms", width: '44"', gsm: "110–130", garments: ["Shirts", "Blouses"], detail: "Fine self-textured dobby in white — a step up in hand-feel for premium uniform and blouse programmes." },
-  { id: "AF-03", name: "Oxford", type: "Shirting", use: "Corporate", width: '58"', gsm: "150–160", garments: ["Office shirts", "Hotel shirts"], detail: "Textured oxford with a refined business finish for office staff, front-desk teams and branded uniforms." },
-  { id: "AF-04", name: "Cotton Poplin", type: "Shirting", use: "Corporate", width: '58"', gsm: "110–125", garments: ["Dress shirts", "Blouses"], detail: "Smooth, closely-woven poplin with a clean drape — a dependable dress-shirt base across a wide shade range." },
-  { id: "AF-05", name: "Pinpoint", type: "Shirting", use: "Hospitality", width: '57"', gsm: "130", garments: ["Service shirts"], detail: "Pinpoint oxford that wears smarter than a plain weave — tidy for hospitality and front-of-house shirting." },
-  { id: "AF-06", name: "Soft Twill CVC", type: "Shirting", use: "Workwear", width: '58"', gsm: "150", garments: ["Work shirts", "Overshirts"], detail: "Soft-twill CVC with extra durability for utility shirts and hard-wearing shop uniforms." },
-  { id: "AF-07", name: "Wool Blend", type: "Suiting", use: "Corporate", width: '60"', gsm: "250–270", garments: ["Blazers", "Trousers"], detail: "Elevated wool-blend handfeel for tailored jackets, blazers and front-office uniforms." },
-  { id: "AF-08", name: "Poly-Viscose", type: "Suiting", use: "Corporate", width: '58"', gsm: "220", garments: ["Suits", "Skirts"], detail: "Wrinkle-resistant poly-viscose with a clean matte finish — a practical everyday suiting for staff programmes." },
-  { id: "AF-09", name: "Tropical", type: "Suiting", use: "Hospitality", width: '60"', gsm: "190", garments: ["Lightweight suits"], detail: "Open, breathable tropical weave for warm-climate suiting and lightweight hospitality tailoring." },
-  { id: "AF-10", name: "Birdseye", type: "Suiting", use: "Corporate", width: '58"', gsm: "240", garments: ["Executive suits"], detail: "Subtle birdseye texture that reads as quiet luxury up close — an executive-grade suiting." },
-  { id: "AF-11", name: "Poly-Cotton (TC)", type: "Trousering", use: "School uniforms", width: '60"', gsm: "185–220", garments: ["Trousers", "Skirts"], detail: "Structured TC trousering built for school programmes and repeat tailoring." },
-  { id: "AF-12", name: "Cotton Gabardine", type: "Trousering", use: "Corporate", width: '58"', gsm: "230", garments: ["Trousers", "Skirts"], detail: "Tightly-woven gabardine with a smart finish and good crease recovery for office trousering." },
-  { id: "AF-13", name: "Bull Denim", type: "Trousering", use: "Workwear", width: '60"', gsm: "300", garments: ["Work trousers", "Aprons"], detail: "Heavy bull denim for rugged work trousers, aprons and long-wear utility garments." },
-  { id: "AF-14", name: "Stretch Chino Twill", type: "Trousering", use: "Corporate", width: '58"', gsm: "240", garments: ["Chinos", "Trousers"], detail: "Comfort-stretch cotton twill for modern chino-cut staff trousers with all-day movement." },
-  { id: "AF-15", name: "Cotton Drill", type: "Twill/Drill", use: "Workwear", width: '60"', gsm: "270", garments: ["Workwear", "Aprons"], detail: "Classic cotton drill — the dependable mid-weight for workwear, aprons and factory uniforms." },
-  { id: "AF-16", name: "Poly Twill", type: "Twill/Drill", use: "Workwear", width: '60"', gsm: "235", garments: ["Utility trousers", "Jackets"], detail: "Durable poly twill that holds colour and shape through heavy laundering and daily wear." },
-  { id: "AF-17", name: "Canvas Duck", type: "Workwear", use: "Workwear", width: '62"', gsm: "320", garments: ["Aprons", "Bags", "Jackets"], detail: "Stiff, hard-wearing cotton duck for aprons, tool bags and structured work jackets." },
-  { id: "AF-18", name: "Ripstop", type: "Workwear", use: "Workwear", width: '58"', gsm: "210", garments: ["Workwear", "Outerwear"], detail: "Grid-reinforced ripstop that resists tearing — for technical workwear and light outerwear." },
-  { id: "AF-19", name: "Herringbone", type: "Twill/Drill", use: "Corporate", width: '58"', gsm: "250", garments: ["Jackets", "Trousers"], detail: "Tonal herringbone with quiet visual interest — a refined twill for jackets and smart trousers." },
-  { id: "AF-20", name: "Pure Linen", type: "Linen", use: "Hospitality", width: '56"', gsm: "180", garments: ["Shirts", "Tablewear"], detail: "Natural pure linen with a breathable, characterful slub — premium for hospitality and resort wear." },
-  { id: "AF-21", name: "Linen-Cotton", type: "Linen", use: "Hospitality", width: '57"', gsm: "165", garments: ["Shirts", "Dresses"], detail: "Linen-cotton that keeps the linen hand while easing the creasing — versatile for service and resort lines." },
-  { id: "AF-22", name: "Cotton Voile", type: "Linen", use: "Corporate", width: '44"', gsm: "80", garments: ["Blouses", "Layers"], detail: "Light, semi-sheer cotton voile for soft blouses, layering and fine summer pieces." },
-  { id: "AF-23", name: "Slub Cotton", type: "Linen", use: "Hospitality", width: '56"', gsm: "150", garments: ["Shirts", "Aprons"], detail: "Textured slub cotton with an artisanal look — a favourite for cafe and boutique-hospitality uniforms." },
-  { id: "AF-24", name: "TC Pocketing", type: "Lining", use: "Resale", width: '44"', gsm: "90", garments: ["Pocketing", "Bundles"], detail: "Cost-efficient TC pocketing for linings, production add-ons and resale bundles." },
-  { id: "AF-25", name: "Viscose Lining", type: "Lining", use: "Corporate", width: '58"', gsm: "75", garments: ["Jacket lining", "Skirts"], detail: "Smooth viscose lining with a clean slip for tailored jackets, skirts and uniform finishing." },
-  { id: "AF-26", name: "Satin Lining", type: "Lining", use: "Hospitality", width: '58"', gsm: "85", garments: ["Lining", "Trims"], detail: "Soft satin-faced lining that adds a touch of sheen to service jackets and waistcoats." },
-  { id: "AF-27", name: "Apron Twill", type: "Workwear", use: "Hospitality", width: '59"', gsm: "210", garments: ["Aprons", "Chef jackets"], detail: "Substantial apron and service-jacket cloth for restaurants, hotels and front-of-house teams." },
-  { id: "AF-28", name: "Chef Check", type: "Shirting", use: "Hospitality", width: '57"', gsm: "140", garments: ["Chef wear", "Aprons"], detail: "Classic kitchen check in a hard-wearing cotton-rich weave for chef and service uniforms." },
-  { id: "AF-29", name: "Mixed Dead-Stock", type: "Clearance", use: "Resale", width: "Assorted", gsm: "Varies", garments: ["Resale", "Export"], detail: "Assorted dead stock positioned for resellers, export buyers and fast-moving value bundles." },
-  { id: "AF-30", name: "Lining Clearance", type: "Clearance", use: "Resale", width: '44–60"', gsm: "Varies", garments: ["Lining", "Pocketing"], detail: "Mixed lining and pocketing clearance — clean, usable lots bundled into decisive offers for value buyers." }
-];
+  { id: "B2-01", name: "Book 2 swatch page 01", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 34) from the ASA inventory scan — pending detailed transcription." },
+  { id: "B2-02", name: "Book 2 swatch page 02", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 35) from the ASA inventory scan — pending detailed transcription." },
+  { id: "B2-03", name: "Book 2 swatch page 03", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 36) from the ASA inventory scan — pending detailed transcription." },
+  { id: "B2-04", name: "Book 2 swatch page 04", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 37) from the ASA inventory scan — pending detailed transcription." },
+  { id: "B2-05", name: "Book 2 swatch page 05", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 shirting swatch page (page 38) from the ASA inventory scan — pending detailed transcription." },
+  { id: "B2-06", name: "Embroidery Lucky Star A", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Embroidered shirting from ASA inventory Book 2 (page 39)." },
+  { id: "B2-07", name: "CVC Opar Embroidery 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC embroidered shirting, 44 inch width — ASA inventory Book 2 (page 40)." },
+  { id: "B2-08", name: "CVC O/R 44 inch pink/off", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC shirting in pink / off shades, 44 inch width — ASA inventory Book 2 (page 41)." },
+  { id: "B2-09", name: "Chambray 60 inch Lucky Stock", type: "Shirting", use: "Shirting", width: '60"', gsm: "—", garments: ["Shirts"], detail: "Chambray shirting, 60 inch width — ASA inventory Book 2 (page 42)." },
+  { id: "B2-10", name: "Linen OPAL 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Linen shirting, 44 inch width — ASA inventory Book 2 (page 43)." },
+  { id: "B2-11", name: "Sin Ram 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Shirting stock, 44 inch width — ASA inventory Book 2 (page 44)." },
+  { id: "B2-12", name: "Book 2 packing list page 12", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 packing-list page (page 45) from the ASA inventory scan — pending detailed transcription." },
+  { id: "B2-13", name: "Book 2 packing list page 13", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Book 2 packing-list page (page 46) from the ASA inventory scan — pending detailed transcription." },
+  { id: "B2-14", name: "Embroidered cotton 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Embroidered cotton shirting, 44 inch width — ASA inventory Book 2 (page 47)." },
+  { id: "B2-15", name: "Voile 44 inch / TR polyester rayon", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Voile and TR polyester-rayon shirting, 44 inch width — ASA inventory Book 2 (page 48)." }
+].map((f) => ({ ...f, image: `assets/catalogue/${slug(f.name)}.jpg` }));
 
 /* ---------- State ---------- */
 const state = { query: "", types: new Set(), uses: new Set() };
@@ -99,7 +93,12 @@ const modal = document.querySelector("#fabricModal");
 function uniqueBy(key) { return [...new Set(fabrics.map((f) => f[key]))]; }
 function buildTabs() {
   const types = uniqueBy("type");
-  const uses = ["School uniforms", "Corporate", "Workwear", "Hospitality", "Resale"].filter((u) => uniqueBy("use").includes(u));
+  const preferredUseOrder = ["School uniforms", "Corporate", "Workwear", "Hospitality", "Resale"];
+  const dataUses = uniqueBy("use");
+  const uses = [
+    ...preferredUseOrder.filter((u) => dataUses.includes(u)),
+    ...dataUses.filter((u) => !preferredUseOrder.includes(u))
+  ];
   typeFilters.innerHTML = tabHtml("all", "All", "type", true) + types.map((t) => tabHtml(t, t, "type")).join("");
   useFilters.innerHTML = tabHtml("all", "All", "use", true) + uses.map((u) => tabHtml(u, u, "use")).join("");
   document.querySelectorAll(".fab-tab").forEach((tab) => tab.addEventListener("click", onTabClick));
@@ -144,6 +143,7 @@ function cardHtml(f, i) {
   return `<article class="fab-card${hasRendered ? "" : " reveal"}" style="--i:${i % 8}">
     <span class="fab-swatch" data-tone="${escapeHtml(f.type)}" aria-hidden="true">
       <span class="fab-mono">${escapeHtml(monogram(f.name))}</span>
+      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="" loading="lazy" onerror="this.remove()">
       <span class="fab-swatch-tag">Sample on request</span>
     </span>
     <div class="fab-info">
@@ -184,6 +184,7 @@ function openModal(id) {
     <button class="m-close" type="button" data-close aria-label="Close">&times;</button>
     <div class="m-banner" data-tone="${escapeHtml(f.type)}" aria-hidden="true">
       <span class="m-mono">${escapeHtml(monogram(f.name))}</span>
+      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="" onerror="this.remove()">
       <span class="fab-swatch-tag">Sample on request</span>
     </div>
     <div class="m-body">
@@ -252,7 +253,7 @@ function renderDrawer() {
     const f = fabrics.find((x) => x.id === id);
     if (!f) return "";
     return `<div class="drawer-item">
-      <span class="drawer-mono" data-tone="${escapeHtml(f.type)}" aria-hidden="true">${escapeHtml(monogram(f.name))}</span>
+      <span class="drawer-mono" data-tone="${escapeHtml(f.type)}" aria-hidden="true">${escapeHtml(monogram(f.name))}<img class="swatch-img" src="${escapeHtml(f.image)}" alt="" loading="lazy" onerror="this.remove()"></span>
       <div class="drawer-item-body">
         <p class="drawer-item-name">${escapeHtml(f.name)}</p>
         <p class="drawer-item-cat">${escapeHtml(f.type)} · ${escapeHtml(f.use)}</p>
@@ -398,7 +399,7 @@ function printSpecSheet(f) {
       <div class="print-brand">Asa Fabric<small>Fabric Spec Sheet · ${escapeHtml(when)}</small></div>
       <div class="print-meta">${escapeHtml(f.id)}<br>Quote on request</div>
     </div>
-    <div class="spec-banner" data-tone="${escapeHtml(f.type)}"><span>${escapeHtml(monogram(f.name))}</span></div>
+    <div class="spec-banner" data-tone="${escapeHtml(f.type)}"><span>${escapeHtml(monogram(f.name))}</span><img class="swatch-img" src="${escapeHtml(f.image)}" alt="" onerror="this.remove()"></div>
     <p class="spec-cat">${escapeHtml(f.type)} · ${escapeHtml(f.use)}</p>
     <h2>${escapeHtml(f.name)}</h2>
     <p class="spec-detail">${escapeHtml(f.detail)}</p>
