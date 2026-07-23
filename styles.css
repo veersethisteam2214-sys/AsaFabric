@@ -1712,3 +1712,101 @@ body.consult-open { overflow: hidden; }
     transform: none !important;
   }
 }
+
+/* ============================================================
+   EMAIL-CAPTURE POPUP (index / about / catalogue)
+   Small, on-brand centered modal. Cream card, EB Garamond heading,
+   Montserrat body, hairline border + soft shadow, --accent-blue touches.
+   Reuses the site .btn / .btn-solid button. Shown once per visitor by
+   initEmailPopup() (site-forms.js). Dimmed, blurred backdrop; ESC /
+   backdrop / × close; focus trapped inside the card.
+   ============================================================ */
+.email-popup {
+  position: fixed; inset: 0; z-index: 210;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(16px, 5vw, 40px);
+}
+.email-popup[hidden] { display: none; }
+.email-popup-backdrop {
+  position: fixed; inset: 0; background: rgba(20,18,15,0.45);
+  -webkit-backdrop-filter: blur(6px) saturate(120%); backdrop-filter: blur(6px) saturate(120%);
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.email-popup.is-open .email-popup-backdrop { opacity: 1; }
+
+.email-popup-card {
+  position: relative; width: 100%; max-width: 420px;
+  background: var(--canvas); border: 1px solid var(--hairline);
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(20,18,15,0.28);
+  padding: clamp(26px, 4vw, 38px);
+  text-align: left;
+  opacity: 0; transform: translateY(14px) scale(0.985);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.email-popup.is-open .email-popup-card { opacity: 1; transform: none; }
+
+.email-popup-card .eyebrow { margin: 0 0 12px; }
+.email-popup-card h2 {
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(24px, 4.4vw, 30px); line-height: 1.1; margin: 0 0 10px;
+}
+.email-popup-lede {
+  color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0 0 20px; max-width: 42ch;
+}
+
+.email-popup-close {
+  position: absolute; top: 12px; right: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 999px;
+  background: transparent; border: 1px solid transparent; color: var(--muted);
+  font-size: 22px; line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.email-popup-close:hover { background: var(--tonal); color: var(--ink); border-color: var(--hairline); }
+.email-popup-close:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; }
+
+.email-popup-form { display: flex; flex-direction: column; gap: 12px; }
+.email-popup-field { display: block; }
+.email-popup-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.email-popup-form input[type="email"] {
+  width: 100%; font-family: var(--sans); font-size: 14px; color: var(--ink);
+  background: #fff; border: 1px solid var(--hairline); border-radius: 10px;
+  padding: 12px 14px; transition: border-color 0.2s ease;
+}
+.email-popup-form input[type="email"]::placeholder { color: var(--muted-2); }
+.email-popup-form input[type="email"]:focus { outline: none; border-color: var(--accent-blue); }
+.email-popup-form input[type="email"][aria-invalid="true"] { border-color: #b3261e; }
+.email-popup-form .btn { align-self: stretch; justify-content: center; }
+
+/* honeypot — visually removed but present in the DOM for bots */
+.email-popup-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.email-popup-note {
+  font-family: var(--sans); font-size: 12.5px; font-weight: 500; line-height: 1.45;
+  color: var(--accent); margin: 2px 0 0;
+}
+.email-popup-note.is-error, .form-note.is-error { color: #b3261e; }
+
+.email-popup-dismiss {
+  display: inline-block; margin-top: 14px; padding: 4px 2px;
+  background: none; border: none; color: var(--muted-2);
+  font-family: var(--sans); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.04em; text-decoration: underline; text-underline-offset: 3px;
+}
+.email-popup-dismiss:hover { color: var(--ink); }
+.email-popup-dismiss:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 2px; border-radius: 4px; }
+
+@media (max-width: 420px) {
+  .email-popup-card { max-width: none; border-radius: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .email-popup-backdrop, .email-popup-card {
+    transition: none !important; opacity: 1 !important; transform: none !important;
+  }
+}

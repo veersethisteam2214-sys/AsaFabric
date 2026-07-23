@@ -521,13 +521,70 @@ function initSmoothScroll() {
     });
   });
 }
+/* Sends the catalogue enquiry / sample / quote / viewing request to FormSubmit
+   via AJAX (no redirect). Keeps the required-field + email validation, includes
+   the _honey honeypot, and shows an inline confirmation on success or a graceful
+   fallback (email-us) message on failure so the UX never breaks. */
 function initForm() {
   const form = document.querySelector("#leadForm");
   const note = document.querySelector("#formNote");
   if (!form) return;
-  form.addEventListener("submit", (event) => {
+
+  const isEmail = (v) => (window.AsaForms ? window.AsaForms.validEmail(v)
+    : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || "").trim()));
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (note) { note.hidden = false; note.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center" }); }
+    const honey = form.querySelector('[name="_honey"]');
+    if (honey && honey.value) return; // bot filled the honeypot — drop silently
+
+    const nameEl = form.querySelector('[name="name"]');
+    const emailEl = form.querySelector('[name="email"]');
+    const name = nameEl ? nameEl.value.trim() : "";
+    const email = emailEl ? emailEl.value.trim() : "";
+
+    if (nameEl && !name) { nameEl.setAttribute("aria-invalid", "true"); nameEl.focus(); return; }
+    if (nameEl) nameEl.removeAttribute("aria-invalid");
+    if (emailEl && !isEmail(email)) { emailEl.setAttribute("aria-invalid", "true"); emailEl.focus(); return; }
+    if (emailEl) emailEl.removeAttribute("aria-invalid");
+
+    const fd = new FormData(form);
+    const intent = (fd.get("intent") || "").toString();
+    const fields = {
+      name: name,
+      email: email,
+      intent: intent,
+      message: (fd.get("message") || "").toString().trim(),
+      requestList: requestList.map((id) => (fabrics.find((x) => x.id === id) || {}).name).filter(Boolean).join(", "),
+      _honey: honey ? honey.value : ""
+    };
+
+    const btn = form.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.innerHTML : "";
+    if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+
+    try {
+      if (!window.AsaForms) throw new Error("AsaForms unavailable");
+      await window.AsaForms.submit(fields, "New Asa Fabric catalogue enquiry");
+      form.reset();
+      if (note) {
+        note.classList.remove("is-error");
+        note.textContent = "Thanks — your enquiry is on its way. The team will follow up shortly.";
+        note.hidden = false;
+        note.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center" });
+      }
+    } catch (err) {
+      console.error("[catalogue enquiry] submit failed:", err);
+      if (note) {
+        note.classList.add("is-error");
+        note.textContent = window.AsaForms ? window.AsaForms.FALLBACK_MSG
+          : "Couldn't send just now — email us at veersethisteam2214@gmail.com";
+        note.hidden = false;
+        note.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center" });
+      }
+    } finally {
+      if (btn) { btn.disabled = false; btn.innerHTML = originalLabel; }
+    }
   });
 }
 function initYear() { const y = document.querySelector("#year"); if (y) y.textContent = new Date().getFullYear(); }
@@ -556,3 +613,5 @@ safe(initNavDock, "initNavDock");
 safe(initSmoothScroll, "initSmoothScroll");
 safe(initForm, "initForm");
 safe(initYear, "initYear");
+/* Email-capture popup lives in site-forms.js (shared across pages). */
+safe(function () { if (window.AsaForms) window.AsaForms.initEmailPopup(); }, "initEmailPopup");
