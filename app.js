@@ -1846,6 +1846,116 @@ function initConsultation() {
   syncAddress();
 }
 
+/* ============================================================
+   ABOUT PAGE — TEAM SHOWCASE (about.html)
+   Vanilla re-creation of the reference `TeamShowcase` React component.
+   A staggered photo grid + a name/role roster share one hovered state:
+   hovering (or focusing) a photo or a name highlights the matching pair,
+   reveals that member's social icons, and dims the others. No React /
+   react-icons / remote images. Renders only when #teamShowcase exists, so
+   it is inert on index.html / catalogue.html. Reduced motion: highlight and
+   social reveal still work; only scale/lift transitions are dropped (CSS).
+   ============================================================ */
+
+/* -------- EDITABLE: the people behind Asa Fabric --------
+   Starting point only — replace roles, social links and drop real photos.
+   role   : job title (EDITABLE placeholder).
+   image  : assets/team/<slug>.jpg — same convention as the catalogue. If the
+            file is missing it is removed on error and the initials tile shows
+            instead (see assets/team/README.md for expected filenames).
+   socials: use "#" placeholders until real profile URLs exist. Remove a key
+            to hide that icon. Supported keys: linkedin, instagram, email. */
+const TEAM = [
+  {
+    slug: "veer-sethi",
+    name: "Veer Sethi",
+    role: "Founder",                 // EDITABLE
+    image: "assets/team/veer-sethi.jpg",
+    socials: { linkedin: "#", instagram: "#", email: "#" }
+  },
+  {
+    slug: "shaan",
+    name: "Shaan",
+    role: "Catalogue & Sourcing",    // EDITABLE
+    image: "assets/team/shaan.jpg",
+    socials: { linkedin: "#", instagram: "#", email: "#" }
+  },
+  {
+    slug: "krish",
+    name: "Krish",
+    role: "Operations",              // EDITABLE
+    image: "assets/team/krish.jpg",
+    socials: { linkedin: "#", instagram: "#", email: "#" }
+  }
+];
+
+// Inline SVG social icons — same visual family as the footer's social icons.
+const TEAM_SOCIAL_ICONS = {
+  linkedin: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5.2 8.9h3.15V20H5.2V8.9ZM6.78 4a1.83 1.83 0 1 1 0 3.66 1.83 1.83 0 0 1 0-3.66Zm4.02 4.9h3.02v1.52h.04c.42-.8 1.45-1.72 3.04-1.72 3.25 0 3.85 2.14 3.85 4.92V20H17.6v-5.65c0-1.35-.03-3.08-1.88-3.08-1.88 0-2.17 1.47-2.17 2.98V20H10.8V8.9Z"/></svg>',
+  instagram: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.4a4.6 4.6 0 1 1 0 9.2 4.6 4.6 0 0 1 0-9.2Zm0 2a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2Zm5.1-2.55a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/></svg>',
+  email: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4.5 5h15A2.5 2.5 0 0 1 22 7.5v9A2.5 2.5 0 0 1 19.5 19h-15A2.5 2.5 0 0 1 2 16.5v-9A2.5 2.5 0 0 1 4.5 5Zm0 2a.5.5 0 0 0-.5.5v.36l8 5.14 8-5.14V7.5a.5.5 0 0 0-.5-.5h-15ZM20 10.24l-7.46 4.8a1 1 0 0 1-1.08 0L4 10.24v6.26a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5v-6.26Z"/></svg>'
+};
+
+function initTeamShowcase() {
+  const root = document.querySelector("#teamShowcase");
+  if (!root) return;
+  const gallery = root.querySelector("#teamGallery");
+  const roster = root.querySelector("#teamRoster");
+  if (!gallery || !roster) return;
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const initials = (name) =>
+    name.trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+
+  const socialsHtml = (m) =>
+    Object.entries(m.socials || {})
+      .filter(([k]) => TEAM_SOCIAL_ICONS[k])
+      .map(([k, href]) =>
+        `<a class="team-social" href="${esc(href)}" aria-label="${esc(m.name)} — ${esc(k)}"` +
+        (href === "#" ? ' tabindex="-1"' : "") + `>${TEAM_SOCIAL_ICONS[k]}</a>`)
+      .join("");
+
+  gallery.innerHTML = TEAM.map((m, i) => `
+    <figure class="team-tile" data-member="${esc(m.slug)}" style="--i:${i}">
+      <div class="team-photo">
+        <span class="team-initials" aria-hidden="true">${esc(initials(m.name))}</span>
+        ${m.image ? `<img class="team-photo-img" src="${esc(m.image)}" alt="${esc(m.name)}" loading="lazy" onerror="this.remove()">` : ""}
+      </div>
+      <figcaption class="team-tile-cap">${esc(m.name)}</figcaption>
+    </figure>`).join("");
+
+  roster.innerHTML = TEAM.map((m) => `
+    <li class="team-row" data-member="${esc(m.slug)}" tabindex="0">
+      <span class="team-row-main">
+        <span class="team-row-name">${esc(m.name)}</span>
+        <span class="team-row-role">${esc(m.role)}</span>
+      </span>
+      <span class="team-row-socials">${socialsHtml(m)}</span>
+    </li>`).join("");
+
+  const tiles = Array.from(gallery.querySelectorAll(".team-tile"));
+  const rows = Array.from(roster.querySelectorAll(".team-row"));
+  const all = tiles.concat(rows);
+
+  const setActive = (slug) => {
+    root.classList.toggle("has-active", !!slug);
+    all.forEach((el) => el.classList.toggle("is-active", !!slug && el.dataset.member === slug));
+  };
+
+  tiles.forEach((t) => { t.tabIndex = 0; });
+
+  all.forEach((el) => {
+    const slug = el.dataset.member;
+    el.addEventListener("mouseenter", () => setActive(slug));
+    el.addEventListener("focusin", () => setActive(slug));
+  });
+  root.addEventListener("mouseleave", () => setActive(null));
+  root.addEventListener("focusout", (e) => {
+    if (!root.contains(e.relatedTarget)) setActive(null);
+  });
+}
+
 function safe(fn, name) {
   try {
     fn();
@@ -1869,4 +1979,5 @@ safe(initParallax, "initParallax");
 safe(initStockAssemble, "initStockAssemble");
 safe(initStatsScramble, "initStatsScramble");
 safe(initConsultation, "initConsultation");
+safe(initTeamShowcase, "initTeamShowcase");
 safe(initYear, "initYear");
