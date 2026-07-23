@@ -45,7 +45,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- EB Garamond (serif), Montserrat (sans), Material Symbols (icons) -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260721-2">
+  <link rel="stylesheet" href="styles.css?v=20260723-2">
 
   <!-- GSAP (self-hosted) for the Featured Fabrics fan-carousel; app.js feature-detects window.gsap.
        Deferred: it's only used for the fan entrance, which inits after DOMContentLoaded. -->
@@ -77,10 +77,9 @@
     </a>
 
     <nav class="nav-links" aria-label="Primary">
-      <a href="#uses">Shirtings</a>
-      <a href="#uses">Suitings</a>
-      <a href="#uses">Trousers</a>
-      <a href="#contact">Contact</a>
+      <a href="#top">Home</a>
+      <a href="about.html">About Us</a>
+      <a href="#reach">B2B</a>
     </nav>
 
     <a class="nav-cta" href="catalogue.html">View Catalog</a>
@@ -98,10 +97,9 @@
         <img class="brand-logo-img" src="assets/logo-dark.png" width="294" height="160" alt="">
       </span>
     </a>
-    <a href="#uses">Shirtings</a>
-    <a href="#uses">Suitings</a>
-    <a href="#uses">Trousers</a>
-    <a href="#contact">Contact</a>
+    <a href="#top">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="#reach">B2B</a>
     <a class="mobile-cta" href="catalogue.html">View Catalog</a>
   </div>
 
@@ -344,6 +342,8 @@
         </div>
       </div>
       <form class="lead-form reveal" id="leadForm" novalidate>
+        <!-- honeypot: real people leave this empty; FormSubmit drops it if filled -->
+        <div class="form-hp" aria-hidden="true"><label>Leave this field empty<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
         <label>
           Full Name
           <span class="field"><input type="text" name="name" placeholder="Your name" required></span>
@@ -480,6 +480,7 @@
         <!-- honeypot (hidden from users; bots fill it) -->
         <div class="consult-hp" aria-hidden="true">
           <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          <label>Leave this field empty<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
         </div>
 
         <div class="consult-grid">
@@ -577,6 +578,7 @@
             aria-labelledby="consultTabBook" data-type="consultation" novalidate hidden>
         <div class="consult-hp" aria-hidden="true">
           <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          <label>Leave this field empty<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
         </div>
 
         <div class="consult-grid">
@@ -634,6 +636,40 @@
     </div>
   </div>
 
-  <script defer src="app.js?v=20260721-2"></script>
+  <!-- ============================================================
+       EMAIL-CAPTURE POPUP (shared snippet — index / about / catalogue)
+       Shown once per visitor by initEmailPopup() in site-forms.js: after a
+       ~6s delay (or exit-intent) on the FIRST visit, then never again
+       (localStorage "asaEmailPopupDone", shared across pages). Submits to
+       FormSubmit via AJAX. Inert / hidden until JS reveals it — no layout shift.
+       ============================================================ -->
+  <div class="email-popup" id="emailPopup" hidden>
+    <div class="email-popup-backdrop" data-popup-close aria-hidden="true"></div>
+    <div class="email-popup-card" role="dialog" aria-modal="true"
+         aria-labelledby="emailPopupTitle" aria-describedby="emailPopupBody">
+      <button class="email-popup-close" type="button" data-popup-close aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p class="eyebrow">Newsletter</p>
+      <h2 id="emailPopupTitle">Stay in the loop</h2>
+      <p class="email-popup-lede" id="emailPopupBody">Be first to hear about new fabric arrivals and stock — the occasional note, nothing more.</p>
+      <form class="email-popup-form" id="emailPopupForm" novalidate>
+        <!-- honeypot: real people leave this empty; FormSubmit drops it if filled -->
+        <div class="email-popup-hp" aria-hidden="true">
+          <label>Leave this field empty<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <label class="email-popup-field">
+          <span class="email-popup-sr">Email address</span>
+          <input type="email" name="email" placeholder="you@email.com" required autocomplete="email">
+        </label>
+        <button class="btn btn-solid" type="submit">Keep me posted <span aria-hidden="true">&rarr;</span></button>
+        <p class="email-popup-note" data-popup-note role="status" aria-live="polite" hidden></p>
+      </form>
+      <button class="email-popup-dismiss" type="button" data-popup-close>No thanks</button>
+    </div>
+  </div>
+
+  <script defer src="site-forms.js?v=20260723-2"></script>
+  <script defer src="app.js?v=20260723-2"></script>
 </body>
 </html>
