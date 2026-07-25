@@ -1,0 +1,1508 @@
+{
+  "total": 87,
+  "pages": {
+    "1": [
+      {
+        "label": "Mustard",
+        "file": "p01-swatch-01.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          18,
+          530,
+          224
+        ],
+        "dimensions": [
+          512,
+          206
+        ],
+        "pixelSha256": "e154eeb7a1f3a799988937c3aec9a3b8f0a00fe5d9741ccb3fca293bed6368e8",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Pink",
+        "file": "p01-swatch-02.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          218,
+          530,
+          318
+        ],
+        "dimensions": [
+          512,
+          100
+        ],
+        "pixelSha256": "588ea59c86f8aa336bee1cdc42e54e723470f070de7fef1feae5a962cf86246e",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Pale green / cream",
+        "file": "p01-swatch-03.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          312,
+          530,
+          385
+        ],
+        "dimensions": [
+          512,
+          73
+        ],
+        "pixelSha256": "df493e8c27b89209be0480993e95171051d1fb8e6f0929e4d19c712922294524",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Light green",
+        "file": "p01-swatch-04.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          377,
+          530,
+          458
+        ],
+        "dimensions": [
+          512,
+          81
+        ],
+        "pixelSha256": "9d829e5efd3f093802ff2985fd7495876c63d6b18866bac9ba6963def01c656a",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Orange",
+        "file": "p01-swatch-05.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          451,
+          530,
+          535
+        ],
+        "dimensions": [
+          512,
+          84
+        ],
+        "pixelSha256": "890347fe6d8894342becce762eb8e0357e835b3198d64bd617d12f1f9a607d65",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Yellow",
+        "file": "p01-swatch-06.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          523,
+          530,
+          596
+        ],
+        "dimensions": [
+          512,
+          73
+        ],
+        "pixelSha256": "6f1211d219d5cdd84c434904924d29c1b80cbfd70c90aec3c2be2d7ac07cd48d",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Orange red",
+        "file": "p01-swatch-07.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          585,
+          530,
+          675
+        ],
+        "dimensions": [
+          512,
+          90
+        ],
+        "pixelSha256": "36c97a5f97432f11177cfa4b69fe3287f82cd856d213960b664bf77226e2e05e",
+        "pixelIdentity": true
+      },
+      {
+        "label": "White",
+        "file": "p01-swatch-08.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          665,
+          530,
+          733
+        ],
+        "dimensions": [
+          512,
+          68
+        ],
+        "pixelSha256": "247d633d8ace4376497728f7335b572662d383cf916fbb70ca6159454c3b0897",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Beige",
+        "file": "p01-swatch-09.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          721,
+          530,
+          792
+        ],
+        "dimensions": [
+          512,
+          71
+        ],
+        "pixelSha256": "48f54e6cc0fbd4c4989fcf28504b7fe5a6a88202a067861b0addec8a162174bd",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black",
+        "file": "p01-swatch-10.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          775,
+          530,
+          840
+        ],
+        "dimensions": [
+          512,
+          65
+        ],
+        "pixelSha256": "9a85ccd0ddbdbff95d4ea20b8549f55ff1ebee02bb7267f722c52eaccb5c543d",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Red",
+        "file": "p01-swatch-11.png",
+        "source": "page_01_preview.jpg",
+        "crop": [
+          18,
+          820,
+          530,
+          884
+        ],
+        "dimensions": [
+          512,
+          64
+        ],
+        "pixelSha256": "7f6ba5a66f917cf9643b3dde46fd826039e2ce67c6b83f0473b05e7d7557600b",
+        "pixelIdentity": true
+      }
+    ],
+    "2": [
+      {
+        "label": "Aqua",
+        "file": "p02-swatch-01.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          0,
+          145,
+          215
+        ],
+        "dimensions": [
+          145,
+          215
+        ],
+        "pixelSha256": "57690411eb34f526fb47d94577e91ca161e4b9be5d3d1de16929e4835589882b",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Cream / pale",
+        "file": "p02-swatch-02.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          120,
+          130,
+          300
+        ],
+        "dimensions": [
+          130,
+          180
+        ],
+        "pixelSha256": "d7b55ce95d5d50d14ac99933e09963321041b21145c202ba225d763fdb06914d",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Yellow",
+        "file": "p02-swatch-03.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          270,
+          130,
+          390
+        ],
+        "dimensions": [
+          130,
+          120
+        ],
+        "pixelSha256": "5fdfb4da8134679e77fcca681f99828cf2250d840544b3111bc0a66f83098533",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Olive",
+        "file": "p02-swatch-04.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          380,
+          128,
+          475
+        ],
+        "dimensions": [
+          128,
+          95
+        ],
+        "pixelSha256": "d8956bb094b7ea0cfc2552bf1c44e47008e2b3aa3ce522dcb7461f718e92ba7c",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Pale green",
+        "file": "p02-swatch-05.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          455,
+          135,
+          560
+        ],
+        "dimensions": [
+          135,
+          105
+        ],
+        "pixelSha256": "5b286108ee5e6d46b63e6aeddc0668d1cdefdcf9cb2d63b5c5d6783d38356e38",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Textured cream",
+        "file": "p02-swatch-06.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          535,
+          135,
+          670
+        ],
+        "dimensions": [
+          135,
+          135
+        ],
+        "pixelSha256": "6ec9eeefec94456f262ff88da4dc8a99787bf372fcdf11f7dd2a8e61d0656f31",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Orange",
+        "file": "p02-swatch-07.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          650,
+          130,
+          765
+        ],
+        "dimensions": [
+          130,
+          115
+        ],
+        "pixelSha256": "b8816ad42b35ebe7262417a785ea94847db543e82b618d5f26c8c7b2bca3557a",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Blue",
+        "file": "p02-swatch-08.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          0,
+          735,
+          145,
+          910
+        ],
+        "dimensions": [
+          145,
+          175
+        ],
+        "pixelSha256": "9f077d77d2bc3b013978ecff27338f9dde72b7d41516d10572fef8f1b255a890",
+        "pixelIdentity": true
+      },
+      {
+        "label": "White swatch",
+        "file": "p02-swatch-09.png",
+        "source": "page_02_preview.jpg",
+        "crop": [
+          290,
+          760,
+          580,
+          930
+        ],
+        "dimensions": [
+          290,
+          170
+        ],
+        "pixelSha256": "2a5f09cc47560b2d91a7bf7f82089665d3e2dbcc66e9ae0a41c0f9e87a523945",
+        "pixelIdentity": true
+      }
+    ],
+    "3": [
+      {
+        "label": "Black 1",
+        "file": "p03-swatch-01.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          0,
+          150,
+          115
+        ],
+        "dimensions": [
+          150,
+          115
+        ],
+        "pixelSha256": "54fc65857045af05fc91f40887e6d8d8907ad35daa2f8065884593a0b7723e17",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Red 1",
+        "file": "p03-swatch-02.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          105,
+          150,
+          215
+        ],
+        "dimensions": [
+          150,
+          110
+        ],
+        "pixelSha256": "0b9de7679685c05a9f3d488a1b7ff39f6f07878822a134944abab2979419139a",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black 2",
+        "file": "p03-swatch-03.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          200,
+          150,
+          320
+        ],
+        "dimensions": [
+          150,
+          120
+        ],
+        "pixelSha256": "c9c513ab2d6983fa30d69e9465f948e3937152e1be6a012f7742f587ec476fd2",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Blue",
+        "file": "p03-swatch-04.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          300,
+          150,
+          385
+        ],
+        "dimensions": [
+          150,
+          85
+        ],
+        "pixelSha256": "3360b78433b1f6e788bbb356747683047d772a6ae263d649e18f01bc61a31004",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black 3",
+        "file": "p03-swatch-05.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          360,
+          150,
+          455
+        ],
+        "dimensions": [
+          150,
+          95
+        ],
+        "pixelSha256": "8e72553dd2ce7522e5a63ef99921d47cc664992d817f95f149366520345a1f60",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Green",
+        "file": "p03-swatch-06.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          435,
+          150,
+          525
+        ],
+        "dimensions": [
+          150,
+          90
+        ],
+        "pixelSha256": "60590fc3671bbf92219153352d66c5d187a6b581821a82e5e04b958b11dd1450",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Purple",
+        "file": "p03-swatch-07.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          505,
+          150,
+          630
+        ],
+        "dimensions": [
+          150,
+          125
+        ],
+        "pixelSha256": "fc2cc503b5c5e23bee7de7b3be857dcd4af6a99b884d73600e57d9373d87aa98",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Peach",
+        "file": "p03-swatch-08.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          610,
+          150,
+          700
+        ],
+        "dimensions": [
+          150,
+          90
+        ],
+        "pixelSha256": "b895ba7da95c86e303eea1845d3c9f9e1903898156ead90e75d60b29d888034e",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Red 2",
+        "file": "p03-swatch-09.png",
+        "source": "page_03_preview.jpg",
+        "crop": [
+          0,
+          680,
+          150,
+          875
+        ],
+        "dimensions": [
+          150,
+          195
+        ],
+        "pixelSha256": "12ddbe90463e69d728f0d8f3196356d75cb0e5e5b7efcaaf380fe75c7e2f48a5",
+        "pixelIdentity": true
+      }
+    ],
+    "4": [
+      {
+        "label": "Dark green",
+        "file": "p04-swatch-01.png",
+        "source": "page_04_preview.jpg",
+        "crop": [
+          15,
+          20,
+          115,
+          250
+        ],
+        "dimensions": [
+          100,
+          230
+        ],
+        "pixelSha256": "71c20366eb025c274a06f2c5000c8d8d0f09657694337c790d2fe7302c341c55",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Cream",
+        "file": "p04-swatch-02.png",
+        "source": "page_04_preview.jpg",
+        "crop": [
+          15,
+          245,
+          115,
+          320
+        ],
+        "dimensions": [
+          100,
+          75
+        ],
+        "pixelSha256": "cf408ff4a935dc7bb746598e3c751f2add7623d09c20798f310f375d77cb98e9",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Olive",
+        "file": "p04-swatch-03.png",
+        "source": "page_04_preview.jpg",
+        "crop": [
+          15,
+          305,
+          110,
+          405
+        ],
+        "dimensions": [
+          95,
+          100
+        ],
+        "pixelSha256": "d51739c23dd59e02b1800149844b136827e0bb53af26448669a5f4c9db44d0ee",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Blue",
+        "file": "p04-swatch-04.png",
+        "source": "page_04_preview.jpg",
+        "crop": [
+          10,
+          390,
+          110,
+          505
+        ],
+        "dimensions": [
+          100,
+          115
+        ],
+        "pixelSha256": "9dfca0de1ffaa6fa333b8ff7514099e14f52d52527e9729a22736a6fdbdbaa9c",
+        "pixelIdentity": true
+      }
+    ],
+    "5": [
+      {
+        "label": "Green plaid",
+        "file": "p05-swatch-01.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          10,
+          15,
+          125,
+          180
+        ],
+        "dimensions": [
+          115,
+          165
+        ],
+        "pixelSha256": "c601d7610adf5013283deca71972abd3bd74b20c316b219e0c8d0b7f53f883fc",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Brown plaid",
+        "file": "p05-swatch-02.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          360,
+          0,
+          470,
+          170
+        ],
+        "dimensions": [
+          110,
+          170
+        ],
+        "pixelSha256": "3371c06eaa23ab0c341f4237d0bff7abfad65b4007f25466522b18ac9d0325ea",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Blue / green plaid",
+        "file": "p05-swatch-03.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          10,
+          175,
+          120,
+          295
+        ],
+        "dimensions": [
+          110,
+          120
+        ],
+        "pixelSha256": "f13a139e45f91b1334000a143162985986012d63ed9708d5d83d941bf0726e5f",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Dark grey",
+        "file": "p05-swatch-04.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          10,
+          285,
+          125,
+          425
+        ],
+        "dimensions": [
+          115,
+          140
+        ],
+        "pixelSha256": "7bcde74faa5a6bb15f30fb193c4ba9ce41d81377f57112c7d739e39b1c9c7e7c",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Grey pattern",
+        "file": "p05-swatch-05.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          5,
+          405,
+          130,
+          535
+        ],
+        "dimensions": [
+          125,
+          130
+        ],
+        "pixelSha256": "1c7f7e175d4643ba10c92c1a4281c92789dff99cb96bc5a10467a908c2d4c5a0",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Peach",
+        "file": "p05-swatch-06.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          5,
+          520,
+          130,
+          630
+        ],
+        "dimensions": [
+          125,
+          110
+        ],
+        "pixelSha256": "26d3eb6ac4cbb6b611a5c662116ac81cb63f0415242dc773d634b34f7b2687d0",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Cream",
+        "file": "p05-swatch-07.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          5,
+          610,
+          135,
+          780
+        ],
+        "dimensions": [
+          130,
+          170
+        ],
+        "pixelSha256": "5eaa4f460ba050e183d0a7a7b636ba317f914207b3b755a02138fad1f967ce5a",
+        "pixelIdentity": true
+      },
+      {
+        "label": "White",
+        "file": "p05-swatch-08.png",
+        "source": "page_05_preview.jpg",
+        "crop": [
+          5,
+          760,
+          140,
+          950
+        ],
+        "dimensions": [
+          135,
+          190
+        ],
+        "pixelSha256": "472279d905f959f86f230e21a635a7ff9049f8ab1946b2a4c37d528217ff2e73",
+        "pixelIdentity": true
+      }
+    ],
+    "6": [
+      {
+        "label": "Light blue",
+        "file": "p06-swatch-01.png",
+        "source": "page_06.jpg",
+        "crop": [
+          0,
+          380,
+          330,
+          720
+        ],
+        "dimensions": [
+          330,
+          340
+        ],
+        "pixelSha256": "9846a4674bd2ffebe57bb71b84c01e8c9a283a05dd3c45d52f4b9da65fecbd6e",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Blue",
+        "file": "p06-swatch-02.png",
+        "source": "page_06.jpg",
+        "crop": [
+          20,
+          760,
+          350,
+          1120
+        ],
+        "dimensions": [
+          330,
+          360
+        ],
+        "pixelSha256": "2e20d3d731abf7698ecd0ce42f44124f5a6c5ea5d3f78db634f47fd48fb01541",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Orange",
+        "file": "p06-swatch-03.png",
+        "source": "page_06.jpg",
+        "crop": [
+          25,
+          1110,
+          350,
+          1450
+        ],
+        "dimensions": [
+          325,
+          340
+        ],
+        "pixelSha256": "01db07f121432d2698330ca0241e711c31af3a2eb26ea6ccc6cd0b8dc6175702",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Steel blue",
+        "file": "p06-swatch-04.png",
+        "source": "page_06.jpg",
+        "crop": [
+          45,
+          1430,
+          390,
+          1770
+        ],
+        "dimensions": [
+          345,
+          340
+        ],
+        "pixelSha256": "ad5e60527e449279c0fcafaaa354a8537fbbeb38f3a938cf854735e1cfe5f671",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Dark grey",
+        "file": "p06-swatch-05.png",
+        "source": "page_06.jpg",
+        "crop": [
+          20,
+          1740,
+          430,
+          2150
+        ],
+        "dimensions": [
+          410,
+          410
+        ],
+        "pixelSha256": "79857ba336879ca21af5fda6a41bac9cdfee8c228f862ec57dd6475c2afbda99",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Mint",
+        "file": "p06-swatch-06.png",
+        "source": "page_06.jpg",
+        "crop": [
+          60,
+          2080,
+          460,
+          2460
+        ],
+        "dimensions": [
+          400,
+          380
+        ],
+        "pixelSha256": "7555def3bd898d6543e471bd6eb74142de9e69421bd2b8bbe0c3cf06cd879c33",
+        "pixelIdentity": true
+      }
+    ],
+    "9": [
+      {
+        "label": "Design 1",
+        "file": "p09-swatch-01.png",
+        "source": "page_09.jpg",
+        "crop": [
+          18,
+          470,
+          385,
+          705
+        ],
+        "dimensions": [
+          367,
+          235
+        ],
+        "pixelSha256": "5de5c2d57c2012fe52f1d5d8935a7dd721363c2b3c8b315f18685066fc154c88",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 2",
+        "file": "p09-swatch-02.png",
+        "source": "page_09.jpg",
+        "crop": [
+          30,
+          680,
+          385,
+          835
+        ],
+        "dimensions": [
+          355,
+          155
+        ],
+        "pixelSha256": "5bb0fcc8084ef1aff76b0492d8670b4e2478aee8647638113f1518016ed80494",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 3",
+        "file": "p09-swatch-03.png",
+        "source": "page_09.jpg",
+        "crop": [
+          30,
+          815,
+          390,
+          980
+        ],
+        "dimensions": [
+          360,
+          165
+        ],
+        "pixelSha256": "7bda262a55e3eb090edc5d75151b1d3d7262898d6e519a342897ac3357902bba",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 4",
+        "file": "p09-swatch-04.png",
+        "source": "page_09.jpg",
+        "crop": [
+          30,
+          955,
+          395,
+          1110
+        ],
+        "dimensions": [
+          365,
+          155
+        ],
+        "pixelSha256": "51459cf5c4993a89b131f0575a69764e3071fd087f73f5fb0d8c3691205e6e4c",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 5",
+        "file": "p09-swatch-05.png",
+        "source": "page_09.jpg",
+        "crop": [
+          30,
+          1080,
+          395,
+          1220
+        ],
+        "dimensions": [
+          365,
+          140
+        ],
+        "pixelSha256": "2d4a08012339417a7113dbcb1e923e29a8752970eba62dd5d3a1178f2901cb50",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 6",
+        "file": "p09-swatch-06.png",
+        "source": "page_09.jpg",
+        "crop": [
+          30,
+          1190,
+          390,
+          1360
+        ],
+        "dimensions": [
+          360,
+          170
+        ],
+        "pixelSha256": "8c86b85e286b6e72cadd4fef63a17f7fb58d5d0e7643ee818dc5e1575e16eb83",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 7",
+        "file": "p09-swatch-07.png",
+        "source": "page_09.jpg",
+        "crop": [
+          30,
+          1325,
+          390,
+          1480
+        ],
+        "dimensions": [
+          360,
+          155
+        ],
+        "pixelSha256": "84a009166129ef72e188e45b482092f886e88a456897ac3e7fc546d76ddb484a",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 8",
+        "file": "p09-swatch-08.png",
+        "source": "page_09.jpg",
+        "crop": [
+          25,
+          1445,
+          385,
+          1600
+        ],
+        "dimensions": [
+          360,
+          155
+        ],
+        "pixelSha256": "8ddb16f60ff26e1e834e9d674b72276a37ed075cbaafbb8c339f5788a3b56249",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 9",
+        "file": "p09-swatch-09.png",
+        "source": "page_09.jpg",
+        "crop": [
+          25,
+          1570,
+          380,
+          1730
+        ],
+        "dimensions": [
+          355,
+          160
+        ],
+        "pixelSha256": "c4dc2b2064e83401cfbed6ec8a6beafc60652beb9443151b58d43fc3070b1ff9",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 10",
+        "file": "p09-swatch-10.png",
+        "source": "page_09.jpg",
+        "crop": [
+          15,
+          1690,
+          390,
+          1860
+        ],
+        "dimensions": [
+          375,
+          170
+        ],
+        "pixelSha256": "725cdcc7299a560c54ffa20a45b7865543f95c7f02430ed817c28740ec258bc0",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 11",
+        "file": "p09-swatch-11.png",
+        "source": "page_09.jpg",
+        "crop": [
+          15,
+          1810,
+          385,
+          1990
+        ],
+        "dimensions": [
+          370,
+          180
+        ],
+        "pixelSha256": "4779c01aa16de081ac2704a2c5871e5d091e2cbc2dc008d0caf1a27d95e85110",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 12",
+        "file": "p09-swatch-12.png",
+        "source": "page_09.jpg",
+        "crop": [
+          10,
+          1940,
+          390,
+          2120
+        ],
+        "dimensions": [
+          380,
+          180
+        ],
+        "pixelSha256": "5143dc0c709ab2e7289691f4e4c5e5e6168ca480941571be380412a1f516cc40",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 13",
+        "file": "p09-swatch-13.png",
+        "source": "page_09.jpg",
+        "crop": [
+          20,
+          2070,
+          390,
+          2260
+        ],
+        "dimensions": [
+          370,
+          190
+        ],
+        "pixelSha256": "0764c761002333fd19e0438d11703eee0cadd7bd4f50604ab85ca96c4e880819",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Design 14",
+        "file": "p09-swatch-14.png",
+        "source": "page_09.jpg",
+        "crop": [
+          760,
+          2140,
+          1120,
+          2275
+        ],
+        "dimensions": [
+          360,
+          135
+        ],
+        "pixelSha256": "34714b71a4e7eb22419f2b5af13476b9f11b69962a86c596ad3c28cbe6df8bc0",
+        "pixelIdentity": true
+      }
+    ],
+    "10": [
+      {
+        "label": "001 group 1",
+        "file": "p10-swatch-01.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          175,
+          265,
+          610
+        ],
+        "dimensions": [
+          265,
+          435
+        ],
+        "pixelSha256": "b1a463139e415b91aa10821b6e9b41f4ec1dab6863b614328acd4575d7b78fc5",
+        "pixelIdentity": true
+      },
+      {
+        "label": "001 group 2",
+        "file": "p10-swatch-02.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          555,
+          275,
+          835
+        ],
+        "dimensions": [
+          275,
+          280
+        ],
+        "pixelSha256": "2a47611282605e90e9ac13421614fe70d94593bedc5065cd2b583f8560b6b823",
+        "pixelIdentity": true
+      },
+      {
+        "label": "002 group 1",
+        "file": "p10-swatch-03.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          800,
+          235,
+          1035
+        ],
+        "dimensions": [
+          235,
+          235
+        ],
+        "pixelSha256": "04962af5bd6bf0fc149e58df0f8ddc4c0955cfd3fc12b06eac3c2eb875a8fe55",
+        "pixelIdentity": true
+      },
+      {
+        "label": "002 group 2",
+        "file": "p10-swatch-04.png",
+        "source": "page_10.jpg",
+        "crop": [
+          45,
+          960,
+          245,
+          1225
+        ],
+        "dimensions": [
+          200,
+          265
+        ],
+        "pixelSha256": "919f9d2d194d98ed936cdaf38a3f965f9e09d5ad94f1e1f52326699a81908198",
+        "pixelIdentity": true
+      },
+      {
+        "label": "003 group 1",
+        "file": "p10-swatch-05.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          1160,
+          250,
+          1460
+        ],
+        "dimensions": [
+          250,
+          300
+        ],
+        "pixelSha256": "6899df0b50b37c67acf08e0ff0a482399c18245567a7e9e2d2bb0f267de53f32",
+        "pixelIdentity": true
+      },
+      {
+        "label": "003 group 2",
+        "file": "p10-swatch-06.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          1390,
+          245,
+          1660
+        ],
+        "dimensions": [
+          245,
+          270
+        ],
+        "pixelSha256": "bd436a2ff25c72ff90e9ae75b913f2e3ceabacb6c3d0f875233b44c4610e109c",
+        "pixelIdentity": true
+      },
+      {
+        "label": "003 group 3",
+        "file": "p10-swatch-07.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          1590,
+          250,
+          1880
+        ],
+        "dimensions": [
+          250,
+          290
+        ],
+        "pixelSha256": "7e329e8ba17448eb91cc45fbdd52785a1bb7fcb0a56c9ac21273d078ebb52776",
+        "pixelIdentity": true
+      },
+      {
+        "label": "003 group 4",
+        "file": "p10-swatch-08.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          1810,
+          240,
+          2085
+        ],
+        "dimensions": [
+          240,
+          275
+        ],
+        "pixelSha256": "5ee80048e14d58bfc3e388be118dca4908aa39e4a4618a74889b7d13bee0d8c9",
+        "pixelIdentity": true
+      },
+      {
+        "label": "004 group",
+        "file": "p10-swatch-09.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          2010,
+          245,
+          2285
+        ],
+        "dimensions": [
+          245,
+          275
+        ],
+        "pixelSha256": "e5d2bcd0e526eb72fa4d14f4fe72adc162187b2fd43cac50679e54ea000ab395",
+        "pixelIdentity": true
+      },
+      {
+        "label": "005 group",
+        "file": "p10-swatch-10.png",
+        "source": "page_10.jpg",
+        "crop": [
+          0,
+          2180,
+          265,
+          2510
+        ],
+        "dimensions": [
+          265,
+          330
+        ],
+        "pixelSha256": "6e819e1ddc603daa95c30c528576bb80196a16b6a556fc087842a46e0ab29ecf",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Bottom blue visible group",
+        "file": "p10-swatch-11.png",
+        "source": "page_10.jpg",
+        "crop": [
+          810,
+          2280,
+          1180,
+          2629
+        ],
+        "dimensions": [
+          370,
+          349
+        ],
+        "pixelSha256": "77d505dc6cdd5132108df9f89e1897d8d9363f9d08f647bead09b6df382e1d73",
+        "pixelIdentity": true
+      }
+    ],
+    "12": [
+      {
+        "label": "Pale pink",
+        "file": "p12-swatch-01.png",
+        "source": "page_12.jpg",
+        "crop": [
+          1600,
+          520,
+          1776,
+          760
+        ],
+        "dimensions": [
+          176,
+          240
+        ],
+        "pixelSha256": "2b5617460a9ed889d1a0ad85dadcdc8f86bd65071ed81b3b9d1f5d1509c69c64",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Pale yellow",
+        "file": "p12-swatch-02.png",
+        "source": "page_12.jpg",
+        "crop": [
+          1600,
+          840,
+          1776,
+          1100
+        ],
+        "dimensions": [
+          176,
+          260
+        ],
+        "pixelSha256": "85e6fd5e7253f8dd4637ac014b6102676b4537c6c9afcfac4268664ec706b840",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Grey",
+        "file": "p12-swatch-03.png",
+        "source": "page_12.jpg",
+        "crop": [
+          1580,
+          1210,
+          1776,
+          1500
+        ],
+        "dimensions": [
+          196,
+          290
+        ],
+        "pixelSha256": "f462e1f2d1e63082c4c9a9667649877fa8af997aed03ae6c6b048d0d067bbf64",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Cream",
+        "file": "p12-swatch-04.png",
+        "source": "page_12.jpg",
+        "crop": [
+          1570,
+          1600,
+          1776,
+          1900
+        ],
+        "dimensions": [
+          206,
+          300
+        ],
+        "pixelSha256": "6858fbad2698b9cd3c44036a6d427e43c8ea99904106cb5644e7fc0b442d8223",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Blue grey",
+        "file": "p12-swatch-05.png",
+        "source": "page_12.jpg",
+        "crop": [
+          1540,
+          2150,
+          1776,
+          2600
+        ],
+        "dimensions": [
+          236,
+          450
+        ],
+        "pixelSha256": "f44bf966c1590603ff7252d1d98d1cd57cb791a67a0923b0b2c08840d06e5e07",
+        "pixelIdentity": true
+      }
+    ],
+    "13": [
+      {
+        "label": "Bronze texture",
+        "file": "p13-swatch-01.png",
+        "source": "page_13.jpg",
+        "crop": [
+          1590,
+          360,
+          1982,
+          870
+        ],
+        "dimensions": [
+          392,
+          510
+        ],
+        "pixelSha256": "043c1e9440639f12b57d7d9d757c3f0b940e086ce19347ae847701d0aafdbbb3",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black 1",
+        "file": "p13-swatch-02.png",
+        "source": "page_13.jpg",
+        "crop": [
+          1620,
+          870,
+          1950,
+          1220
+        ],
+        "dimensions": [
+          330,
+          350
+        ],
+        "pixelSha256": "e976de75f07f1beea5d2f8a52d24537fc0a3391e1ee87f9466cecb0f6dfedbcb",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black 2",
+        "file": "p13-swatch-03.png",
+        "source": "page_13.jpg",
+        "crop": [
+          1600,
+          1260,
+          1950,
+          1550
+        ],
+        "dimensions": [
+          350,
+          290
+        ],
+        "pixelSha256": "ddef664de6ab559038c5510435aa2c60ceb04060106edc2a9b4bd74dea046307",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black 3",
+        "file": "p13-swatch-04.png",
+        "source": "page_13.jpg",
+        "crop": [
+          1580,
+          1630,
+          1950,
+          1900
+        ],
+        "dimensions": [
+          370,
+          270
+        ],
+        "pixelSha256": "953bd02d2e6ece23d804808c99f4ef21da43fe37f9523c1c8999fe2641eee8cc",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black 4",
+        "file": "p13-swatch-05.png",
+        "source": "page_13.jpg",
+        "crop": [
+          1550,
+          2000,
+          1950,
+          2260
+        ],
+        "dimensions": [
+          400,
+          260
+        ],
+        "pixelSha256": "545a3a1793badbfe86f17e6ebab97a46767f531786d90cdc11f306322d6443fa",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Black 5",
+        "file": "p13-swatch-06.png",
+        "source": "page_13.jpg",
+        "crop": [
+          1520,
+          2340,
+          1950,
+          2660
+        ],
+        "dimensions": [
+          430,
+          320
+        ],
+        "pixelSha256": "adc3266f37cc2bab66c44050685254745b911c84ee9fa802d1af3b9800edf602",
+        "pixelIdentity": true
+      }
+    ],
+    "14": [
+      {
+        "label": "Embroidered cotton source sample",
+        "file": "p14-swatch-01.png",
+        "source": "page_14.jpg",
+        "crop": [
+          820,
+          320,
+          1680,
+          1220
+        ],
+        "dimensions": [
+          860,
+          900
+        ],
+        "pixelSha256": "103a044761f0410581f046ca62fb53cbcdd14ba37d29540b3b3ad7d384601848",
+        "pixelIdentity": true
+      }
+    ],
+    "15": [
+      {
+        "label": "TR polyester / rayon",
+        "file": "p15-swatch-01.png",
+        "source": "page_15.jpg",
+        "crop": [
+          1360,
+          430,
+          1581,
+          700
+        ],
+        "dimensions": [
+          221,
+          270
+        ],
+        "pixelSha256": "9e149e1bdf4ca37c753d5da8e632490328e05253be464c06cc7be111b233e66f",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Voile 1",
+        "file": "p15-swatch-02.png",
+        "source": "page_15.jpg",
+        "crop": [
+          1370,
+          760,
+          1581,
+          1070
+        ],
+        "dimensions": [
+          211,
+          310
+        ],
+        "pixelSha256": "5351ba547cf00808ce39fd3f2401fa28df384dcddfae9c5c6c5a080cc77b063e",
+        "pixelIdentity": true
+      },
+      {
+        "label": "Voile 2",
+        "file": "p15-swatch-03.png",
+        "source": "page_15.jpg",
+        "crop": [
+          1350,
+          1120,
+          1581,
+          1480
+        ],
+        "dimensions": [
+          231,
+          360
+        ],
+        "pixelSha256": "359e9336ac3e7188fee549ceabf50432a9c95b10fa60f8e8c6b11d6fc4df46cb",
+        "pixelIdentity": true
+      }
+    ]
+  }
+}

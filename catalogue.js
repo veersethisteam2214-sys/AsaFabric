@@ -5,9 +5,9 @@
    shared nav, scroll-progress, reveal and smooth-scroll behaviours
    ported from the landing page so the page behaves identically.
 
-   PREVIEW / TEMPLATE: placeholder swatches (no real photos), no
-   stock figures shown to buyers, pricing is "quote on request",
-   no real email send, the viewing calendar is illustrative.
+   Book 2 catalogue galleries use lossless crops of the original source photos.
+   Stock figures are not shown to buyers, pricing is "quote on request",
+   and the viewing calendar is illustrative.
    Fabric vocabulary is drawn from the real ASA inventory workbook.
    ============================================================ */
 
@@ -26,30 +26,150 @@ function monogram(name) {
 function gsmLabel(gsm) {
   return /^\d/.test(gsm) ? gsm + " gsm" : gsm;
 }
-/* slug: lowercase hyphenated key used to map a fabric to its image file */
-function slug(name) {
-  return String(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+const PHOTO_SWATCHES = {
+  "B2-P34": { page: 1, labels: ["Mustard", "Pink", "Pale green / cream", "Light green", "Orange", "Yellow", "Orange red", "White", "Beige", "Black", "Red"] },
+  "B2-P35": { page: 2, labels: ["Aqua", "Cream / pale", "Yellow", "Olive", "Pale green", "Textured cream", "Orange", "Blue", "White swatch"] },
+  "B2-P36": { page: 3, labels: ["Black 1", "Red 1", "Black 2", "Blue", "Black 3", "Green", "Purple", "Peach", "Red 2"] },
+  "B2-P37": { page: 4, labels: ["Dark green", "Cream", "Olive", "Blue"] },
+  "B2-P38": { page: 5, labels: ["Green plaid", "Brown plaid", "Blue / green plaid", "Dark grey", "Grey pattern", "Peach", "Cream", "White"] },
+  "B2-P39": { page: 6, labels: ["Light blue", "Blue", "Orange", "Steel blue", "Dark grey", "Mint"] },
+  "B2-P42": { page: 9, labels: Array.from({ length: 14 }, (_, index) => `Design ${index + 1}`) },
+  "B2-P43": { page: 10, labels: ["001 group 1", "001 group 2", "002 group 1", "002 group 2", "003 group 1", "003 group 2", "003 group 3", "003 group 4", "004 group", "005 group", "Bottom blue visible group"] },
+  "B2-P45": { page: 12, labels: ["Pale pink", "Pale yellow", "Grey", "Cream", "Blue grey"] },
+  "B2-P46": { page: 13, labels: ["Bronze texture", "Black 1", "Black 2", "Black 3", "Black 4", "Black 5"] },
+  "B2-P47": { page: 14, labels: ["Embroidered cotton source sample"] },
+  "B2-P48": { page: 15, labels: ["TR polyester / rayon", "Voile 1", "Voile 2"] }
+};
+
+function sourceSwatches(id) {
+  const set = PHOTO_SWATCHES[id];
+  if (!set) return [];
+  return set.labels.map((label, index) => ({
+    label,
+    image: `assets/catalogue/book2-swatches/p${String(set.page).padStart(2, "0")}-swatch-${String(index + 1).padStart(2, "0")}.png`
+  }));
 }
 
-/* ---------- Catalogue data — Book 2 fabrics from the ASA inventory workbook ----------
-   Source: "Real ASA Fabric Inventory" Google Sheet, Book 2 page tabs (Page 34–48).
-   name  = the page-level Type / Item (verbatim from the sheet)   type = sheet category
-   use   = Category of Use                width / gsm : product specs (— where not recorded)
-   garments = what it's made into (tags + search)   detail : short factual line
-   image = assets/catalogue/<slug>.jpg — generated image mapped to the fabric by name.
-   NOTE: Book 2 rows are flagged "Needs Review" in the sheet; names are kept verbatim.
-   Only the eight rows with real design names are listed here — the sheet's generic
-   page labels ("Book 2 swatch page 0N" / "Book 2 packing list page NN") were dropped. */
+/* Complete Book 2 inventory: one card per page-level family/collection.
+   The variants arrays account for all 135 design and colour groups in Page 34-48.
+   imageBasis separates original source photos from pages with no attached swatch. */
 const fabrics = [
-  { id: "B2-01", name: "Embroidery Lucky Star A", type: "Shirting", use: "Shirting", width: "—", gsm: "—", garments: ["Shirts"], detail: "Embroidered shirting from ASA inventory Book 2 (page 39)." },
-  { id: "B2-02", name: "CVC Opar Embroidery 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC embroidered shirting, 44 inch width — ASA inventory Book 2 (page 40)." },
-  { id: "B2-03", name: "CVC O/R 44 inch pink/off", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "CVC shirting in pink / off shades, 44 inch width — ASA inventory Book 2 (page 41)." },
-  { id: "B2-04", name: "Chambray 60 inch Lucky Stock", type: "Shirting", use: "Shirting", width: '60"', gsm: "—", garments: ["Shirts"], detail: "Chambray shirting, 60 inch width — ASA inventory Book 2 (page 42)." },
-  { id: "B2-05", name: "Linen OPAL 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Linen shirting, 44 inch width — ASA inventory Book 2 (page 43)." },
-  { id: "B2-06", name: "Sin Ram 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Shirting stock, 44 inch width — ASA inventory Book 2 (page 44)." },
-  { id: "B2-07", name: "Embroidered cotton 44 inch", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Embroidered cotton shirting, 44 inch width — ASA inventory Book 2 (page 47)." },
-  { id: "B2-08", name: "Voile 44 inch / TR polyester rayon", type: "Shirting", use: "Shirting", width: '44"', gsm: "—", garments: ["Shirts"], detail: "Voile and TR polyester-rayon shirting, 44 inch width — ASA inventory Book 2 (page 48)." }
-].map((f) => ({ ...f, image: `assets/catalogue/${slug(f.name)}.jpg` }));
+  {
+    id: "B2-P34", name: "Book 2 swatch page 01", type: "Shirting", use: "Shirting",
+    width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 34", sourcePdf: "page_01.pdf",
+    imageBasis: "Original source photo",
+    detail: "Book 2 colour collection with 12 transcribed colour groups. The source page does not record a customer-facing fabric name.",
+    variants: ["Mustard", "Pink", "Pale green / cream", "Light green", "Green / orange edge", "Orange", "Yellow", "Orange red", "White / cream", "Beige", "Black", "Red"]
+  },
+  {
+    id: "B2-P35", name: "Book 2 swatch page 02", type: "Shirting", use: "Shirting",
+    width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 35", sourcePdf: "page_02.pdf",
+    imageBasis: "Original source photo",
+    detail: "Book 2 colour collection with nine transcribed colour and texture groups. The source page does not record a customer-facing fabric name.",
+    variants: ["Aqua", "Cream / pale", "Yellow", "Olive / cream", "Cream", "Textured cream", "Orange", "Blue", "Pale swatch"]
+  },
+  {
+    id: "B2-P36", name: "Book 2 swatch page 03", type: "Shirting", use: "Shirting",
+    width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 36", sourcePdf: "page_03.pdf",
+    imageBasis: "Original source photo",
+    detail: "Book 2 dark and bright colour collection with nine transcribed groups. The source page does not record a customer-facing fabric name.",
+    variants: ["Black / red / black", "Red / black", "Black / blue", "Light blue / black", "Green", "Purple", "Purple / peach", "Peach / red", "Red"]
+  },
+  {
+    id: "B2-P37", name: "Book 2 swatch page 04", type: "Shirting", use: "Shirting",
+    width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 37", sourcePdf: "page_04.pdf",
+    imageBasis: "Original source photo",
+    detail: "Book 2 green, cream, olive and blue collection with five transcribed groups. The source page does not record a customer-facing fabric name.",
+    variants: ["Top dark green group", "Middle dark green group", "Cream / olive / blue group", "Olive group", "Blue swatch"]
+  },
+  {
+    id: "B2-P38", name: "Book 2 swatch page 05", type: "Shirting", use: "Shirting",
+    width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 38", sourcePdf: "page_05.pdf",
+    imageBasis: "Original source photo",
+    detail: "Book 2 plaid, patterned and plain colour collection with eight transcribed groups. The source page does not record a customer-facing fabric name.",
+    variants: ["Green plaid", "Brown plaid", "Blue/green plaid", "Dark grey", "Grey pattern", "Peach", "Cream bulk group", "White bulk group"]
+  },
+  {
+    id: "B2-P39", name: "Embroidery Lucky Star A", type: "Shirting", use: "Shirting",
+    width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 39", sourcePdf: "page_06.pdf",
+    imageBasis: "Original source photo",
+    detail: "Embroidered shirting recorded in five colour groups in ASA inventory Book 2.",
+    variants: ["Light blue group", "Blue group", "Orange group", "Steel blue group", "Dark grey group"]
+  },
+  {
+    id: "B2-P40", name: "CVC Opar Embroidery 44 inch", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 40", sourcePdf: "page_07.pdf",
+    imageBasis: "Source photo required",
+    detail: "CVC embroidered shirting in four recorded designs. The packing-list photo has no attached fabric swatch, so no visual representation is shown.",
+    variants: ["Design 2296", "Design 2285", "Design 2130", "Design 2288"]
+  },
+  {
+    id: "B2-P41", name: "CVC O/R 44 inch pink/off", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 41", sourcePdf: "page_08.pdf",
+    imageBasis: "Source photo required",
+    detail: "CVC shirting in pink, off-white and white-mix groups. The packing-list photo has no attached fabric swatch, so no visual representation is shown.",
+    variants: ["#2292 P", "#2292 OF", "#2346 P", "#2246 OF", "#1696 P", "#2058 P", "White mix"]
+  },
+  {
+    id: "B2-P42", name: "Chambray 60 inch Lucky Stock", type: "Shirting", use: "Shirting",
+    width: '60"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 42", sourcePdf: "page_09.pdf",
+    imageBasis: "Original source photo",
+    detail: "Chambray shirting, 60 inch width, with 14 photographed and transcribed design groups.",
+    variants: ["Design 1", "Design 2", "Design 3", "Design 4", "Design 5", "Design 6", "Design 7", "Design 8", "Design 9", "Design 10", "Design 11", "Design 12", "Design 13", "Design 14"]
+  },
+  {
+    id: "B2-P43", name: "Linen OPAL 44 inch", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 43", sourcePdf: "page_10.pdf",
+    imageBasis: "Original source photo",
+    detail: "Linen shirting, 44 inch width, with 11 photographed and transcribed groups.",
+    variants: ["001 group 1", "001 group 2", "002 group 1", "002 group 2", "003 group 1", "003 group 2", "003 group 3", "003 group 4", "004 group", "005 group", "Bottom blue visible group"]
+  },
+  {
+    id: "B2-P44", name: "Sin Ram 44 inch", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 44", sourcePdf: "page_11.pdf",
+    imageBasis: "Source photo required",
+    detail: "Sin Ram shirting, 44 inch width, with 29 recorded design and colour groups. The packing-list photo has no attached fabric swatch, so no visual representation is shown.",
+    variants: ["1622 color 1", "1622 color 2", "1622 color 3", "1622 color 4", "1622 color 5", "0912 color 1", "0912 color 2", "0912 color 3", "0912 color 5", "1824 color 1", "1824 color 2", "1824 color 3", "1824 color 5", "1626 color 1", "1626 color 5", "1607 color 1", "1607 color 2", "1607 color 3", "1607 color 4", "1607 color 5", "1930 color 1", "1930 color 2", "1930 color 3", "1930 color 4", "1230 color 1", "1230 color 2", "1230 color 3", "1230 color 4", "1230 color 5"]
+  },
+  {
+    id: "B2-P45", name: "Book 2 packing list page 12", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 45", sourcePdf: "page_12.pdf",
+    imageBasis: "Original source photo",
+    detail: "Book 2 pale-colour collection with five photographed and transcribed groups. The handwritten item name needs confirmation.",
+    variants: ["Visible row 1", "Visible row 2", "Visible row 3", "Visible row 4", "Visible row 5"]
+  },
+  {
+    id: "B2-P46", name: "Book 2 packing list page 13", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 46", sourcePdf: "page_13.pdf",
+    imageBasis: "Original source photo",
+    detail: "Book 2 warm-brown and black collection with six photographed and transcribed groups. The handwritten item name needs confirmation.",
+    variants: ["Grid block 1", "Grid block 2", "Grid block 3", "Grid block 4", "Grid block 5", "Bottom visible line"]
+  },
+  {
+    id: "B2-P47", name: "Embroidered cotton 44 inch", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 47", sourcePdf: "page_14.pdf",
+    imageBasis: "Original source photo",
+    detail: "Embroidered cotton shirting, 44 inch width, with eight recorded designs.",
+    variants: ["Design 037", "Design 041", "Design 040", "Design 035", "Design 038", "Design 014", "Design 036", "Design 043"]
+  },
+  {
+    id: "B2-P48", name: "Voile 44 inch / TR polyester rayon", type: "Shirting", use: "Shirting",
+    width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 48", sourcePdf: "page_15.pdf",
+    imageBasis: "Original source photo",
+    detail: "Voile and TR polyester-rayon shirting, 44 inch width, recorded in three stock groups.",
+    variants: ["TR polyester/rayon group", "Voile group 1", "Voile group 2"]
+  }
+].map((f) => {
+  const swatches = sourceSwatches(f.id);
+  return {
+    ...f,
+    swatches,
+    image: swatches[0]?.image || null,
+    imageBasis: swatches.length
+      ? `${swatches.length} original source photo${swatches.length === 1 ? "" : "s"}`
+      : "Source photo required"
+  };
+});
 
 /* ---------- State ---------- */
 const state = { query: "", types: new Set(), uses: new Set() };
@@ -65,7 +185,8 @@ if (window.Fuse) {
       { name: "type", weight: 0.2 },
       { name: "use", weight: 0.15 },
       { name: "garments", weight: 0.15 },
-      { name: "detail", weight: 0.1 }
+      { name: "variants", weight: 0.15 },
+      { name: "detail", weight: 0.05 }
     ],
     threshold: 0.35, ignoreLocation: true, minMatchCharLength: 2
   });
@@ -126,18 +247,28 @@ function currentList() {
   return list;
 }
 function searchable(f) {
-  return `${f.name} ${f.type} ${f.use} ${f.garments.join(" ")} ${f.detail}`.toLowerCase();
+  return `${f.name} ${f.type} ${f.use} ${f.garments.join(" ")} ${f.variants.join(" ")} ${f.swatches.map((swatch) => swatch.label).join(" ")} ${f.detail}`.toLowerCase();
 }
 
 /* ---------- Render grid ---------- */
 function cardHtml(f, i) {
   const added = requestList.includes(f.id);
-  const meta = [f.use, f.width, gsmLabel(f.gsm)].join(" · ");
+  const meta = [
+    `${f.variants.length} variants`,
+    f.swatches.length ? `${f.swatches.length} source photo${f.swatches.length === 1 ? "" : "s"}` : null,
+    f.width === "-" ? null : f.width
+  ].filter(Boolean).join(" · ");
+  const image = f.image
+    ? `<img class="swatch-img" src="${escapeHtml(f.image)}" alt="${escapeHtml(f.name + " — " + f.type + " fabric swatch")}" loading="lazy" onerror="this.remove()">`
+    : "";
+  const swatchTag = f.image
+    ? `${f.swatches.length} source photo${f.swatches.length === 1 ? "" : "s"}`
+    : "Source photo required";
   return `<article class="fab-card${hasRendered ? "" : " reveal"}" style="--i:${i % 8}">
     <span class="fab-swatch" data-tone="${escapeHtml(f.type)}" aria-hidden="true">
       <span class="fab-mono">${escapeHtml(monogram(f.name))}</span>
-      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="${escapeHtml(f.name + " — " + f.type + " fabric swatch")}" loading="lazy" onerror="this.remove()">
-      <span class="fab-swatch-tag">Sample on request</span>
+      ${image}
+      <span class="fab-swatch-tag">${swatchTag}</span>
     </span>
     <div class="fab-info">
       <p class="fab-type">${escapeHtml(f.type)}</p>
@@ -155,7 +286,7 @@ function render() {
   grid.innerHTML = list.map(cardHtml).join("");
   emptyState.hidden = list.length > 0;
   const filtered = state.types.size || state.uses.size || state.query;
-  resultsCount.textContent = filtered ? `${list.length} of ${fabrics.length}` : `${fabrics.length} fabrics`;
+  resultsCount.textContent = filtered ? `${list.length} of ${fabrics.length} families` : `${fabrics.length} fabric families`;
   clearFiltersBtn.hidden = !filtered;
 
   grid.querySelectorAll(".fab-open").forEach((b) => b.addEventListener("click", () => openModal(b.dataset.id)));
@@ -173,23 +304,53 @@ function openModal(id) {
   const f = fabrics.find((x) => x.id === id);
   if (!f) return;
   const added = requestList.includes(f.id);
+  const image = f.image
+    ? `<img class="swatch-img" src="${escapeHtml(f.image)}" alt="${escapeHtml(f.name + " — " + f.type + " fabric swatch")}" onerror="this.remove()">`
+    : "";
+  const swatchTag = f.image ? f.swatches[0].label : "Source photo required";
+  const gallery = f.swatches.length ? `
+      <section class="m-gallery" aria-labelledby="photoHeading">
+        <div class="m-gallery-head">
+          <h3 id="photoHeading">Original source photos</h3>
+          <span>${f.swatches.length}</span>
+        </div>
+        <div class="m-gallery-grid">
+          ${f.swatches.map((swatch, index) => `
+            <button class="m-gallery-thumb${index === 0 ? " is-active" : ""}" type="button"
+              data-gallery-src="${escapeHtml(swatch.image)}" data-gallery-label="${escapeHtml(swatch.label)}"
+              aria-label="View ${escapeHtml(swatch.label)} source photo" aria-pressed="${index === 0 ? "true" : "false"}">
+              <img src="${escapeHtml(swatch.image)}" alt="" loading="lazy">
+              <span>${escapeHtml(swatch.label)}</span>
+            </button>`).join("")}
+        </div>
+      </section>` : "";
   modal.innerHTML = `<div class="m-inner">
     <button class="m-close" type="button" data-close aria-label="Close">&times;</button>
     <div class="m-banner" data-tone="${escapeHtml(f.type)}" aria-hidden="true">
       <span class="m-mono">${escapeHtml(monogram(f.name))}</span>
-      <img class="swatch-img" src="${escapeHtml(f.image)}" alt="${escapeHtml(f.name + " — " + f.type + " fabric swatch")}" onerror="this.remove()">
-      <span class="fab-swatch-tag">Sample on request</span>
+      ${image}
+      <span class="fab-swatch-tag" data-gallery-current>${escapeHtml(swatchTag)}</span>
     </div>
     <div class="m-body">
       <p class="m-type">${escapeHtml(f.type)}</p>
       <h2 class="m-name">${escapeHtml(f.name)}</h2>
       <p class="m-detail">${escapeHtml(f.detail)}</p>
+      ${gallery}
       <dl class="m-specs">
         ${specRow("Application", f.use)}
         ${specRow("Width", f.width)}
         ${specRow("Weight", gsmLabel(f.gsm))}
         ${specRow("Best for", f.garments.join(", "))}
+        ${specRow("Source", `${f.sourceTab} · ${f.sourcePdf}`)}
+        ${specRow("Image reference", f.imageBasis)}
       </dl>
+      <section class="m-variants" aria-labelledby="variantHeading">
+        <div class="m-variants-head">
+          <h3 id="variantHeading">Book 2 variants</h3>
+          <span>${f.variants.length}</span>
+        </div>
+        <ul>${f.variants.map((variant) => `<li>${escapeHtml(variant)}</li>`).join("")}</ul>
+      </section>
       <p class="m-quote">Pricing — <strong>quote on request.</strong> Sold by the roll or cut to length.</p>
       <div class="m-actions">
         <button class="btn btn-solid" type="button" data-act="sample">Request a sample <span aria-hidden="true">→</span></button>
@@ -201,6 +362,18 @@ function openModal(id) {
   </div>`;
   modal.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", () => modal.close()));
   modal.querySelectorAll("[data-act]").forEach((b) => b.addEventListener("click", () => modalAction(b.dataset.act, f)));
+  modal.querySelectorAll(".m-gallery-thumb").forEach((button) => button.addEventListener("click", () => {
+    const imageElement = modal.querySelector(".m-banner .swatch-img");
+    const currentLabel = modal.querySelector("[data-gallery-current]");
+    if (imageElement) imageElement.src = button.dataset.gallerySrc;
+    if (imageElement) imageElement.alt = `${f.name} — ${button.dataset.galleryLabel} fabric swatch`;
+    if (currentLabel) currentLabel.textContent = button.dataset.galleryLabel;
+    modal.querySelectorAll(".m-gallery-thumb").forEach((thumb) => {
+      const active = thumb === button;
+      thumb.classList.toggle("is-active", active);
+      thumb.setAttribute("aria-pressed", String(active));
+    });
+  }));
   if (typeof modal.showModal === "function") modal.showModal();
 }
 function modalAction(act, f) {
@@ -245,8 +418,11 @@ function renderDrawer() {
   body.innerHTML = requestList.map((id) => {
     const f = fabrics.find((x) => x.id === id);
     if (!f) return "";
+    const image = f.image
+      ? `<img class="swatch-img" src="${escapeHtml(f.image)}" alt="" loading="lazy" onerror="this.remove()">`
+      : "";
     return `<div class="drawer-item">
-      <span class="drawer-mono" data-tone="${escapeHtml(f.type)}" aria-hidden="true">${escapeHtml(monogram(f.name))}<img class="swatch-img" src="${escapeHtml(f.image)}" alt="" loading="lazy" onerror="this.remove()"></span>
+      <span class="drawer-mono" data-tone="${escapeHtml(f.type)}" aria-hidden="true">${escapeHtml(monogram(f.name))}${image}</span>
       <div class="drawer-item-body">
         <p class="drawer-item-name">${escapeHtml(f.name)}</p>
         <p class="drawer-item-cat">${escapeHtml(f.type)} · ${escapeHtml(f.use)}</p>
@@ -379,7 +555,7 @@ function exportPdf() {
   const when = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   ensurePrintHeader().innerHTML =
     `<div class="print-brand">Asa Fabric<small>Catalogue · ${escapeHtml(when)}</small></div>` +
-    `<div class="print-meta">${escapeHtml(String(list.length))} fabrics${facets.length ? "<br>" + escapeHtml(facets.join(" · ")) : ""}<br>Quality fabrics, by the roll or the cut · Quote on request</div>`;
+    `<div class="print-meta">${escapeHtml(String(list.length))} fabric families${facets.length ? "<br>" + escapeHtml(facets.join(" · ")) : ""}<br>135 Book 2 variants · Quote on request</div>`;
   document.body.classList.remove("printing-spec");
   window.print();
 }
@@ -387,12 +563,15 @@ function printSpecSheet(f) {
   let sheet = document.querySelector("#specSheet");
   if (!sheet) { sheet = document.createElement("div"); sheet.id = "specSheet"; document.body.appendChild(sheet); }
   const when = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const image = f.image
+    ? `<img class="swatch-img" src="${escapeHtml(f.image)}" alt="" onerror="this.remove()">`
+    : "";
   sheet.innerHTML = `
     <div class="print-header" style="display:flex">
       <div class="print-brand">Asa Fabric<small>Fabric Spec Sheet · ${escapeHtml(when)}</small></div>
       <div class="print-meta">${escapeHtml(f.id)}<br>Quote on request</div>
     </div>
-    <div class="spec-banner" data-tone="${escapeHtml(f.type)}"><span>${escapeHtml(monogram(f.name))}</span><img class="swatch-img" src="${escapeHtml(f.image)}" alt="" onerror="this.remove()"></div>
+    <div class="spec-banner" data-tone="${escapeHtml(f.type)}"><span>${escapeHtml(monogram(f.name))}</span>${image}</div>
     <p class="spec-cat">${escapeHtml(f.type)} · ${escapeHtml(f.use)}</p>
     <h2>${escapeHtml(f.name)}</h2>
     <p class="spec-detail">${escapeHtml(f.detail)}</p>
@@ -401,9 +580,13 @@ function printSpecSheet(f) {
       <div><span class="k">Width</span><span class="v">${escapeHtml(f.width)}</span></div>
       <div><span class="k">Weight</span><span class="v">${escapeHtml(gsmLabel(f.gsm))}</span></div>
       <div><span class="k">Best for</span><span class="v">${escapeHtml(f.garments.join(", "))}</span></div>
+      <div><span class="k">Book 2 groups</span><span class="v">${escapeHtml(String(f.variants.length))}</span></div>
+      <div><span class="k">Source</span><span class="v">${escapeHtml(`${f.sourceTab} · ${f.sourcePdf}`)}</span></div>
+      <div><span class="k">Image reference</span><span class="v">${escapeHtml(f.imageBasis)}</span></div>
       <div><span class="k">Format</span><span class="v">By the roll or cut to length</span></div>
       <div><span class="k">Pricing</span><span class="v">Quote on request</span></div>
     </div>
+    <p class="spec-detail"><strong>Variants:</strong> ${escapeHtml(f.variants.join(", "))}</p>
     <p class="spec-foot">ASA FABRIC · Quality fabrics, by the roll or the cut · Request a sample or quote any time.</p>`;
   if (modal.open) modal.close();
   document.body.classList.add("printing-spec");
