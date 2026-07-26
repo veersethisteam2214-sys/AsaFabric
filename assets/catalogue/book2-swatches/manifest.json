@@ -5,1667 +5,1764 @@
       {
         "label": "Mustard",
         "file": "p01-swatch-01.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           42,
           1264,
           535
         ],
         "dimensions": [
-          1222,
-          493
+          1200,
+          800
         ],
-        "pixelSha256": "be88caa720ef775f759a3a05283262caf08fcca6276a9c916b9b8986c03064e3",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "bc9e4b1ae3598b93ef38de84918ea35b93f6839cbf7f6f30004d9c3620f06c98",
+        "visualAudit": "passed"
       },
       {
         "label": "Pink",
         "file": "p01-swatch-02.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           519,
           1264,
           759
         ],
         "dimensions": [
-          1222,
-          240
+          1200,
+          800
         ],
-        "pixelSha256": "20edac2231644bfc71e67e5e110b4d0edde1d8faef04b19b266b98fbbf0facfb",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "1f57e47ce662da6f7e99b48b16746ab6babeb6ee8f10d40b6c18996e706d0d63",
+        "visualAudit": "passed"
       },
       {
         "label": "Pale green / cream",
         "file": "p01-swatch-03.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           743,
           1264,
           918
         ],
         "dimensions": [
-          1222,
-          175
+          1200,
+          800
         ],
-        "pixelSha256": "f79501463032f1db88bb9bf1c31b18463ea4d22aca719d43beede080efb5be7f",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "451979d4694b422e5ab4e04a150e0fdf35a9d84d1da575b95a7eb8dce0312b01",
+        "visualAudit": "passed"
       },
       {
         "label": "Light green",
         "file": "p01-swatch-04.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           898,
           1264,
           1092
         ],
         "dimensions": [
-          1222,
-          194
+          1200,
+          800
         ],
-        "pixelSha256": "d14a4c4edf29554a70cad55f8af05438acbab1000d5fbdd5a90f4a4b563a45f3",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "698113c8c147a75cb654b7533fdd6e8bbe4de91a23150c46811609cb47b8eb31",
+        "visualAudit": "passed"
       },
       {
         "label": "Orange",
         "file": "p01-swatch-05.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           1075,
           1264,
           1276
         ],
         "dimensions": [
-          1222,
-          201
+          1200,
+          800
         ],
-        "pixelSha256": "5c76a69beb5e88acd061077a86515b6e21fc05e6676dc0a0823e1ff4bce7a380",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "7c3f3847d0af25e0b01eb05ddc9c15b7fccd5874754a2c35d8ff46cd2c8a771a",
+        "visualAudit": "passed"
       },
       {
         "label": "Yellow",
         "file": "p01-swatch-06.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           1246,
           1264,
           1422
         ],
         "dimensions": [
-          1222,
-          176
+          1200,
+          800
         ],
-        "pixelSha256": "510d29a7e1692822054a3797e32d03716511fc59cdb83afd2860cb4fe0dddd68",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "f906543713c0fe240c289dd2804e80502623f04879e76fbdb16819775bba5a7b",
+        "visualAudit": "passed"
       },
       {
         "label": "Orange red",
         "file": "p01-swatch-07.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           1394,
           1264,
           1610
         ],
         "dimensions": [
-          1222,
-          216
+          1200,
+          800
         ],
-        "pixelSha256": "4d1e24e414abd73233b3f9b6a36711db841ea267190b9dcd226e4c63edba5190",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "c345eaf991e059bc42ebcb788824a2e9a901a8a40c047e36a2f4dc4aa308afb1",
+        "visualAudit": "passed"
       },
       {
         "label": "White",
         "file": "p01-swatch-08.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           1585,
           1264,
           1748
         ],
         "dimensions": [
-          1222,
-          163
+          1200,
+          800
         ],
-        "pixelSha256": "39f6c1cc3c9fd5f385414920b99c1628c4cb76896773b61815f66f4c312fe58c",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "09f90af4c9b80ec0195d47e0ce705e6333a3b8e17a1b36d98f42cfa08e56e7a7",
+        "visualAudit": "passed"
       },
       {
         "label": "Beige",
         "file": "p01-swatch-09.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           1719,
           1264,
           1889
         ],
         "dimensions": [
-          1222,
-          170
+          1200,
+          800
         ],
-        "pixelSha256": "6aaf9a131d551a7bc7343370efb1b7724ab38b5c64cc37c2979ad97e8a9a018a",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "6233905287831aa50d3cc6c0612d25ce05517037e4594067edc58eddd7fee7b9",
+        "visualAudit": "passed"
       },
       {
         "label": "Black",
         "file": "p01-swatch-10.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           1847,
           1264,
           2003
         ],
         "dimensions": [
-          1222,
-          156
+          1200,
+          800
         ],
-        "pixelSha256": "bfcdddbf79680ddcf2974ca595347f2dfa14b0987f88e763acccd36b2c8c0b54",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "c6bce7028ca35c8122affb15d04f27f8d37bd2ede926e07fdc2d23a3e5a93f49",
+        "visualAudit": "passed"
       },
       {
         "label": "Red",
         "file": "p01-swatch-11.png",
-        "source": "page_01.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_01.pdf",
+        "sourceCrop": [
           42,
           1955,
           1264,
           2108
         ],
         "dimensions": [
-          1222,
-          153
+          1200,
+          800
         ],
-        "pixelSha256": "9a94e7207d32c24453bd4e2690d7598b4c8d74c8241ccc1930624cab98cfd081",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1545,
-          2122
-        ]
+        "pixelSha256": "48ebd5910f2f80a55c0463e44e4180518d75f22a9c56dc7c9be773bd68838117",
+        "visualAudit": "passed"
       }
     ],
     "2": [
       {
         "label": "Aqua",
         "file": "p02-swatch-01.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           0,
           365,
           541
         ],
         "dimensions": [
-          365,
-          541
+          1200,
+          800
         ],
-        "pixelSha256": "6ae254038d0073fcde8a3940b96a1060ed95a232b813ecb8ebd126e95f811f6e",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "dc0082f0dca6966056d495de90acf97b94ea0d3f8f2b74dc2d77f0f03079160e",
+        "visualAudit": "passed"
       },
       {
         "label": "Cream / pale",
         "file": "p02-swatch-02.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           301,
           327,
           754
         ],
         "dimensions": [
-          327,
-          453
+          1200,
+          800
         ],
-        "pixelSha256": "2c0e1a318d5c0a0fcbfa02e953b2a905b66794ef81f52ea5ab1060477f0b0d04",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "18b41819bfc7e16f342dfc0af355ca2866b7755bd3da8f5974248d764933720d",
+        "visualAudit": "passed"
       },
       {
         "label": "Yellow",
         "file": "p02-swatch-03.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           678,
           327,
           980
         ],
         "dimensions": [
-          327,
-          302
+          1200,
+          800
         ],
-        "pixelSha256": "d30fb17e7f1fc1d1836063b05ef3af6a0ebbdd7a7af314cc714b2ecb2734c1ad",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "5acb85dfd1760868671326138c25795121bc2573f3bded6eb6e05bb2b1821ef7",
+        "visualAudit": "passed"
       },
       {
         "label": "Olive",
         "file": "p02-swatch-04.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           954,
           322,
           1194
         ],
         "dimensions": [
-          322,
-          240
+          1200,
+          800
         ],
-        "pixelSha256": "009cdb6f68b6b33cd77506861d1e91bf9d505d6992c1313a66fa72dc3a482f96",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "64508650c9a2a81a432e8ceeb19d7b8892434a8289ef69fcdb49437ea9f62255",
+        "visualAudit": "passed"
       },
       {
         "label": "Pale green",
         "file": "p02-swatch-05.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           1143,
           340,
           1407
         ],
         "dimensions": [
-          340,
-          264
+          1200,
+          800
         ],
-        "pixelSha256": "fa8f864edfabfafdf2b6190378a14980dfbc6267d5701c096895afbc816ce778",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "0b08eed26e7f4bcef8d792e22733a6ad60f508ea31fc27bf419a61cef938d1ff",
+        "visualAudit": "passed"
       },
       {
         "label": "Textured cream",
         "file": "p02-swatch-06.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           1344,
           340,
           1684
         ],
         "dimensions": [
-          340,
-          340
+          1200,
+          800
         ],
-        "pixelSha256": "02ee564db6976c5e4df9f2cdc70d12ea9ff5328e304901e744ce85a8d3764d26",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "ebef9cdb0ae0d583ddbcea8cc7cfb829575e289d30ee78347777e8bec16a274f",
+        "visualAudit": "passed"
       },
       {
         "label": "Orange",
         "file": "p02-swatch-07.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           1633,
           327,
           1922
         ],
         "dimensions": [
-          327,
-          289
+          1200,
+          800
         ],
-        "pixelSha256": "416c909953771f6a31c897727cb1ffe54d0e334f43cc35da007532f18e97b461",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "95810d9ababbdae5f612753fa002c2fd0019758f57e654b2d8a743b5291ec99c",
+        "visualAudit": "passed"
       },
       {
         "label": "Blue",
         "file": "p02-swatch-08.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           0,
           1846,
           365,
           2270
         ],
         "dimensions": [
-          365,
-          424
+          1200,
+          800
         ],
-        "pixelSha256": "a86ef821fbeaa808715813dfd87cab76291169dc2c279e8b1a6a62bfbce09b7a",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "8112f82d6ca165e53ca300ea5f6b5fb102cafd03aed365e4b8982153ac1bdadb",
+        "visualAudit": "passed"
       },
       {
         "label": "White swatch",
         "file": "p02-swatch-09.png",
-        "source": "page_02.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_02.pdf",
+        "sourceCrop": [
           728,
           1909,
           1458,
           2270
         ],
         "dimensions": [
-          730,
-          361
+          1200,
+          751
         ],
-        "pixelSha256": "ecea041c3dd4d066c7e1a5fbccfc00c26ee14934754ab5b3cc3beb5528900d9c",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1628,
-          2270
-        ]
+        "pixelSha256": "d8203fddb58c1f5d05351e8f7338fff504c02673fe3c8aa9f3a488e85e07329e",
+        "visualAudit": "passed"
       }
     ],
     "3": [
       {
         "label": "Black 1",
         "file": "p03-swatch-01.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           0,
           316,
           242
         ],
         "dimensions": [
-          316,
-          242
+          1200,
+          800
         ],
-        "pixelSha256": "af0ca2518f775e046996b91882eb518b0abb3840f809bdb2e02cc9fa96aeb95f",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "d35fff039c5646ba75af4b76514535bb39ceb6ec8bece567dd4a20db29673460",
+        "visualAudit": "passed"
       },
       {
         "label": "Red 1",
         "file": "p03-swatch-02.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           220,
           316,
           452
         ],
         "dimensions": [
-          316,
-          232
+          1200,
+          800
         ],
-        "pixelSha256": "b9144493f373b25912ac209ca47136aa43591c7304014fd70deb1a7995714b2b",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "261f3e75ccdfd36bcdd648dd2ad70951e22acefd19e21a2e3eba0ea5432b92ef",
+        "visualAudit": "passed"
       },
       {
         "label": "Black 2",
         "file": "p03-swatch-03.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           420,
           316,
           673
         ],
         "dimensions": [
-          316,
-          253
+          1200,
+          800
         ],
-        "pixelSha256": "86d32722dddd828a8171e3cc787ccb2168a6ff4c6f911b93dbe7a1e48afc7649",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "4e602a6c0265d4d4fc5a22bb505a6ed4c062b4a71645be3d7bc0fc3268fcd741",
+        "visualAudit": "passed"
       },
       {
         "label": "Blue",
         "file": "p03-swatch-04.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           630,
           316,
           810
         ],
         "dimensions": [
-          316,
-          180
+          1200,
+          800
         ],
-        "pixelSha256": "4ecb5caadd5f88a98c777c535c190b18e8a0f07f43e011adc04bdb6482ea0ed7",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "8a57f584f1cdf5b9b367c9aae03b68383c8bb9492ffca4eaee33c33700085ea3",
+        "visualAudit": "passed"
       },
       {
         "label": "Black 3",
         "file": "p03-swatch-05.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           756,
           316,
           957
         ],
         "dimensions": [
-          316,
-          201
+          1200,
+          800
         ],
-        "pixelSha256": "5883626c9ff48f28cd518bac2463a84fe510e72bf4f97844aa693a995ca82e72",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "508d4277002c9570b41f286ac2e88e8fb09dbda0651a9f248d683c2fd2e57277",
+        "visualAudit": "passed"
       },
       {
         "label": "Green",
         "file": "p03-swatch-06.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           914,
           316,
           1104
         ],
         "dimensions": [
-          316,
-          190
+          1200,
+          800
         ],
-        "pixelSha256": "2827c5c331036cdfad3f88c7a9fd5e5bfc19e555bc89618543d3a723569bd639",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "b50d8ef95f1b9a5a51c0228e47d25d14ba8c35eaf166bfddda315b65ebaf8db0",
+        "visualAudit": "passed"
       },
       {
         "label": "Purple",
         "file": "p03-swatch-07.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           1061,
           316,
           1325
         ],
         "dimensions": [
-          316,
-          264
+          1200,
+          800
         ],
-        "pixelSha256": "0ef3811104cc959683d028c0cbdf233871f6835e5041d40925f1737ec1d4f493",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "5324193c357761309b372cb39077d46f5332f2107715c7095a5a402c4800dbd7",
+        "visualAudit": "passed"
       },
       {
         "label": "Peach",
         "file": "p03-swatch-08.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           1282,
           316,
           1472
         ],
         "dimensions": [
-          316,
-          190
+          1200,
+          800
         ],
-        "pixelSha256": "2131615ba6c2ba84cac39acb3bbea994a22cce7bceb4b354a23347d2f029d21d",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "ca3459daf3818a2110eab141c3693dbb2eb06a933813666866f39156f191ab48",
+        "visualAudit": "passed"
       },
       {
         "label": "Red 2",
         "file": "p03-swatch-09.png",
-        "source": "page_03.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_03.pdf",
+        "sourceCrop": [
           0,
           1429,
           316,
           1839
         ],
         "dimensions": [
-          316,
-          410
+          1200,
+          800
         ],
-        "pixelSha256": "53771d6bddea36f612233359e5b95ebce651388a9a5d2db0e53639fa79150488",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1364,
-          2034
-        ]
+        "pixelSha256": "ff9957c86c0cc5b712c05c48f8846f2830fd1b22b87d4f5279e70fc8cd75c8bc",
+        "visualAudit": "passed"
       }
     ],
     "4": [
       {
         "label": "Dark green",
         "file": "p04-swatch-01.png",
-        "source": "page_04.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_04.pdf",
+        "sourceCrop": [
           41,
           55,
           321,
           696
         ],
         "dimensions": [
-          280,
-          641
+          1200,
+          800
         ],
-        "pixelSha256": "d526c19abcac018e6297fdbf8a2671b437505825d68bfc7b5bf93b57bb134e74",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1804,
-          2607
-        ]
+        "pixelSha256": "e6ca367d849bbcb41729a7f26a6037da737dfaacb021435c092a51392033ca77",
+        "visualAudit": "passed"
       },
       {
         "label": "Cream",
         "file": "p04-swatch-02.png",
-        "source": "page_04.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_04.pdf",
+        "sourceCrop": [
           41,
           682,
           321,
           891
         ],
         "dimensions": [
-          280,
-          209
+          1200,
+          800
         ],
-        "pixelSha256": "bea62df0802dd7cc4845e5529ff01a16e67a53fc8a5b06da0b312f68dae57636",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1804,
-          2607
-        ]
+        "pixelSha256": "07539c43e68ad6e100eaf9f73b9524050f8290fe5df7f9d31ecd4c6c1507bf7b",
+        "visualAudit": "passed"
       },
       {
         "label": "Olive",
         "file": "p04-swatch-03.png",
-        "source": "page_04.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_04.pdf",
+        "sourceCrop": [
           41,
           849,
           307,
           1128
         ],
         "dimensions": [
-          266,
-          279
+          1200,
+          800
         ],
-        "pixelSha256": "2ed307f7e1c7a6083f5f0605c5f4c50b33a397d553f81612d80e42eb1402601d",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1804,
-          2607
-        ]
+        "pixelSha256": "8611a8089c490e39452e423dd92484ecbb7a0418f5e39216515a02b23a3f2f8a",
+        "visualAudit": "passed"
       },
       {
         "label": "Blue",
         "file": "p04-swatch-04.png",
-        "source": "page_04.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_04.pdf",
+        "sourceCrop": [
           27,
           1085,
           307,
           1406
         ],
         "dimensions": [
-          280,
-          321
+          1200,
+          800
         ],
-        "pixelSha256": "9a0539c75fa75fa7c3fa461ce9b2dc50a1b289a615a100fe6b03233b6cadfb3c",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1804,
-          2607
-        ]
+        "pixelSha256": "bef961c006dc0280e2a84d56e8435886f9d38d7e1c8b7c8788e4e2b767cd3211",
+        "visualAudit": "passed"
       }
     ],
     "5": [
       {
         "label": "Green plaid",
         "file": "p05-swatch-01.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           26,
           39,
           332,
           478
         ],
         "dimensions": [
-          306,
-          439
+          1200,
+          800
         ],
-        "pixelSha256": "f465cdab24e6ae5fd3ee46ce8a1c93bf8af7e2cde1c738b9578643b7b1e14299",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "893dc9e081271c110f43f483ec9863c7885bff5df993e51e490806286cdcdcdd",
+        "visualAudit": "passed"
       },
       {
         "label": "Brown plaid",
         "file": "p05-swatch-02.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           954,
           0,
           1247,
           451
         ],
         "dimensions": [
-          293,
-          451
+          1200,
+          800
         ],
-        "pixelSha256": "1495caa184322d84f2bc08c9c3de38d74fe9e653889d7d0a98b9958ec332df18",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "1c047b163aad68e8ea11e572f32605b37a57b460ed36d404bd7aec1115e689be",
+        "visualAudit": "passed"
       },
       {
         "label": "Blue / green plaid",
         "file": "p05-swatch-03.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           26,
           463,
           319,
           783
         ],
         "dimensions": [
-          293,
-          320
+          1200,
+          800
         ],
-        "pixelSha256": "7b280374233ae3b696b75c7342e347b6fee15613f1140b47144bcd8a096131c0",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "812088f2c45bfb31c2e4732e1c78f399177ef1388e81bee69ab1a21a912a631b",
+        "visualAudit": "passed"
       },
       {
         "label": "Dark grey",
         "file": "p05-swatch-04.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           26,
           755,
           332,
           1127
         ],
         "dimensions": [
-          306,
-          372
+          1200,
+          800
         ],
-        "pixelSha256": "c6cbbea32b7508be836598b4e66978b771190597e9785a329c9eb247b2b5e596",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "f8983c1cb5130e887eabae8b205cf95a312fd430187ab74de13fcc1427b67584",
+        "visualAudit": "passed"
       },
       {
         "label": "Grey pattern",
         "file": "p05-swatch-05.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           13,
           1073,
           345,
           1419
         ],
         "dimensions": [
-          332,
-          346
+          1200,
+          800
         ],
-        "pixelSha256": "82a6de1dab111b9a57a2ed6a868f6b9f55beac62b538ff9191016593091b91e6",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "d6e01a5b4231db0b299b3df40de1d44cbf919f66fa91dab12efb952a428fdaa7",
+        "visualAudit": "passed"
       },
       {
         "label": "Peach",
         "file": "p05-swatch-06.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           13,
           1378,
           345,
           1671
         ],
         "dimensions": [
-          332,
-          293
+          1200,
+          800
         ],
-        "pixelSha256": "30afe5e78dbe8cac32289a5ba0ff3aef3b11dbdc319fa81802d916cdc0256761",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "68132a08cb55c6971ccd3ce8ebb533871817ea5554575bc2e09104855670fd80",
+        "visualAudit": "passed"
       },
       {
         "label": "Cream",
         "file": "p05-swatch-07.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           13,
           1617,
           358,
           2068
         ],
         "dimensions": [
-          345,
-          451
+          1200,
+          800
         ],
-        "pixelSha256": "28bcd89f00caea83a6aac9980c3a37792aef49a2662b6b407515c8d8cb82cf0d",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "bf7acc5f17377a7e0bcd2c38c4ff85fa86298a1e55568d7619486b10a13b0f87",
+        "visualAudit": "passed"
       },
       {
         "label": "White",
         "file": "p05-swatch-08.png",
-        "source": "page_05.pdf",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_05.pdf",
+        "sourceCrop": [
           13,
           2014,
           372,
           2519
         ],
         "dimensions": [
-          359,
-          505
+          1200,
+          800
         ],
-        "pixelSha256": "dc29c82567a67e4ae146c48c95ea4f48ec387a2296ab82751172c729237ac7dc",
-        "pixelIdentity": true,
-        "sourceDimensions": [
-          1718,
-          2532
-        ]
+        "pixelSha256": "ace86b273b01567b9a5c2a8449904457c5fd983146f938258fc45b47c7a02971",
+        "visualAudit": "passed"
       }
     ],
     "6": [
       {
         "label": "Light blue",
         "file": "p06-swatch-01.png",
-        "source": "page_06.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_06.jpg",
+        "sourceCrop": [
           0,
           380,
           330,
           720
         ],
         "dimensions": [
-          330,
-          340
+          1200,
+          800
         ],
-        "pixelSha256": "9846a4674bd2ffebe57bb71b84c01e8c9a283a05dd3c45d52f4b9da65fecbd6e",
-        "pixelIdentity": true
+        "pixelSha256": "bc405388e6900db92a8e8be6dc61e5225a6327e511183f741e93e482587421b0",
+        "visualAudit": "passed"
       },
       {
         "label": "Blue",
         "file": "p06-swatch-02.png",
-        "source": "page_06.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_06.jpg",
+        "sourceCrop": [
           20,
           760,
           350,
           1120
         ],
         "dimensions": [
-          330,
-          360
+          1200,
+          800
         ],
-        "pixelSha256": "2e20d3d731abf7698ecd0ce42f44124f5a6c5ea5d3f78db634f47fd48fb01541",
-        "pixelIdentity": true
+        "pixelSha256": "e883379a6eba8abd518157dbe9b7a5e7aa8b5d272188a71e58da90710c1e5c73",
+        "visualAudit": "passed"
       },
       {
         "label": "Orange",
         "file": "p06-swatch-03.png",
-        "source": "page_06.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_06.jpg",
+        "sourceCrop": [
           25,
           1110,
           350,
           1450
         ],
         "dimensions": [
-          325,
-          340
+          1200,
+          800
         ],
-        "pixelSha256": "01db07f121432d2698330ca0241e711c31af3a2eb26ea6ccc6cd0b8dc6175702",
-        "pixelIdentity": true
+        "pixelSha256": "716aec565bbaf0690eabd17058707b96e6c3e06eba4d6557c20a53638d789c3d",
+        "visualAudit": "passed"
       },
       {
         "label": "Steel blue",
         "file": "p06-swatch-04.png",
-        "source": "page_06.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_06.jpg",
+        "sourceCrop": [
           45,
           1430,
           390,
           1770
         ],
         "dimensions": [
-          345,
-          340
+          1200,
+          800
         ],
-        "pixelSha256": "ad5e60527e449279c0fcafaaa354a8537fbbeb38f3a938cf854735e1cfe5f671",
-        "pixelIdentity": true
+        "pixelSha256": "2d2b947b98bad13ec52dc9be244c7637bbf51d2b075e33f5489bc55da2912194",
+        "visualAudit": "passed"
       },
       {
         "label": "Dark grey",
         "file": "p06-swatch-05.png",
-        "source": "page_06.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_06.jpg",
+        "sourceCrop": [
           20,
           1740,
           430,
           2150
         ],
         "dimensions": [
-          410,
-          410
+          1200,
+          800
         ],
-        "pixelSha256": "79857ba336879ca21af5fda6a41bac9cdfee8c228f862ec57dd6475c2afbda99",
-        "pixelIdentity": true
+        "pixelSha256": "3d123be50fa52eae3ab36731bbe84fc1d3fcc674465016e38d174d75c45b15a4",
+        "visualAudit": "passed"
       },
       {
         "label": "Mint",
         "file": "p06-swatch-06.png",
-        "source": "page_06.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_06.jpg",
+        "sourceCrop": [
           60,
           2080,
           460,
           2460
         ],
         "dimensions": [
-          400,
-          380
+          1200,
+          800
         ],
-        "pixelSha256": "7555def3bd898d6543e471bd6eb74142de9e69421bd2b8bbe0c3cf06cd879c33",
-        "pixelIdentity": true
+        "pixelSha256": "c37baf66d5210c32bb23468175662931d5d4bca01512ba4f2feff8dd7167de38",
+        "visualAudit": "passed"
       }
     ],
     "9": [
       {
         "label": "Design 1",
         "file": "p09-swatch-01.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           18,
           470,
           385,
           705
         ],
         "dimensions": [
-          367,
-          235
+          1200,
+          800
         ],
-        "pixelSha256": "5de5c2d57c2012fe52f1d5d8935a7dd721363c2b3c8b315f18685066fc154c88",
-        "pixelIdentity": true
+        "pixelSha256": "9efae2c8f777b860260607a7957745affd719f5ceeb209a726629fa3fdd01aff",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 2",
         "file": "p09-swatch-02.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           30,
           680,
           385,
           835
         ],
         "dimensions": [
-          355,
-          155
+          1200,
+          800
         ],
-        "pixelSha256": "5bb0fcc8084ef1aff76b0492d8670b4e2478aee8647638113f1518016ed80494",
-        "pixelIdentity": true
+        "pixelSha256": "e4e9ab75d1c1ce80cca8d124da2ab46432eb3d763aabbe543c66d253855b3cd3",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 3",
         "file": "p09-swatch-03.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           30,
           815,
           390,
           980
         ],
         "dimensions": [
-          360,
-          165
+          1200,
+          800
         ],
-        "pixelSha256": "7bda262a55e3eb090edc5d75151b1d3d7262898d6e519a342897ac3357902bba",
-        "pixelIdentity": true
+        "pixelSha256": "822a71a40ac4c5f6ef8bfcd3d138e817b28bc3fc6fd07c15d823a8babc867399",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 4",
         "file": "p09-swatch-04.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           30,
           955,
           395,
           1110
         ],
         "dimensions": [
-          365,
-          155
+          1200,
+          800
         ],
-        "pixelSha256": "51459cf5c4993a89b131f0575a69764e3071fd087f73f5fb0d8c3691205e6e4c",
-        "pixelIdentity": true
+        "pixelSha256": "2e15d69d497d4f9fd9fdfa43135b655c630f0cbf45e3012ca4e2b5ccabef7547",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 5",
         "file": "p09-swatch-05.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           30,
           1080,
           395,
           1220
         ],
         "dimensions": [
-          365,
-          140
+          1200,
+          800
         ],
-        "pixelSha256": "2d4a08012339417a7113dbcb1e923e29a8752970eba62dd5d3a1178f2901cb50",
-        "pixelIdentity": true
+        "pixelSha256": "c2b6a2aa7df5cdce276bbce4afa3b68649fa376816d9c9c9aeaf455634cb0316",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 6",
         "file": "p09-swatch-06.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           30,
           1190,
           390,
           1360
         ],
         "dimensions": [
-          360,
-          170
+          1200,
+          800
         ],
-        "pixelSha256": "8c86b85e286b6e72cadd4fef63a17f7fb58d5d0e7643ee818dc5e1575e16eb83",
-        "pixelIdentity": true
+        "pixelSha256": "4bade711061b8d458b9f558a16a6879999ee800b3651f652ed1070ac349dab92",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 7",
         "file": "p09-swatch-07.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           30,
           1325,
           390,
           1480
         ],
         "dimensions": [
-          360,
-          155
+          1200,
+          800
         ],
-        "pixelSha256": "84a009166129ef72e188e45b482092f886e88a456897ac3e7fc546d76ddb484a",
-        "pixelIdentity": true
+        "pixelSha256": "10ae59afa056868fce74ab6e6cca8249fe86dba79c92b6611a6342fcd4cf9a7f",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 8",
         "file": "p09-swatch-08.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           25,
           1445,
           385,
           1600
         ],
         "dimensions": [
-          360,
-          155
+          1200,
+          800
         ],
-        "pixelSha256": "8ddb16f60ff26e1e834e9d674b72276a37ed075cbaafbb8c339f5788a3b56249",
-        "pixelIdentity": true
+        "pixelSha256": "acd9f1fce3c008289ada5bc196111225951c559a53aa03195808622632aaa24f",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 9",
         "file": "p09-swatch-09.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           25,
           1570,
           380,
           1730
         ],
         "dimensions": [
-          355,
-          160
+          1200,
+          800
         ],
-        "pixelSha256": "c4dc2b2064e83401cfbed6ec8a6beafc60652beb9443151b58d43fc3070b1ff9",
-        "pixelIdentity": true
+        "pixelSha256": "13f87c720d6c7ccd67d746706d3d986aa1dd90e76ab4ab183e47b3c321e32dab",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 10",
         "file": "p09-swatch-10.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           15,
           1690,
           390,
           1860
         ],
         "dimensions": [
-          375,
-          170
+          1200,
+          800
         ],
-        "pixelSha256": "725cdcc7299a560c54ffa20a45b7865543f95c7f02430ed817c28740ec258bc0",
-        "pixelIdentity": true
+        "pixelSha256": "ffa78f9323c2f33ae01905b7e5ed5c76b7935f413b0b4e91c460ae8b514fe960",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 11",
         "file": "p09-swatch-11.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           15,
           1810,
           385,
           1990
         ],
         "dimensions": [
-          370,
-          180
+          1200,
+          800
         ],
-        "pixelSha256": "4779c01aa16de081ac2704a2c5871e5d091e2cbc2dc008d0caf1a27d95e85110",
-        "pixelIdentity": true
+        "pixelSha256": "959d5182e9e4dc04b1e4a5e1d7b108fabc67826bb9055d4f380ec7a409ae7418",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 12",
         "file": "p09-swatch-12.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           10,
           1940,
           390,
           2120
         ],
         "dimensions": [
-          380,
-          180
+          1200,
+          800
         ],
-        "pixelSha256": "5143dc0c709ab2e7289691f4e4c5e5e6168ca480941571be380412a1f516cc40",
-        "pixelIdentity": true
+        "pixelSha256": "683af2f2fc928ed9f5fbf6519a35602a01bb3c5a1006f69e09126f6ee00c7d19",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 13",
         "file": "p09-swatch-13.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           20,
           2070,
           390,
           2260
         ],
         "dimensions": [
-          370,
-          190
+          1200,
+          800
         ],
-        "pixelSha256": "0764c761002333fd19e0438d11703eee0cadd7bd4f50604ab85ca96c4e880819",
-        "pixelIdentity": true
+        "pixelSha256": "ece60919b99240bcb7b10c8f8b1372f48a959e9b3d703080ab2d7f8c56f478e5",
+        "visualAudit": "passed"
       },
       {
         "label": "Design 14",
         "file": "p09-swatch-14.png",
-        "source": "page_09.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_09.jpg",
+        "sourceCrop": [
           760,
           2140,
           1120,
           2275
         ],
         "dimensions": [
-          360,
-          135
+          1200,
+          800
         ],
-        "pixelSha256": "34714b71a4e7eb22419f2b5af13476b9f11b69962a86c596ad3c28cbe6df8bc0",
-        "pixelIdentity": true
+        "pixelSha256": "f6db7748e20782ee2ff49f051a4025e2da3084af68f8a8edfeddbe1aa60f09a4",
+        "visualAudit": "passed"
       }
     ],
     "10": [
       {
         "label": "001 group 1",
         "file": "p10-swatch-01.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           175,
           265,
           610
         ],
         "dimensions": [
-          265,
-          435
+          1200,
+          800
         ],
-        "pixelSha256": "b1a463139e415b91aa10821b6e9b41f4ec1dab6863b614328acd4575d7b78fc5",
-        "pixelIdentity": true
+        "pixelSha256": "247ba58b2463449902211cc5ae08e6f0a61d0071c325d6cd85a7e405ae260abc",
+        "visualAudit": "passed"
       },
       {
         "label": "001 group 2",
         "file": "p10-swatch-02.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           555,
           275,
           835
         ],
         "dimensions": [
-          275,
-          280
+          1200,
+          800
         ],
-        "pixelSha256": "2a47611282605e90e9ac13421614fe70d94593bedc5065cd2b583f8560b6b823",
-        "pixelIdentity": true
+        "pixelSha256": "34245b78644deb3be983c992caa01b3db6c2a9036ef50b1a4b434c118012dfda",
+        "visualAudit": "passed"
       },
       {
         "label": "002 group 1",
         "file": "p10-swatch-03.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           800,
           235,
           1035
         ],
         "dimensions": [
-          235,
-          235
+          1200,
+          800
         ],
-        "pixelSha256": "04962af5bd6bf0fc149e58df0f8ddc4c0955cfd3fc12b06eac3c2eb875a8fe55",
-        "pixelIdentity": true
+        "pixelSha256": "71f04be87ad41b16f905d1f0b45862ab98d862e20cecee94f1f94447c39e08c0",
+        "visualAudit": "passed"
       },
       {
         "label": "002 group 2",
         "file": "p10-swatch-04.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           45,
           960,
           245,
           1225
         ],
         "dimensions": [
-          200,
-          265
+          1200,
+          800
         ],
-        "pixelSha256": "919f9d2d194d98ed936cdaf38a3f965f9e09d5ad94f1e1f52326699a81908198",
-        "pixelIdentity": true
+        "pixelSha256": "eed7d7be1ad2f63c0ee9a663ea328ae709c070a4285fe77b352dd9863cae9b8d",
+        "visualAudit": "passed"
       },
       {
         "label": "003 group 1",
         "file": "p10-swatch-05.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           1160,
           250,
           1460
         ],
         "dimensions": [
-          250,
-          300
+          1200,
+          800
         ],
-        "pixelSha256": "6899df0b50b37c67acf08e0ff0a482399c18245567a7e9e2d2bb0f267de53f32",
-        "pixelIdentity": true
+        "pixelSha256": "a7d3e5d22d51d6cc84cef3994ce776553dfcc5bf2eede7a7baf5f4d00cd066e9",
+        "visualAudit": "passed"
       },
       {
         "label": "003 group 2",
         "file": "p10-swatch-06.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           1390,
           245,
           1660
         ],
         "dimensions": [
-          245,
-          270
+          1200,
+          800
         ],
-        "pixelSha256": "bd436a2ff25c72ff90e9ae75b913f2e3ceabacb6c3d0f875233b44c4610e109c",
-        "pixelIdentity": true
+        "pixelSha256": "7164ce596d0b36f89a6e8811a805e1c6d6b046948a5338c4970abe04a6e18ab7",
+        "visualAudit": "passed"
       },
       {
         "label": "003 group 3",
         "file": "p10-swatch-07.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           1590,
           250,
           1880
         ],
         "dimensions": [
-          250,
-          290
+          1200,
+          800
         ],
-        "pixelSha256": "7e329e8ba17448eb91cc45fbdd52785a1bb7fcb0a56c9ac21273d078ebb52776",
-        "pixelIdentity": true
+        "pixelSha256": "63b55a186c122c160697073bc695cbea51c95668280b72aeb0420359a38d2d06",
+        "visualAudit": "passed"
       },
       {
         "label": "003 group 4",
         "file": "p10-swatch-08.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           1810,
           240,
           2085
         ],
         "dimensions": [
-          240,
-          275
+          1200,
+          800
         ],
-        "pixelSha256": "5ee80048e14d58bfc3e388be118dca4908aa39e4a4618a74889b7d13bee0d8c9",
-        "pixelIdentity": true
+        "pixelSha256": "0d6f1c5050832fc4b8000b9f74ab2ca50d93ae9668116a1a4d17fad15f46c7de",
+        "visualAudit": "passed"
       },
       {
         "label": "004 group",
         "file": "p10-swatch-09.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           2010,
           245,
           2285
         ],
         "dimensions": [
-          245,
-          275
+          1200,
+          800
         ],
-        "pixelSha256": "e5d2bcd0e526eb72fa4d14f4fe72adc162187b2fd43cac50679e54ea000ab395",
-        "pixelIdentity": true
+        "pixelSha256": "436188a2c7a63f5041b5dbf67f93e5c54e43b054795d9c6a93ec50d47de51f05",
+        "visualAudit": "passed"
       },
       {
         "label": "005 group",
         "file": "p10-swatch-10.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           0,
           2180,
           265,
           2510
         ],
         "dimensions": [
-          265,
-          330
+          1200,
+          800
         ],
-        "pixelSha256": "6e819e1ddc603daa95c30c528576bb80196a16b6a556fc087842a46e0ab29ecf",
-        "pixelIdentity": true
+        "pixelSha256": "b242c3d0db6240d257126d8cdf59730bede70dedf91437523d21756f0a484b38",
+        "visualAudit": "passed"
       },
       {
         "label": "Bottom blue visible group",
         "file": "p10-swatch-11.png",
-        "source": "page_10.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_10.jpg",
+        "sourceCrop": [
           810,
           2280,
           1180,
           2629
         ],
         "dimensions": [
-          370,
-          349
+          1200,
+          800
         ],
-        "pixelSha256": "77d505dc6cdd5132108df9f89e1897d8d9363f9d08f647bead09b6df382e1d73",
-        "pixelIdentity": true
+        "pixelSha256": "98788da101e4f8aeb5cf9c3475d69fbdd805b5aba50540305eb9afa0aa750661",
+        "visualAudit": "passed"
       }
     ],
     "12": [
       {
         "label": "Pale pink",
         "file": "p12-swatch-01.png",
-        "source": "page_12.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_12.jpg",
+        "sourceCrop": [
           1600,
           520,
           1776,
           760
         ],
         "dimensions": [
-          176,
-          240
+          1200,
+          800
         ],
-        "pixelSha256": "2b5617460a9ed889d1a0ad85dadcdc8f86bd65071ed81b3b9d1f5d1509c69c64",
-        "pixelIdentity": true
+        "pixelSha256": "784eeae0ff32035104ffd183df614211244e93cacde129ef48413a6c4270a0b6",
+        "visualAudit": "passed"
       },
       {
         "label": "Pale yellow",
         "file": "p12-swatch-02.png",
-        "source": "page_12.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_12.jpg",
+        "sourceCrop": [
           1600,
           840,
           1776,
           1100
         ],
         "dimensions": [
-          176,
-          260
+          1200,
+          800
         ],
-        "pixelSha256": "85e6fd5e7253f8dd4637ac014b6102676b4537c6c9afcfac4268664ec706b840",
-        "pixelIdentity": true
+        "pixelSha256": "c33aeead42d098b46e1046456d4b869f15eae068761cc6d45e1a3ab82db8c542",
+        "visualAudit": "passed"
       },
       {
         "label": "Grey",
         "file": "p12-swatch-03.png",
-        "source": "page_12.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_12.jpg",
+        "sourceCrop": [
           1580,
           1210,
           1776,
           1500
         ],
         "dimensions": [
-          196,
-          290
+          1200,
+          800
         ],
-        "pixelSha256": "f462e1f2d1e63082c4c9a9667649877fa8af997aed03ae6c6b048d0d067bbf64",
-        "pixelIdentity": true
+        "pixelSha256": "98ea2cd62fc780018811fb5534c068afd1956b7b0700e9ffcd1a57aa2a7e68a2",
+        "visualAudit": "passed"
       },
       {
         "label": "Cream",
         "file": "p12-swatch-04.png",
-        "source": "page_12.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_12.jpg",
+        "sourceCrop": [
           1570,
           1600,
           1776,
           1900
         ],
         "dimensions": [
-          206,
-          300
+          1200,
+          800
         ],
-        "pixelSha256": "6858fbad2698b9cd3c44036a6d427e43c8ea99904106cb5644e7fc0b442d8223",
-        "pixelIdentity": true
+        "pixelSha256": "08b06d19affb604cdd5c93a304aa8bd285a4eb17f0dd95a50fb32d2e0a5df258",
+        "visualAudit": "passed"
       },
       {
         "label": "Blue grey",
         "file": "p12-swatch-05.png",
-        "source": "page_12.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_12.jpg",
+        "sourceCrop": [
           1540,
           2150,
           1776,
           2600
         ],
         "dimensions": [
-          236,
-          450
+          1200,
+          800
         ],
-        "pixelSha256": "f44bf966c1590603ff7252d1d98d1cd57cb791a67a0923b0b2c08840d06e5e07",
-        "pixelIdentity": true
+        "pixelSha256": "ddcf335f5dabba9dd65c19da48b1f7c36b355cd087240f28242b57b1729699f9",
+        "visualAudit": "passed"
       }
     ],
     "13": [
       {
         "label": "Bronze texture",
         "file": "p13-swatch-01.png",
-        "source": "page_13.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_13.jpg",
+        "sourceCrop": [
           1590,
           360,
           1982,
           870
         ],
         "dimensions": [
-          392,
-          510
+          1200,
+          800
         ],
-        "pixelSha256": "043c1e9440639f12b57d7d9d757c3f0b940e086ce19347ae847701d0aafdbbb3",
-        "pixelIdentity": true
+        "pixelSha256": "3731f79f9bfc33ac8ebc2b7625e58ee019286fb069e8ad41aab7c7dbe4e45e3c",
+        "visualAudit": "passed"
       },
       {
         "label": "Black 1",
         "file": "p13-swatch-02.png",
-        "source": "page_13.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_13.jpg",
+        "sourceCrop": [
           1620,
           870,
           1950,
           1220
         ],
         "dimensions": [
-          330,
-          350
+          1200,
+          800
         ],
-        "pixelSha256": "e976de75f07f1beea5d2f8a52d24537fc0a3391e1ee87f9466cecb0f6dfedbcb",
-        "pixelIdentity": true
+        "pixelSha256": "4bfa54ea2853ce648489b37323d7193c36916893c295ed200e8ce0d33b3da2fd",
+        "visualAudit": "passed"
       },
       {
         "label": "Black 2",
         "file": "p13-swatch-03.png",
-        "source": "page_13.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_13.jpg",
+        "sourceCrop": [
           1600,
           1260,
           1950,
           1550
         ],
         "dimensions": [
-          350,
-          290
+          1200,
+          800
         ],
-        "pixelSha256": "ddef664de6ab559038c5510435aa2c60ceb04060106edc2a9b4bd74dea046307",
-        "pixelIdentity": true
+        "pixelSha256": "97d507d0d1f3e40c03442279b6bb17e02d0fd40f36f15dc2e86d3c81615c4174",
+        "visualAudit": "passed"
       },
       {
         "label": "Black 3",
         "file": "p13-swatch-04.png",
-        "source": "page_13.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_13.jpg",
+        "sourceCrop": [
           1580,
           1630,
           1950,
           1900
         ],
         "dimensions": [
-          370,
-          270
+          1200,
+          800
         ],
-        "pixelSha256": "953bd02d2e6ece23d804808c99f4ef21da43fe37f9523c1c8999fe2641eee8cc",
-        "pixelIdentity": true
+        "pixelSha256": "3ddd11dd5b3bd547ea0a0852ba4f3eacad8899bf9c83f39507764c9588bfad19",
+        "visualAudit": "passed"
       },
       {
         "label": "Black 4",
         "file": "p13-swatch-05.png",
-        "source": "page_13.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_13.jpg",
+        "sourceCrop": [
           1550,
           2000,
           1950,
           2260
         ],
         "dimensions": [
-          400,
-          260
+          1200,
+          800
         ],
-        "pixelSha256": "545a3a1793badbfe86f17e6ebab97a46767f531786d90cdc11f306322d6443fa",
-        "pixelIdentity": true
+        "pixelSha256": "2efa64b9518e3fc8c95b94d8941e2fa8660c08df9e2648abb309f53792a7bc7b",
+        "visualAudit": "passed"
       },
       {
         "label": "Black 5",
         "file": "p13-swatch-06.png",
-        "source": "page_13.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_13.jpg",
+        "sourceCrop": [
           1520,
           2340,
           1950,
           2660
         ],
         "dimensions": [
-          430,
-          320
+          1200,
+          800
         ],
-        "pixelSha256": "adc3266f37cc2bab66c44050685254745b911c84ee9fa802d1af3b9800edf602",
-        "pixelIdentity": true
+        "pixelSha256": "2de2449dd214dbb6644a3386a1e22154a8afec33d685288538dc414e9c470cda",
+        "visualAudit": "passed"
       }
     ],
     "14": [
       {
         "label": "Embroidered cotton source sample",
         "file": "p14-swatch-01.png",
-        "source": "page_14.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_14.jpg",
+        "sourceCrop": [
           820,
           320,
           1680,
           1220
         ],
         "dimensions": [
-          860,
-          900
+          1200,
+          800
         ],
-        "pixelSha256": "103a044761f0410581f046ca62fb53cbcdd14ba37d29540b3b3ad7d384601848",
-        "pixelIdentity": true
+        "pixelSha256": "b086e81e24a9e848edc31f784fd831389ffe5a351bfe5f2b0a271c99b2440062",
+        "visualAudit": "passed"
       }
     ],
     "15": [
       {
         "label": "TR polyester / rayon",
         "file": "p15-swatch-01.png",
-        "source": "page_15.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_15.jpg",
+        "sourceCrop": [
           1360,
           430,
           1581,
           700
         ],
         "dimensions": [
-          221,
-          270
+          1200,
+          800
         ],
-        "pixelSha256": "9e149e1bdf4ca37c753d5da8e632490328e05253be464c06cc7be111b233e66f",
-        "pixelIdentity": true
+        "pixelSha256": "a5ffb51bf4c63b1f5913992e5444c4d5b929dc5dc26c1be20f46a238adbbc056",
+        "visualAudit": "passed"
       },
       {
         "label": "Voile 1",
         "file": "p15-swatch-02.png",
-        "source": "page_15.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_15.jpg",
+        "sourceCrop": [
           1370,
           760,
           1581,
           1070
         ],
         "dimensions": [
-          211,
-          310
+          1200,
+          800
         ],
-        "pixelSha256": "5351ba547cf00808ce39fd3f2401fa28df384dcddfae9c5c6c5a080cc77b063e",
-        "pixelIdentity": true
+        "pixelSha256": "6b3ec4338c103acf7349b5ff0aabeada8776cf4bb0d49a064dcb1a8f50142651",
+        "visualAudit": "passed"
       },
       {
         "label": "Voile 2",
         "file": "p15-swatch-03.png",
-        "source": "page_15.jpg",
-        "crop": [
+        "generated": true,
+        "generationModel": "OpenAI GPT Image 2",
+        "styleReference": "ChatGPT Image Jul 13, 2026, 12_59_06 AM.png",
+        "sourceReference": "page_15.jpg",
+        "sourceCrop": [
           1350,
           1120,
           1581,
           1480
         ],
         "dimensions": [
-          231,
-          360
+          1200,
+          800
         ],
-        "pixelSha256": "359e9336ac3e7188fee549ceabf50432a9c95b10fa60f8e8c6b11d6fc4df46cb",
-        "pixelIdentity": true
+        "pixelSha256": "721aa3cc8379e1a4f52476697a752e72a2372c42abac816f6e5ebb2630e7964c",
+        "visualAudit": "passed"
       }
     ]
   }

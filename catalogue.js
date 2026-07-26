@@ -5,7 +5,7 @@
    shared nav, scroll-progress, reveal and smooth-scroll behaviours
    ported from the landing page so the page behaves identically.
 
-   Book 2 catalogue galleries use lossless crops of the original source photos.
+   Book 2 catalogue galleries use generated swatches based on the source photos.
    Stock figures are not shown to buyers, pricing is "quote on request",
    and the viewing calendar is illustrative.
    Fabric vocabulary is drawn from the real ASA inventory workbook.
@@ -52,47 +52,47 @@ function sourceSwatches(id) {
 
 /* Complete Book 2 inventory: one card per page-level family/collection.
    The variants arrays account for all 135 design and colour groups in Page 34-48.
-   imageBasis separates original source photos from pages with no attached swatch. */
+   imageBasis separates generated swatches from pages with no attached source. */
 const fabrics = [
   {
     id: "B2-P34", name: "Book 2 swatch page 01", type: "Shirting", use: "Shirting",
     width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 34", sourcePdf: "page_01.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Book 2 colour collection with 12 transcribed colour groups. The source page does not record a customer-facing fabric name.",
     variants: ["Mustard", "Pink", "Pale green / cream", "Light green", "Green / orange edge", "Orange", "Yellow", "Orange red", "White / cream", "Beige", "Black", "Red"]
   },
   {
     id: "B2-P35", name: "Book 2 swatch page 02", type: "Shirting", use: "Shirting",
     width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 35", sourcePdf: "page_02.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Book 2 colour collection with nine transcribed colour and texture groups. The source page does not record a customer-facing fabric name.",
     variants: ["Aqua", "Cream / pale", "Yellow", "Olive / cream", "Cream", "Textured cream", "Orange", "Blue", "Pale swatch"]
   },
   {
     id: "B2-P36", name: "Book 2 swatch page 03", type: "Shirting", use: "Shirting",
     width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 36", sourcePdf: "page_03.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Book 2 dark and bright colour collection with nine transcribed groups. The source page does not record a customer-facing fabric name.",
     variants: ["Black / red / black", "Red / black", "Black / blue", "Light blue / black", "Green", "Purple", "Purple / peach", "Peach / red", "Red"]
   },
   {
     id: "B2-P37", name: "Book 2 swatch page 04", type: "Shirting", use: "Shirting",
     width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 37", sourcePdf: "page_04.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Book 2 green, cream, olive and blue collection with five transcribed groups. The source page does not record a customer-facing fabric name.",
     variants: ["Top dark green group", "Middle dark green group", "Cream / olive / blue group", "Olive group", "Blue swatch"]
   },
   {
     id: "B2-P38", name: "Book 2 swatch page 05", type: "Shirting", use: "Shirting",
     width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 38", sourcePdf: "page_05.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Book 2 plaid, patterned and plain colour collection with eight transcribed groups. The source page does not record a customer-facing fabric name.",
     variants: ["Green plaid", "Brown plaid", "Blue/green plaid", "Dark grey", "Grey pattern", "Peach", "Cream bulk group", "White bulk group"]
   },
   {
     id: "B2-P39", name: "Embroidery Lucky Star A", type: "Shirting", use: "Shirting",
     width: "-", gsm: "-", garments: ["Shirts"], sourceTab: "Page 39", sourcePdf: "page_06.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Embroidered shirting recorded in five colour groups in ASA inventory Book 2.",
     variants: ["Light blue group", "Blue group", "Orange group", "Steel blue group", "Dark grey group"]
   },
@@ -113,14 +113,14 @@ const fabrics = [
   {
     id: "B2-P42", name: "Chambray 60 inch Lucky Stock", type: "Shirting", use: "Shirting",
     width: '60"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 42", sourcePdf: "page_09.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Chambray shirting, 60 inch width, with 14 photographed and transcribed design groups.",
     variants: ["Design 1", "Design 2", "Design 3", "Design 4", "Design 5", "Design 6", "Design 7", "Design 8", "Design 9", "Design 10", "Design 11", "Design 12", "Design 13", "Design 14"]
   },
   {
     id: "B2-P43", name: "Linen OPAL 44 inch", type: "Shirting", use: "Shirting",
     width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 43", sourcePdf: "page_10.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Linen shirting, 44 inch width, with 11 photographed and transcribed groups.",
     variants: ["001 group 1", "001 group 2", "002 group 1", "002 group 2", "003 group 1", "003 group 2", "003 group 3", "003 group 4", "004 group", "005 group", "Bottom blue visible group"]
   },
@@ -134,28 +134,28 @@ const fabrics = [
   {
     id: "B2-P45", name: "Book 2 packing list page 12", type: "Shirting", use: "Shirting",
     width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 45", sourcePdf: "page_12.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Book 2 pale-colour collection with five photographed and transcribed groups. The handwritten item name needs confirmation.",
     variants: ["Visible row 1", "Visible row 2", "Visible row 3", "Visible row 4", "Visible row 5"]
   },
   {
     id: "B2-P46", name: "Book 2 packing list page 13", type: "Shirting", use: "Shirting",
     width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 46", sourcePdf: "page_13.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Book 2 warm-brown and black collection with six photographed and transcribed groups. The handwritten item name needs confirmation.",
     variants: ["Grid block 1", "Grid block 2", "Grid block 3", "Grid block 4", "Grid block 5", "Bottom visible line"]
   },
   {
     id: "B2-P47", name: "Embroidered cotton 44 inch", type: "Shirting", use: "Shirting",
     width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 47", sourcePdf: "page_14.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Embroidered cotton shirting, 44 inch width, with eight recorded designs.",
     variants: ["Design 037", "Design 041", "Design 040", "Design 035", "Design 038", "Design 014", "Design 036", "Design 043"]
   },
   {
     id: "B2-P48", name: "Voile 44 inch / TR polyester rayon", type: "Shirting", use: "Shirting",
     width: '44"', gsm: "-", garments: ["Shirts"], sourceTab: "Page 48", sourcePdf: "page_15.pdf",
-    imageBasis: "Original source photo",
+    imageBasis: "Generated from source swatch",
     detail: "Voile and TR polyester-rayon shirting, 44 inch width, recorded in three stock groups.",
     variants: ["TR polyester/rayon group", "Voile group 1", "Voile group 2"]
   }
@@ -166,7 +166,7 @@ const fabrics = [
     swatches,
     image: swatches[0]?.image || null,
     imageBasis: swatches.length
-      ? `${swatches.length} original source photo${swatches.length === 1 ? "" : "s"}`
+      ? `${swatches.length} generated swatch${swatches.length === 1 ? "" : "es"}`
       : "Source photo required"
   };
 });
@@ -255,14 +255,14 @@ function cardHtml(f, i) {
   const added = requestList.includes(f.id);
   const meta = [
     `${f.variants.length} variants`,
-    f.swatches.length ? `${f.swatches.length} source photo${f.swatches.length === 1 ? "" : "s"}` : null,
+    f.swatches.length ? `${f.swatches.length} generated swatch${f.swatches.length === 1 ? "" : "es"}` : null,
     f.width === "-" ? null : f.width
   ].filter(Boolean).join(" · ");
   const image = f.image
     ? `<img class="swatch-img" src="${escapeHtml(f.image)}" alt="${escapeHtml(f.name + " — " + f.type + " fabric swatch")}" loading="lazy" onerror="this.remove()">`
     : "";
   const swatchTag = f.image
-    ? `${f.swatches.length} source photo${f.swatches.length === 1 ? "" : "s"}`
+    ? `${f.swatches.length} generated swatch${f.swatches.length === 1 ? "" : "es"}`
     : "Source photo required";
   return `<article class="fab-card${hasRendered ? "" : " reveal"}" style="--i:${i % 8}">
     <span class="fab-swatch" data-tone="${escapeHtml(f.type)}" aria-hidden="true">
@@ -311,14 +311,14 @@ function openModal(id) {
   const gallery = f.swatches.length ? `
       <section class="m-gallery" aria-labelledby="photoHeading">
         <div class="m-gallery-head">
-          <h3 id="photoHeading">Original source photos</h3>
+          <h3 id="photoHeading">Generated fabric swatches</h3>
           <span>${f.swatches.length}</span>
         </div>
         <div class="m-gallery-grid">
           ${f.swatches.map((swatch, index) => `
             <button class="m-gallery-thumb${index === 0 ? " is-active" : ""}" type="button"
               data-gallery-src="${escapeHtml(swatch.image)}" data-gallery-label="${escapeHtml(swatch.label)}"
-              aria-label="View ${escapeHtml(swatch.label)} source photo" aria-pressed="${index === 0 ? "true" : "false"}">
+              aria-label="View ${escapeHtml(swatch.label)} generated swatch" aria-pressed="${index === 0 ? "true" : "false"}">
               <img src="${escapeHtml(swatch.image)}" alt="" loading="lazy">
               <span>${escapeHtml(swatch.label)}</span>
             </button>`).join("")}

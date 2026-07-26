@@ -5,14 +5,16 @@ The catalogue accounts for all 15 Book 2 page-level fabric families and all
 Google Sheet (Page 34-48).
 
 The source pages contain 87 distinct photographed swatches across 12 pages.
-Every photographed swatch is stored separately under `book2-swatches/` and is
-available in its fabric family's catalogue gallery. The images are lossless PNG
-crops of the supplied source photos: they are not generated, retouched,
-recoloured, stretched or cleaned.
+Every photographed swatch has a corresponding AI-generated product image under
+`book2-swatches/` and is available in its fabric family's catalogue gallery.
+The real source photos are references only; the catalogue images present each
+fabric as a clean rectangular swatch with pinked edges on a white background.
 
 - File convention: `book2-swatches/pNN-swatch-NN.png`
-- Crop and label manifest: `book2-swatches/manifest.json`
-- `Original source photos`: one or more real swatches are attached to the page.
+- Generation, source-reference and label manifest:
+  `book2-swatches/manifest.json`
+- `Generated swatches`: one or more real references were available for
+  source-faithful image generation.
 - `Source photo required`: the packing-list page has no attached swatch, so the
   catalogue intentionally shows no invented fabric image.
 - Page 45 and Page 46 retain generic labels because their handwritten
