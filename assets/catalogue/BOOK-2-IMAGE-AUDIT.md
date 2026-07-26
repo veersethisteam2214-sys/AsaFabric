@@ -1,6 +1,8 @@
 # Book 2 catalogue image fidelity audit
 
-Audit date: 25 July 2026
+Initial audit: 25 July 2026
+
+Full re-audit: 26 July 2026
 
 ## Acceptance standard
 
@@ -58,6 +60,14 @@ hash are recorded in
 [`book2-swatches/manifest.json`](book2-swatches/manifest.json). Recomputing each
 source crop produced the same dimensions and pixel hash as its catalogue PNG.
 No AI-generated fabric content remains in the Book 2 galleries.
+
+During the 26 July re-audit, Pages 34-38 were re-extracted directly from the
+original embedded images in the authenticated Drive PDFs. This replaced 41
+correct but downscaled contact-sheet crops with full-resolution source-pixel
+crops. Pages 39-48 were independently rechecked against their direct source
+renders. The live catalogue was also reconciled with all 15 Google Sheet tabs:
+15 families, 135 spreadsheet groups and 87 displayed source photos matched,
+with no missing, duplicated, broken or cross-family image placements.
 
 ## Required follow-up
 

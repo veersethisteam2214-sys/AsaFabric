@@ -5,707 +5,871 @@
       {
         "label": "Mustard",
         "file": "p01-swatch-01.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          18,
-          530,
-          224
+          42,
+          42,
+          1264,
+          535
         ],
         "dimensions": [
-          512,
-          206
+          1222,
+          493
         ],
-        "pixelSha256": "e154eeb7a1f3a799988937c3aec9a3b8f0a00fe5d9741ccb3fca293bed6368e8",
-        "pixelIdentity": true
+        "pixelSha256": "be88caa720ef775f759a3a05283262caf08fcca6276a9c916b9b8986c03064e3",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Pink",
         "file": "p01-swatch-02.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          218,
-          530,
-          318
+          42,
+          519,
+          1264,
+          759
         ],
         "dimensions": [
-          512,
-          100
+          1222,
+          240
         ],
-        "pixelSha256": "588ea59c86f8aa336bee1cdc42e54e723470f070de7fef1feae5a962cf86246e",
-        "pixelIdentity": true
+        "pixelSha256": "20edac2231644bfc71e67e5e110b4d0edde1d8faef04b19b266b98fbbf0facfb",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Pale green / cream",
         "file": "p01-swatch-03.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          312,
-          530,
-          385
+          42,
+          743,
+          1264,
+          918
         ],
         "dimensions": [
-          512,
-          73
+          1222,
+          175
         ],
-        "pixelSha256": "df493e8c27b89209be0480993e95171051d1fb8e6f0929e4d19c712922294524",
-        "pixelIdentity": true
+        "pixelSha256": "f79501463032f1db88bb9bf1c31b18463ea4d22aca719d43beede080efb5be7f",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Light green",
         "file": "p01-swatch-04.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          377,
-          530,
-          458
+          42,
+          898,
+          1264,
+          1092
         ],
         "dimensions": [
-          512,
-          81
+          1222,
+          194
         ],
-        "pixelSha256": "9d829e5efd3f093802ff2985fd7495876c63d6b18866bac9ba6963def01c656a",
-        "pixelIdentity": true
+        "pixelSha256": "d14a4c4edf29554a70cad55f8af05438acbab1000d5fbdd5a90f4a4b563a45f3",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Orange",
         "file": "p01-swatch-05.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          451,
-          530,
-          535
+          42,
+          1075,
+          1264,
+          1276
         ],
         "dimensions": [
-          512,
-          84
+          1222,
+          201
         ],
-        "pixelSha256": "890347fe6d8894342becce762eb8e0357e835b3198d64bd617d12f1f9a607d65",
-        "pixelIdentity": true
+        "pixelSha256": "5c76a69beb5e88acd061077a86515b6e21fc05e6676dc0a0823e1ff4bce7a380",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Yellow",
         "file": "p01-swatch-06.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          523,
-          530,
-          596
+          42,
+          1246,
+          1264,
+          1422
         ],
         "dimensions": [
-          512,
-          73
+          1222,
+          176
         ],
-        "pixelSha256": "6f1211d219d5cdd84c434904924d29c1b80cbfd70c90aec3c2be2d7ac07cd48d",
-        "pixelIdentity": true
+        "pixelSha256": "510d29a7e1692822054a3797e32d03716511fc59cdb83afd2860cb4fe0dddd68",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Orange red",
         "file": "p01-swatch-07.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          585,
-          530,
-          675
+          42,
+          1394,
+          1264,
+          1610
         ],
         "dimensions": [
-          512,
-          90
+          1222,
+          216
         ],
-        "pixelSha256": "36c97a5f97432f11177cfa4b69fe3287f82cd856d213960b664bf77226e2e05e",
-        "pixelIdentity": true
+        "pixelSha256": "4d1e24e414abd73233b3f9b6a36711db841ea267190b9dcd226e4c63edba5190",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "White",
         "file": "p01-swatch-08.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          665,
-          530,
-          733
+          42,
+          1585,
+          1264,
+          1748
         ],
         "dimensions": [
-          512,
-          68
+          1222,
+          163
         ],
-        "pixelSha256": "247d633d8ace4376497728f7335b572662d383cf916fbb70ca6159454c3b0897",
-        "pixelIdentity": true
+        "pixelSha256": "39f6c1cc3c9fd5f385414920b99c1628c4cb76896773b61815f66f4c312fe58c",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Beige",
         "file": "p01-swatch-09.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          721,
-          530,
-          792
+          42,
+          1719,
+          1264,
+          1889
         ],
         "dimensions": [
-          512,
-          71
+          1222,
+          170
         ],
-        "pixelSha256": "48f54e6cc0fbd4c4989fcf28504b7fe5a6a88202a067861b0addec8a162174bd",
-        "pixelIdentity": true
+        "pixelSha256": "6aaf9a131d551a7bc7343370efb1b7724ab38b5c64cc37c2979ad97e8a9a018a",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Black",
         "file": "p01-swatch-10.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          775,
-          530,
-          840
+          42,
+          1847,
+          1264,
+          2003
         ],
         "dimensions": [
-          512,
-          65
+          1222,
+          156
         ],
-        "pixelSha256": "9a85ccd0ddbdbff95d4ea20b8549f55ff1ebee02bb7267f722c52eaccb5c543d",
-        "pixelIdentity": true
+        "pixelSha256": "bfcdddbf79680ddcf2974ca595347f2dfa14b0987f88e763acccd36b2c8c0b54",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       },
       {
         "label": "Red",
         "file": "p01-swatch-11.png",
-        "source": "page_01_preview.jpg",
+        "source": "page_01.pdf",
         "crop": [
-          18,
-          820,
-          530,
-          884
+          42,
+          1955,
+          1264,
+          2108
         ],
         "dimensions": [
-          512,
-          64
+          1222,
+          153
         ],
-        "pixelSha256": "7f6ba5a66f917cf9643b3dde46fd826039e2ce67c6b83f0473b05e7d7557600b",
-        "pixelIdentity": true
+        "pixelSha256": "9a94e7207d32c24453bd4e2690d7598b4c8d74c8241ccc1930624cab98cfd081",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1545,
+          2122
+        ]
       }
     ],
     "2": [
       {
         "label": "Aqua",
         "file": "p02-swatch-01.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
           0,
-          145,
-          215
+          365,
+          541
         ],
         "dimensions": [
-          145,
-          215
+          365,
+          541
         ],
-        "pixelSha256": "57690411eb34f526fb47d94577e91ca161e4b9be5d3d1de16929e4835589882b",
-        "pixelIdentity": true
+        "pixelSha256": "6ae254038d0073fcde8a3940b96a1060ed95a232b813ecb8ebd126e95f811f6e",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "Cream / pale",
         "file": "p02-swatch-02.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
-          120,
-          130,
-          300
+          301,
+          327,
+          754
         ],
         "dimensions": [
-          130,
-          180
+          327,
+          453
         ],
-        "pixelSha256": "d7b55ce95d5d50d14ac99933e09963321041b21145c202ba225d763fdb06914d",
-        "pixelIdentity": true
+        "pixelSha256": "2c0e1a318d5c0a0fcbfa02e953b2a905b66794ef81f52ea5ab1060477f0b0d04",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "Yellow",
         "file": "p02-swatch-03.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
-          270,
-          130,
-          390
+          678,
+          327,
+          980
         ],
         "dimensions": [
-          130,
-          120
+          327,
+          302
         ],
-        "pixelSha256": "5fdfb4da8134679e77fcca681f99828cf2250d840544b3111bc0a66f83098533",
-        "pixelIdentity": true
+        "pixelSha256": "d30fb17e7f1fc1d1836063b05ef3af6a0ebbdd7a7af314cc714b2ecb2734c1ad",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "Olive",
         "file": "p02-swatch-04.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
-          380,
-          128,
-          475
+          954,
+          322,
+          1194
         ],
         "dimensions": [
-          128,
-          95
+          322,
+          240
         ],
-        "pixelSha256": "d8956bb094b7ea0cfc2552bf1c44e47008e2b3aa3ce522dcb7461f718e92ba7c",
-        "pixelIdentity": true
+        "pixelSha256": "009cdb6f68b6b33cd77506861d1e91bf9d505d6992c1313a66fa72dc3a482f96",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "Pale green",
         "file": "p02-swatch-05.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
-          455,
-          135,
-          560
+          1143,
+          340,
+          1407
         ],
         "dimensions": [
-          135,
-          105
+          340,
+          264
         ],
-        "pixelSha256": "5b286108ee5e6d46b63e6aeddc0668d1cdefdcf9cb2d63b5c5d6783d38356e38",
-        "pixelIdentity": true
+        "pixelSha256": "fa8f864edfabfafdf2b6190378a14980dfbc6267d5701c096895afbc816ce778",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "Textured cream",
         "file": "p02-swatch-06.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
-          535,
-          135,
-          670
+          1344,
+          340,
+          1684
         ],
         "dimensions": [
-          135,
-          135
+          340,
+          340
         ],
-        "pixelSha256": "6ec9eeefec94456f262ff88da4dc8a99787bf372fcdf11f7dd2a8e61d0656f31",
-        "pixelIdentity": true
+        "pixelSha256": "02ee564db6976c5e4df9f2cdc70d12ea9ff5328e304901e744ce85a8d3764d26",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "Orange",
         "file": "p02-swatch-07.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
-          650,
-          130,
-          765
+          1633,
+          327,
+          1922
         ],
         "dimensions": [
-          130,
-          115
+          327,
+          289
         ],
-        "pixelSha256": "b8816ad42b35ebe7262417a785ea94847db543e82b618d5f26c8c7b2bca3557a",
-        "pixelIdentity": true
+        "pixelSha256": "416c909953771f6a31c897727cb1ffe54d0e334f43cc35da007532f18e97b461",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "Blue",
         "file": "p02-swatch-08.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
           0,
-          735,
-          145,
-          910
+          1846,
+          365,
+          2270
         ],
         "dimensions": [
-          145,
-          175
+          365,
+          424
         ],
-        "pixelSha256": "9f077d77d2bc3b013978ecff27338f9dde72b7d41516d10572fef8f1b255a890",
-        "pixelIdentity": true
+        "pixelSha256": "a86ef821fbeaa808715813dfd87cab76291169dc2c279e8b1a6a62bfbce09b7a",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       },
       {
         "label": "White swatch",
         "file": "p02-swatch-09.png",
-        "source": "page_02_preview.jpg",
+        "source": "page_02.pdf",
         "crop": [
-          290,
-          760,
-          580,
-          930
+          728,
+          1909,
+          1458,
+          2270
         ],
         "dimensions": [
-          290,
-          170
+          730,
+          361
         ],
-        "pixelSha256": "2a5f09cc47560b2d91a7bf7f82089665d3e2dbcc66e9ae0a41c0f9e87a523945",
-        "pixelIdentity": true
+        "pixelSha256": "ecea041c3dd4d066c7e1a5fbccfc00c26ee14934754ab5b3cc3beb5528900d9c",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1628,
+          2270
+        ]
       }
     ],
     "3": [
       {
         "label": "Black 1",
         "file": "p03-swatch-01.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
           0,
-          150,
-          115
+          316,
+          242
         ],
         "dimensions": [
-          150,
-          115
+          316,
+          242
         ],
-        "pixelSha256": "54fc65857045af05fc91f40887e6d8d8907ad35daa2f8065884593a0b7723e17",
-        "pixelIdentity": true
+        "pixelSha256": "af0ca2518f775e046996b91882eb518b0abb3840f809bdb2e02cc9fa96aeb95f",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Red 1",
         "file": "p03-swatch-02.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          105,
-          150,
-          215
+          220,
+          316,
+          452
         ],
         "dimensions": [
-          150,
-          110
+          316,
+          232
         ],
-        "pixelSha256": "0b9de7679685c05a9f3d488a1b7ff39f6f07878822a134944abab2979419139a",
-        "pixelIdentity": true
+        "pixelSha256": "b9144493f373b25912ac209ca47136aa43591c7304014fd70deb1a7995714b2b",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Black 2",
         "file": "p03-swatch-03.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          200,
-          150,
-          320
+          420,
+          316,
+          673
         ],
         "dimensions": [
-          150,
-          120
+          316,
+          253
         ],
-        "pixelSha256": "c9c513ab2d6983fa30d69e9465f948e3937152e1be6a012f7742f587ec476fd2",
-        "pixelIdentity": true
+        "pixelSha256": "86d32722dddd828a8171e3cc787ccb2168a6ff4c6f911b93dbe7a1e48afc7649",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Blue",
         "file": "p03-swatch-04.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          300,
-          150,
-          385
+          630,
+          316,
+          810
         ],
         "dimensions": [
-          150,
-          85
+          316,
+          180
         ],
-        "pixelSha256": "3360b78433b1f6e788bbb356747683047d772a6ae263d649e18f01bc61a31004",
-        "pixelIdentity": true
+        "pixelSha256": "4ecb5caadd5f88a98c777c535c190b18e8a0f07f43e011adc04bdb6482ea0ed7",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Black 3",
         "file": "p03-swatch-05.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          360,
-          150,
-          455
+          756,
+          316,
+          957
         ],
         "dimensions": [
-          150,
-          95
+          316,
+          201
         ],
-        "pixelSha256": "8e72553dd2ce7522e5a63ef99921d47cc664992d817f95f149366520345a1f60",
-        "pixelIdentity": true
+        "pixelSha256": "5883626c9ff48f28cd518bac2463a84fe510e72bf4f97844aa693a995ca82e72",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Green",
         "file": "p03-swatch-06.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          435,
-          150,
-          525
+          914,
+          316,
+          1104
         ],
         "dimensions": [
-          150,
-          90
+          316,
+          190
         ],
-        "pixelSha256": "60590fc3671bbf92219153352d66c5d187a6b581821a82e5e04b958b11dd1450",
-        "pixelIdentity": true
+        "pixelSha256": "2827c5c331036cdfad3f88c7a9fd5e5bfc19e555bc89618543d3a723569bd639",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Purple",
         "file": "p03-swatch-07.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          505,
-          150,
-          630
+          1061,
+          316,
+          1325
         ],
         "dimensions": [
-          150,
-          125
+          316,
+          264
         ],
-        "pixelSha256": "fc2cc503b5c5e23bee7de7b3be857dcd4af6a99b884d73600e57d9373d87aa98",
-        "pixelIdentity": true
+        "pixelSha256": "0ef3811104cc959683d028c0cbdf233871f6835e5041d40925f1737ec1d4f493",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Peach",
         "file": "p03-swatch-08.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          610,
-          150,
-          700
+          1282,
+          316,
+          1472
         ],
         "dimensions": [
-          150,
-          90
+          316,
+          190
         ],
-        "pixelSha256": "b895ba7da95c86e303eea1845d3c9f9e1903898156ead90e75d60b29d888034e",
-        "pixelIdentity": true
+        "pixelSha256": "2131615ba6c2ba84cac39acb3bbea994a22cce7bceb4b354a23347d2f029d21d",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       },
       {
         "label": "Red 2",
         "file": "p03-swatch-09.png",
-        "source": "page_03_preview.jpg",
+        "source": "page_03.pdf",
         "crop": [
           0,
-          680,
-          150,
-          875
+          1429,
+          316,
+          1839
         ],
         "dimensions": [
-          150,
-          195
+          316,
+          410
         ],
-        "pixelSha256": "12ddbe90463e69d728f0d8f3196356d75cb0e5e5b7efcaaf380fe75c7e2f48a5",
-        "pixelIdentity": true
+        "pixelSha256": "53771d6bddea36f612233359e5b95ebce651388a9a5d2db0e53639fa79150488",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1364,
+          2034
+        ]
       }
     ],
     "4": [
       {
         "label": "Dark green",
         "file": "p04-swatch-01.png",
-        "source": "page_04_preview.jpg",
+        "source": "page_04.pdf",
         "crop": [
-          15,
-          20,
-          115,
-          250
+          41,
+          55,
+          321,
+          696
         ],
         "dimensions": [
-          100,
-          230
+          280,
+          641
         ],
-        "pixelSha256": "71c20366eb025c274a06f2c5000c8d8d0f09657694337c790d2fe7302c341c55",
-        "pixelIdentity": true
+        "pixelSha256": "d526c19abcac018e6297fdbf8a2671b437505825d68bfc7b5bf93b57bb134e74",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1804,
+          2607
+        ]
       },
       {
         "label": "Cream",
         "file": "p04-swatch-02.png",
-        "source": "page_04_preview.jpg",
+        "source": "page_04.pdf",
         "crop": [
-          15,
-          245,
-          115,
-          320
+          41,
+          682,
+          321,
+          891
         ],
         "dimensions": [
-          100,
-          75
+          280,
+          209
         ],
-        "pixelSha256": "cf408ff4a935dc7bb746598e3c751f2add7623d09c20798f310f375d77cb98e9",
-        "pixelIdentity": true
+        "pixelSha256": "bea62df0802dd7cc4845e5529ff01a16e67a53fc8a5b06da0b312f68dae57636",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1804,
+          2607
+        ]
       },
       {
         "label": "Olive",
         "file": "p04-swatch-03.png",
-        "source": "page_04_preview.jpg",
+        "source": "page_04.pdf",
         "crop": [
-          15,
-          305,
-          110,
-          405
+          41,
+          849,
+          307,
+          1128
         ],
         "dimensions": [
-          95,
-          100
+          266,
+          279
         ],
-        "pixelSha256": "d51739c23dd59e02b1800149844b136827e0bb53af26448669a5f4c9db44d0ee",
-        "pixelIdentity": true
+        "pixelSha256": "2ed307f7e1c7a6083f5f0605c5f4c50b33a397d553f81612d80e42eb1402601d",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1804,
+          2607
+        ]
       },
       {
         "label": "Blue",
         "file": "p04-swatch-04.png",
-        "source": "page_04_preview.jpg",
+        "source": "page_04.pdf",
         "crop": [
-          10,
-          390,
-          110,
-          505
+          27,
+          1085,
+          307,
+          1406
         ],
         "dimensions": [
-          100,
-          115
+          280,
+          321
         ],
-        "pixelSha256": "9dfca0de1ffaa6fa333b8ff7514099e14f52d52527e9729a22736a6fdbdbaa9c",
-        "pixelIdentity": true
+        "pixelSha256": "9a0539c75fa75fa7c3fa461ce9b2dc50a1b289a615a100fe6b03233b6cadfb3c",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1804,
+          2607
+        ]
       }
     ],
     "5": [
       {
         "label": "Green plaid",
         "file": "p05-swatch-01.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          10,
-          15,
-          125,
-          180
+          26,
+          39,
+          332,
+          478
         ],
         "dimensions": [
-          115,
-          165
+          306,
+          439
         ],
-        "pixelSha256": "c601d7610adf5013283deca71972abd3bd74b20c316b219e0c8d0b7f53f883fc",
-        "pixelIdentity": true
+        "pixelSha256": "f465cdab24e6ae5fd3ee46ce8a1c93bf8af7e2cde1c738b9578643b7b1e14299",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       },
       {
         "label": "Brown plaid",
         "file": "p05-swatch-02.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          360,
+          954,
           0,
-          470,
-          170
+          1247,
+          451
         ],
         "dimensions": [
-          110,
-          170
+          293,
+          451
         ],
-        "pixelSha256": "3371c06eaa23ab0c341f4237d0bff7abfad65b4007f25466522b18ac9d0325ea",
-        "pixelIdentity": true
+        "pixelSha256": "1495caa184322d84f2bc08c9c3de38d74fe9e653889d7d0a98b9958ec332df18",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       },
       {
         "label": "Blue / green plaid",
         "file": "p05-swatch-03.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          10,
-          175,
-          120,
-          295
+          26,
+          463,
+          319,
+          783
         ],
         "dimensions": [
-          110,
-          120
+          293,
+          320
         ],
-        "pixelSha256": "f13a139e45f91b1334000a143162985986012d63ed9708d5d83d941bf0726e5f",
-        "pixelIdentity": true
+        "pixelSha256": "7b280374233ae3b696b75c7342e347b6fee15613f1140b47144bcd8a096131c0",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       },
       {
         "label": "Dark grey",
         "file": "p05-swatch-04.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          10,
-          285,
-          125,
-          425
+          26,
+          755,
+          332,
+          1127
         ],
         "dimensions": [
-          115,
-          140
+          306,
+          372
         ],
-        "pixelSha256": "7bcde74faa5a6bb15f30fb193c4ba9ce41d81377f57112c7d739e39b1c9c7e7c",
-        "pixelIdentity": true
+        "pixelSha256": "c6cbbea32b7508be836598b4e66978b771190597e9785a329c9eb247b2b5e596",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       },
       {
         "label": "Grey pattern",
         "file": "p05-swatch-05.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          5,
-          405,
-          130,
-          535
+          13,
+          1073,
+          345,
+          1419
         ],
         "dimensions": [
-          125,
-          130
+          332,
+          346
         ],
-        "pixelSha256": "1c7f7e175d4643ba10c92c1a4281c92789dff99cb96bc5a10467a908c2d4c5a0",
-        "pixelIdentity": true
+        "pixelSha256": "82a6de1dab111b9a57a2ed6a868f6b9f55beac62b538ff9191016593091b91e6",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       },
       {
         "label": "Peach",
         "file": "p05-swatch-06.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          5,
-          520,
-          130,
-          630
+          13,
+          1378,
+          345,
+          1671
         ],
         "dimensions": [
-          125,
-          110
+          332,
+          293
         ],
-        "pixelSha256": "26d3eb6ac4cbb6b611a5c662116ac81cb63f0415242dc773d634b34f7b2687d0",
-        "pixelIdentity": true
+        "pixelSha256": "30afe5e78dbe8cac32289a5ba0ff3aef3b11dbdc319fa81802d916cdc0256761",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       },
       {
         "label": "Cream",
         "file": "p05-swatch-07.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          5,
-          610,
-          135,
-          780
+          13,
+          1617,
+          358,
+          2068
         ],
         "dimensions": [
-          130,
-          170
+          345,
+          451
         ],
-        "pixelSha256": "5eaa4f460ba050e183d0a7a7b636ba317f914207b3b755a02138fad1f967ce5a",
-        "pixelIdentity": true
+        "pixelSha256": "28bcd89f00caea83a6aac9980c3a37792aef49a2662b6b407515c8d8cb82cf0d",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       },
       {
         "label": "White",
         "file": "p05-swatch-08.png",
-        "source": "page_05_preview.jpg",
+        "source": "page_05.pdf",
         "crop": [
-          5,
-          760,
-          140,
-          950
+          13,
+          2014,
+          372,
+          2519
         ],
         "dimensions": [
-          135,
-          190
+          359,
+          505
         ],
-        "pixelSha256": "472279d905f959f86f230e21a635a7ff9049f8ab1946b2a4c37d528217ff2e73",
-        "pixelIdentity": true
+        "pixelSha256": "dc29c82567a67e4ae146c48c95ea4f48ec387a2296ab82751172c729237ac7dc",
+        "pixelIdentity": true,
+        "sourceDimensions": [
+          1718,
+          2532
+        ]
       }
     ],
     "6": [
